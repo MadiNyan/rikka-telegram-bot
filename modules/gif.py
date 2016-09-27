@@ -20,7 +20,7 @@ def gif(bot, update, args):
         dir = "gifs/"+args
         gifs = [f for f in listdir(dir) if isfile(join(dir, f))]
         filecount = len(gifs)
-        rand = randint(1, filecount-1)
+        rand = randint(0, filecount-1)
         result = list(gifs)[rand]
         with open(dir+"/"+str(result), "rb") as f:
             bot.sendDocument(update.message.chat_id, f, reply_to_message_id=update.message.message_id)
