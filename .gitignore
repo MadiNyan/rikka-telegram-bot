@@ -98,3 +98,10 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+memes/meme.jpg
+memes/original.jpg
+lego/original.jpg
+lego/legofied.jpg
+glitch/original.jpg
+glitch/result.jpg
