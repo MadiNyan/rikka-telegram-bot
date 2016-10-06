@@ -1,4 +1,5 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from random import randint
 import os, datetime, logging, yaml
 
@@ -62,13 +63,9 @@ print("Lego imported")
 # reply with Kappa
 from modules.kappa import kappa
 print("Kappa imported")
-
-# reply with Nutshack
-from modules.nutshack import nutshack
-print("Nutshack imported")
     
 # post random gif
-from modules.gif import gif
+from modules.gif import gif, gif_button 
 print("Gif imported")
 
 # meme creator
@@ -110,7 +107,7 @@ dp.add_handler(CommandHandler('status', status))
 dp.add_handler(CommandHandler('img', img_search, pass_args=True))
 dp.add_handler(CommandHandler('vid', vid_search, pass_args=True))
 dp.add_handler(CommandHandler('news', news_search, pass_args=True))
-dp.add_handler(MessageHandler([Filters.text], nutshack))
+dp.add_handler(CallbackQueryHandler(gif_button))
 
 # Starting bot
 updater.start_polling()
