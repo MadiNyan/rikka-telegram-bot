@@ -1,11 +1,13 @@
 .git/
 .vscode/
-gifs/
-nya/
-glitch/
-lego/
-memes/
+/gifs/
+/nya/
+/glitch/
+/lego/
+/memes/
 config.yml
+*.ini
+*.db
 
 
 # Byte-compiled / optimized / DLL files
@@ -98,10 +100,3 @@ ENV/
 
 # Rope project settings
 .ropeproject
-
-memes/meme.jpg
-memes/original.jpg
-lego/original.jpg
-lego/legofied.jpg
-glitch/original.jpg
-glitch/result.jpg
