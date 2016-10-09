@@ -25,7 +25,7 @@ def gif(bot, update, args):
         update.message.reply_text('Available folders for /gif are:', reply_markup=reply_markup)
     else:
         dir = "gifs/"+args
-        gifs = [f for f in listdir(dir) if isfile(join(dir, f))]
+        gifs = [f for f in listdir(dir) if isfile(join(dir, f)) and not f.endswith(".db")]
         filecount = len(gifs)
         rand = randint(0, filecount-1)
         result = list(gifs)[rand]
