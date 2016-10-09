@@ -5,8 +5,13 @@ from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 
-import sys
+import sys, yaml
 
+#import paths
+with open('config.yml', 'r') as f:
+    memes_folder = yaml.load(f)["path"]["memes"]
+with open('config.yml', 'r') as f:
+    meme_font = yaml.load(f)["path"]["meme_font"]
 
 def make_meme(topString, bottomString, filename):
 
@@ -15,12 +20,12 @@ def make_meme(topString, bottomString, filename):
 
 	# find biggest font size that works
 	fontSize = int(imageSize[1]/6)
-	font = ImageFont.truetype("memes/Impact.ttf", fontSize)
+	font = ImageFont.truetype(meme_font, fontSize)
 	topTextSize = font.getsize(topString)
 	bottomTextSize = font.getsize(bottomString)
 	while topTextSize[0] > imageSize[0]-20 or bottomTextSize[0] > imageSize[0]-20:
 		fontSize = fontSize - 1
-		font = ImageFont.truetype("memes/Impact.ttf", fontSize)
+		font = ImageFont.truetype(meme_font, fontSize)
 		topTextSize = font.getsize(topString)
 		bottomTextSize = font.getsize(bottomString)
 
@@ -47,7 +52,7 @@ def make_meme(topString, bottomString, filename):
 	draw.text(topTextPosition, topString, (255,255,255), font=font)
 	draw.text(bottomTextPosition, bottomString, (255,255,255), font=font)
 
-	img.save("memes/meme.jpg")
+	img.save(memes_folder+"meme.jpg")
 
 def get_upper(somedata):
 	'''

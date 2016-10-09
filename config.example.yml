@@ -1,3 +1,11 @@
 keys:
      telegram_token: 123455
      bing_api_key: 123456
+
+path:
+    gifs: examples/gifs/
+    memes: examples/memes/
+    meme_font: resources/impact.ttf
+    glitch: examples/glitch/
+    lego: examples/lego/
+    nya: examples/nya/

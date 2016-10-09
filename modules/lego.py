@@ -1,5 +1,10 @@
+import legofy, datetime, requests, re, yaml
+
+#import paths
+with open('config.yml', 'r') as f:
+    lego_folder = yaml.load(f)["path"]["lego"]
+
 def lego(bot, update):
-    import legofy, datetime, requests, re
     #check reply
     if update.message.reply_to_message is not None:
         # check if command used on reply
@@ -22,13 +27,13 @@ def lego(bot, update):
                     url = re.findall('http[s]?://\S+?\.(?:jpg|jpeg|png|gif)', update.message.reply_to_message.text)
                     link = str(url)
                     print(link[2:-2])
-                    with open("lego/original.jpg", "wb") as code:
+                    with open(lego_folder+"original.jpg", "wb") as code:
                         code.write(r.content)
                 # if not, download photo from replied message
                 else:
-                    bot.getFile(update.message.reply_to_message.photo[-1].file_id).download("lego/original.jpg")
-                legofy.main(image_path="lego/original.jpg", output_path="lego/legofied.jpg", size=size, palette_mode=None, dither=False)
-                with open("lego/legofied.jpg", "rb") as f:
+                    bot.getFile(update.message.reply_to_message.photo[-1].file_id).download(lego_folder+"original.jpg")
+                legofy.main(image_path=lego_folder+"original.jpg", output_path=lego_folder+"legofied.jpg", size=size, palette_mode=None, dither=False)
+                with open(lego_folder+"legofied.jpg", "rb") as f:
                     bot.sendPhoto(update.message.chat_id, f, reply_to_message_id=update.message.message_id)
                 print(datetime.datetime.now(), ">>>", "Done legofying", ">>>", update.message.from_user.username)
             except:
@@ -48,8 +53,8 @@ def lego(bot, update):
             if size > 100:
                 bot.sendMessage(chat_id=update.message.chat_id, text="Baka, make it from 1 to 100!", reply_to_message_id=update.message.message_id)
                 return
-        bot.getFile(update.message.photo[-1].file_id).download("lego/original.jpg")
-        legofy.main(image_path="lego/original.jpg", output_path="lego/legofied.jpg", size=size, palette_mode=None, dither=False)
-        with open("lego/legofied.jpg", "rb") as f:
+        bot.getFile(update.message.photo[-1].file_id).download(lego_folder+"original.jpg")
+        legofy.main(image_path=lego_folder+"original.jpg", output_path="lego/legofied.jpg", size=size, palette_mode=None, dither=False)
+        with open(lego_folder+"legofied.jpg", "rb") as f:
             bot.sendPhoto(update.message.chat_id, f, reply_to_message_id=update.message.message_id)
         print(datetime.datetime.now(), ">>>", "Done legofying", ">>>", update.message.from_user.username)

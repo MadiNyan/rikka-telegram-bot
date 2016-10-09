@@ -1,7 +1,11 @@
-import os, datetime
+import os, datetime, yaml
 from random import randint
 
-dir = "nya"
+#import paths
+with open('config.yml', 'r') as f:
+    nya_folder = yaml.load(f)["path"]["nya"]
+
+dir = nya_folder
 files = os.listdir(dir)
 filecount = len(files)
 

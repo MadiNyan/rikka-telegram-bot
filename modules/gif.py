@@ -1,4 +1,4 @@
-import os, datetime
+import os, datetime, yaml
 from random import randint
 from os import listdir
 from os.path import isfile, join
@@ -6,7 +6,9 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
 def gif(bot, update, args):
-    folders = os.walk('gifs')
+    with open('config.yml', 'r') as f:
+        gif_folder = yaml.load(f)["path"]["gifs"]
+    folders = os.walk(gif_folder)
     found = None
     args = str(args)[2:-2]
     avail_folders = ", ".join(next(folders)[1])
@@ -24,7 +26,7 @@ def gif(bot, update, args):
         reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text('Available folders for /gif are:', reply_markup=reply_markup)
     else:
-        dir = "gifs/"+args
+        dir = gif_folder+args
         gifs = [f for f in listdir(dir) if isfile(join(dir, f)) and not f.endswith(".db")]
         filecount = len(gifs)
         rand = randint(0, filecount-1)
