@@ -5,11 +5,10 @@ Multipurpose chat bot
 Python 3.5
 
 ### Libraries:
-+ telegram
 + [python-telegram-bot](https://github.com/python-telegram-bot)
 + [py_bing_search](https://github.com/tristantao/py-bing-search)
 + [legofy](https://github.com/JuanPotato/Legofy)
-+ PIL
++ Pillow
 + psutil
 + requests
 + uptime

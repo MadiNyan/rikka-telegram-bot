@@ -9,9 +9,8 @@ with open('config.yml', 'r') as f:
 def gif(bot, update, args):
     folders = os.walk(gif_folder)
     args = str(args)[2:-2]
-    print(args)
     avail_folders = next(folders)[1]
-    if args == "help"or args == "?":
+    if args == "help" or args == "?":
         key_list = []
         for i in avail_folders:
             key = InlineKeyboardButton(i, callback_data=i)
