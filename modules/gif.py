@@ -3,9 +3,10 @@ from random import randint
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
+with open('config.yml', 'r') as f:
+    gif_folder = yaml.load(f)["path"]["gifs"]
+
 def gif(bot, update, args):
-    with open('config.yml', 'r') as f:
-        gif_folder = yaml.load(f)["path"]["gifs"]
     folders = os.walk(gif_folder)
     args = str(args)[2:-2]
     print(args)
@@ -25,7 +26,7 @@ def gif(bot, update, args):
     else:
         if args in avail_folders or args == "":
             dir = gif_folder+args
-            gifs = [f for f in os.listdir(dir) if os.path.isfile(os.path.join(dir, f)) and f.endswith(".gif")]
+            gifs = [f for f in os.listdir(dir) if os.path.isfile(os.path.join(dir, f)) and f.endswith((".mp4", ".gif"))]
             filecount = len(gifs)
             rand = randint(0, filecount-1)
             result = list(gifs)[rand]
@@ -40,8 +41,8 @@ def gif_button(bot, update):
     bot.editMessageText(text="Selected option: %s\nUploading can take a while!" % query.data,
                         chat_id=query.message.chat_id,
                         message_id=query.message.message_id)
-    dir = "gifs/"+query.data
-    gifs = [f for f in os.listdir(dir) if os.path.isfile(os.path.join(dir, f)) and f.endswith(".gif")]
+    dir = gif_folder+query.data
+    gifs = [f for f in os.listdir(dir) if os.path.isfile(os.path.join(dir, f)) and f.endswith((".mp4", ".gif"))]
     filecount = len(gifs)
     rand = randint(0, filecount-1)
     result = list(gifs)[rand]
