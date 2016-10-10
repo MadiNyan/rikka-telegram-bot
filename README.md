@@ -15,11 +15,19 @@ Python 3.5
 + uptime
 
 ## How to
-Put your bot token and Bing Api key in config.yml (without any quotations)
+Configure your token, api key and paths in config.yml (without any quotations)
 ```
     keys:
-     telegram_token: <here>
-     bing_api_key: <and here>
+        telegram_token: 123455
+        bing_api_key: 123456
+
+    path:
+        gifs: examples/gifs/
+        memes: examples/memes/
+        meme_font: resources/impact.ttf
+        glitch: examples/glitch/
+        lego: examples/lego/
+        nya: examples/nya/
 ```
 
 ## Available functions:
@@ -31,7 +39,7 @@ Put your bot token and Bing Api key in config.yml (without any quotations)
 + /glitch - break an image
 + /lego [from 1 to 100] - legofy image
 + /gif - get random gif, "/gif help" to see folders
-+ /nya - get random girl pic
++ /nya - get random asian girl pic
 + /meme [top text] @ [bottom text] - make a meme from image
 + /img, /vid, /news [query] - Bing search for random result
 + /status - show server cpu, ram, hdd load and uptime

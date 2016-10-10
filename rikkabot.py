@@ -110,7 +110,7 @@ dp.add_handler(CommandHandler('news', news_search, pass_args=True))
 dp.add_handler(CallbackQueryHandler(gif_button))
 
 # Starting bot
-updater.start_polling()
-# Run the bot until the you presses Ctrl+C
+updater.start_polling(clean=True)
+# Run the bot until you presses Ctrl+C
 print("=====================\nUp and running!\n")
 updater.idle()
