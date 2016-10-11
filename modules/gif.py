@@ -16,7 +16,7 @@ def gif(bot, update, args):
             key = InlineKeyboardButton(i, callback_data=i)
             key_list.append(key)
         row_split = lambda list, size, acc=[]: row_split(list[size:], size, acc+[(list[:size])]) if list else acc
-        rows = row_split(key_list, 5)
+        rows = row_split(key_list, 4)
         root_btn = [InlineKeyboardButton("[unsorted]", callback_data="\\")]
         rows.insert(0, root_btn)
         keyboard = rows
