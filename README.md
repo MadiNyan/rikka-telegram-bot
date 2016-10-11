@@ -2,8 +2,8 @@
 Multipurpose chat bot
 
 ## Requirements:
-Python 3.5
-ImageMagick
++ Python 3.5
++ ImageMagick
 
 ### Libraries:
 + [python-telegram-bot](https://github.com/python-telegram-bot)
