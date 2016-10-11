@@ -8,6 +8,7 @@
 /gif - get random gif, "/gif help" to see folders
 /nya - get random girl pic
 /meme [top text] @ [bottom text] - make a meme from image
+/kek [-l, -r, -t, -b] - mirror one side of an image to another
 /img, /vid, /news [query] - Bing search for random result
 
 That is all for now, but I will learn something new in future!

@@ -3,6 +3,7 @@ Multipurpose chat bot
 
 ## Requirements:
 Python 3.5
+ImageMagick
 
 ### Libraries:
 + [python-telegram-bot](https://github.com/python-telegram-bot)
@@ -27,6 +28,7 @@ Configure your token, api key and paths in config.yml (without any quotations)
         glitch: examples/glitch/
         lego: examples/lego/
         nya: examples/nya/
+        kek: examples/kek/
 ```
 
 ## Available functions:
@@ -40,5 +42,6 @@ Configure your token, api key and paths in config.yml (without any quotations)
 + /gif - get random gif, "/gif help" to see folders
 + /nya - get random asian girl pic
 + /meme [top text] @ [bottom text] - make a meme from image
++ /kek [-l, -r, -t, -b] - mirror one side of an image to another
 + /img, /vid, /news [query] - Bing search for random result
 + /status - show server cpu, ram, hdd load and uptime

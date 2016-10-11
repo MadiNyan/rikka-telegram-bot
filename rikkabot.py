@@ -84,6 +84,10 @@ print("Status imported")
 from modules.bing_search import img_search, vid_search, news_search
 print("Bing search imported")
 
+# Kek images
+from modules.kek import kekify, kek
+print("Kek imported")
+
 ### All the handlers for feature functions go here:
 dp.add_handler(CommandHandler('start', start))
 dp.add_handler(CommandHandler("help", help))
@@ -108,6 +112,8 @@ dp.add_handler(CommandHandler('img', img_search, pass_args=True))
 dp.add_handler(CommandHandler('vid', vid_search, pass_args=True))
 dp.add_handler(CommandHandler('news', news_search, pass_args=True))
 dp.add_handler(CallbackQueryHandler(gif_button))
+dp.add_handler(MessageHandler([caption_filter("/kek")], kek))
+dp.add_handler(CommandHandler('kek', kek))
 
 # Starting bot
 updater.start_polling(clean=True)
