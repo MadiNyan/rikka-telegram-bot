@@ -91,7 +91,6 @@ print("Instagram imported")
 ### All the handlers for feature functions go here:
 dp.add_handler(CommandHandler('start', start))
 dp.add_handler(CommandHandler("help", help))
-dp.add_handler(CommandHandler('caps', caps, pass_args=True))
 dp.add_handler(CommandHandler('leet', leet, pass_args=True))
 dp.add_handler(CommandHandler('toribash', toristats, pass_args=True))
 dp.add_handler(CommandHandler('roll', roll, pass_args=True))
