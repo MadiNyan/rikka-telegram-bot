@@ -36,10 +36,6 @@ def help(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text=help_text)
     print(datetime.datetime.now(), ">>>", "Done /help", ">>>", update.message.from_user.username)
 
-# caps all the text
-from modules.caps import caps
-print("Caps imported")
-
 #leetspeak convert
 from modules.leetspeak import leet
 print("1337 imported")

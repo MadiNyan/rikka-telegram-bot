@@ -1,15 +1,11 @@
-/start - start a bot or view welcome message
-/caps - UPPER CASE your text
 /leet - convert text to 1337 5P34K
 /roll [1] or [2] - choose one option randomly
-/toribash [username] - show Toribash stats
 /glitch - break an image
 /lego [from 1 to 100] - legofy image
-/gif - get random gif, "/gif help" to see folders
-/nya - get random girl pic
 /meme [top text] @ [bottom text] - make a meme from image
 /kek [-l, -r, -t, -b] - mirror one side of an image to another
+/gif - get random gif, "/gif help" to see folders
+/nya - get random girl pic
 /img, /vid, /news [query] - Bing search for random result
 
-That is all for now, but I will learn something new in future!
 Made by @Madi_Nyan
