@@ -1,7 +1,7 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from random import randint
-import os, datetime, logging, yaml
+import os, datetime, logging, yaml, re
 
 with open('config.yml', 'r') as f:
     key = yaml.load(f)["keys"]["telegram_token"]
@@ -88,6 +88,10 @@ print("Bing search imported")
 from modules.kek import kekify, kek
 print("Kek imported")
 
+# Instagram
+from modules.instagram import instagram, instagram_button
+print("Instagram imported")
+
 ### All the handlers for feature functions go here:
 dp.add_handler(CommandHandler('start', start))
 dp.add_handler(CommandHandler("help", help))
@@ -111,9 +115,13 @@ dp.add_handler(CommandHandler('status', status))
 dp.add_handler(CommandHandler('img', img_search, pass_args=True))
 dp.add_handler(CommandHandler('vid', vid_search, pass_args=True))
 dp.add_handler(CommandHandler('news', news_search, pass_args=True))
-dp.add_handler(CallbackQueryHandler(gif_button))
 dp.add_handler(MessageHandler([caption_filter("/kek")], kek))
 dp.add_handler(CommandHandler('kek', kek))
+dp.add_handler(MessageHandler([caption_filter("/instagram")], instagram))
+dp.add_handler(CommandHandler('instagram', instagram))
+
+dp.add_handler(CallbackQueryHandler(instagram_button, pattern="(filt_)\w+"))
+dp.add_handler(CallbackQueryHandler(gif_button, pattern="([A-z0-9\\\])"))
 
 # Starting bot
 updater.start_polling(clean=True)
