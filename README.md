@@ -29,6 +29,7 @@ Configure your token, api key and paths in config.yml (without any quotations)
         lego: examples/lego/
         nya: examples/nya/
         kek: examples/kek/
+        instagram: examples/instagram/
 ```
 
 ## Available functions:
@@ -43,5 +44,6 @@ Configure your token, api key and paths in config.yml (without any quotations)
 + /nya - get random asian girl pic
 + /meme [top text] @ [bottom text] - make a meme from image
 + /kek [-l, -r, -t, -b] - mirror one side of an image to another
++ /instagram - add filter to an image
 + /img, /vid, /news [query] - Bing search for random result
 + /status - show server cpu, ram, hdd load and uptime
