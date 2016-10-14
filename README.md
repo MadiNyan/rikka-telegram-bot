@@ -34,7 +34,6 @@ Configure your token, api key and paths in config.yml (without any quotations)
 
 ## Available functions:
 + /start - start a bot or view welcome message
-+ /caps - UPPER CASE your text
 + /leet - convert text to 1337 5P34K
 + /roll [1] or [2] - choose one option randomly
 + /toribash [username] - show Toribash stats
