@@ -10,11 +10,15 @@ with open('config.yml', 'r') as f:
 def get_anime(bot, update, query):
     client = Pybooru('yandere')
     tags = client.tags_list(query)
-    tag_count = tags[0]['count']
-    if tag_count >= 100:
+    try:
+        tag_dict = next((item for item in tags if item["name"] == query))
+        tag_count = tag_dict['count']
+        if tag_count >= 100:
+            posts_to_load = 100
+        else:
+            posts_to_load = tag_count
+    except:
         posts_to_load = 100
-    else:
-        posts_to_load = tag_count
     posts = client.posts_list(query, posts_to_load)
     random = randint(0, posts_to_load-1)
     image_post = "https://yande.re/post/show/"+str(posts[random]["id"])

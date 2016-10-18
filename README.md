@@ -13,6 +13,7 @@ Multipurpose chat bot
 + psutil
 + requests
 + uptime
++ [PyBooru](https://github.com/LuqueDaniel/pybooru)
 
 ## How to
 Configure your token, api key and paths in config.yml (without any quotations)
