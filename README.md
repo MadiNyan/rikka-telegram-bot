@@ -45,4 +45,5 @@ Configure your token, api key and paths in config.yml (without any quotations)
 + /kek [-l, -r, -t, -b] - mirror one side of an image to another
 + /instagram - add filter to an image
 + /img, /vid, /news [query] - Bing search for random result
++ /a [tag] - get pic from yande.re
 + /status - show server cpu, ram, hdd load and uptime

@@ -88,6 +88,10 @@ print("Kek imported")
 from modules.instagram import instagram, instagram_button
 print("Instagram imported")
 
+# Anime search
+from modules.anime import anime, get_anime
+print("Anime imported")
+
 ### All the handlers for feature functions go here:
 dp.add_handler(CommandHandler('start', start))
 dp.add_handler(CommandHandler("help", help))
@@ -114,6 +118,7 @@ dp.add_handler(MessageHandler([caption_filter("/kek")], kek))
 dp.add_handler(CommandHandler('kek', kek))
 dp.add_handler(MessageHandler([caption_filter("/instagram")], instagram))
 dp.add_handler(CommandHandler('instagram', instagram))
+dp.add_handler(CommandHandler('a', anime, pass_args=True))
 
 dp.add_handler(CallbackQueryHandler(instagram_button, pattern="(filt_)\w+"))
 dp.add_handler(CallbackQueryHandler(gif_button, pattern="([A-z0-9\\\])"))

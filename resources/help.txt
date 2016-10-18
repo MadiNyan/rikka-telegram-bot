@@ -8,5 +8,6 @@
 /gif - get random gif, "/gif help" to see categories
 /nya - get random girl pic
 /img, /vid, /news [query] - Bing search for random result
+/a [tag] - get pic from yande.re
 
 Made by @Madi_Nyan
