@@ -22,7 +22,7 @@ def meme(bot, update):
     elif update.message.reply_to_message is not None:
         if "/meme" in update.message.text:
             try:
-                if "http" in update.message.reply_to_message.text:
+                if "http:" or "https:" in update.message.reply_to_message.text:
                     url = re.findall('http[s]?://\S+?\.(?:jpg|jpeg|png|gif)', update.message.reply_to_message.text)
                     link = str(url)
                     r = requests.get(link[2:-2])

@@ -53,7 +53,7 @@ def kek(bot, update):
         if "/kek" in update.message.text:
             kek_param = "".join(update.message.text[5:7])
             try:
-                if "http:" in update.message.reply_to_message.text:
+                if "http:" or "https:" in update.message.reply_to_message.text:
                     url = re.findall('http[s]?://\S+?\.(?:jpg|jpeg|png|gif)', update.message.reply_to_message.text)
                     link = str(url)
                     r = requests.get(link[2:-2])

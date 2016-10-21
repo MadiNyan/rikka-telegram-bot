@@ -23,10 +23,10 @@ def lego(bot, update):
                     return
             # if replied message had a link, download image
             try:
-                if "http:" in update.message.reply_to_message.text:
+                if "http:" or "https:" in update.message.reply_to_message.text:
                     url = re.findall('http[s]?://\S+?\.(?:jpg|jpeg|png|gif)', update.message.reply_to_message.text)
                     link = str(url)
-                    print(link[2:-2])
+                    r = requests.get(link[2:-2])
                     with open(lego_folder+"original.jpg", "wb") as code:
                         code.write(r.content)
                 # if not, download photo from replied message
