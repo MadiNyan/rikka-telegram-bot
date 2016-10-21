@@ -15,7 +15,7 @@ def instagram(bot, update):
     if "/instagram" in update.message.text:
         if update.message.reply_to_message is not None:
             try:
-                if "http:" in update.message.reply_to_message.text:
+                if "http" in update.message.reply_to_message.text:
                     url = re.findall('http[s]?://\S+?\.(?:jpg|jpeg|png|gif)', update.message.reply_to_message.text)
                     link = str(url)
                     r = requests.get(link[2:-2])
