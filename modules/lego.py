@@ -54,7 +54,7 @@ def lego(bot, update):
                 bot.sendMessage(chat_id=update.message.chat_id, text="Baka, make it from 1 to 100!", reply_to_message_id=update.message.message_id)
                 return
         bot.getFile(update.message.photo[-1].file_id).download(lego_folder+"original.jpg")
-        legofy.main(image_path=lego_folder+"original.jpg", output_path="lego/legofied.jpg", size=size, palette_mode=None, dither=False)
+        legofy.main(image_path=lego_folder+"original.jpg", output_path=lego_folder+"legofied.jpg", size=size, palette_mode=None, dither=False)
         with open(lego_folder+"legofied.jpg", "rb") as f:
             bot.sendPhoto(update.message.chat_id, f, reply_to_message_id=update.message.message_id)
         print(datetime.datetime.now(), ">>>", "Done legofying", ">>>", update.message.from_user.username)
