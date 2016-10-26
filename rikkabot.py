@@ -1,7 +1,11 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from random import randint
-import os, datetime, logging, yaml, re
+import os
+import datetime
+import logging
+import yaml
+import re
 
 with open('config.yml', 'r') as f:
     key = yaml.load(f)["keys"]["telegram_token"]
@@ -10,37 +14,43 @@ dp = updater.dispatcher
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 # Import /help from a text file
-helpfile = open("resources/help.txt","r")
+helpfile = open("resources/help.txt", "r")
 help_text = helpfile.read()
 print("Help textfile imported successfully")
 helpfile.close()
 
+
 # custom filters
 def caption_filter(text):
     return lambda msg: bool(msg.photo) and msg.caption.startswith(text)
-    
+
+
 def text_filter(text):
     return lambda msg: bool(text in msg.text)
 
-### All the feature functions go here:
+
+# All the feature functions go here:
 # start feature
 def start(bot, update):
     with open("resources/hello.webp", "rb") as hello:
         bot.sendSticker(update.message.chat_id, hello)
     personname = update.message.from_user.first_name
-    bot.sendMessage(chat_id=update.message.chat_id, text="Konnichiwa, " + personname + "! \nMy name is Takanashi Rikka desu! \nUse /help to see what I can do! :3")
+    bot.sendMessage(chat_id=update.message.chat_id,
+                    text="Konnichiwa, " + personname + "! \nMy name is Takanashi Rikka desu! \
+                    \nUse /help to see what I can do! :3")
     print(datetime.datetime.now(), ">>>", "Done /start", ">>>", update.message.from_user.username)
+
 
 # show help
 def help(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text=help_text)
     print(datetime.datetime.now(), ">>>", "Done /help", ">>>", update.message.from_user.username)
 
-#leetspeak convert
+# leetspeak convert
 from modules.leetspeak import leet
 print("1337 imported")
 
-#tori stats
+# tori stats
 from modules.toribash import toristats
 print("Toristats imported")
 
@@ -59,9 +69,9 @@ print("Lego imported")
 # reply with Kappa
 from modules.kappa import kappa
 print("Kappa imported")
-    
+
 # post random gif
-from modules.gif import gif, gif_button 
+from modules.gif import gif, gif_button
 print("Gif imported")
 
 # meme creator
@@ -92,7 +102,7 @@ print("Instagram imported")
 from modules.anime import anime, get_anime
 print("Anime imported")
 
-### All the handlers for feature functions go here:
+# All the handlers for feature functions go here:
 dp.add_handler(CommandHandler('start', start))
 dp.add_handler(CommandHandler("help", help))
 dp.add_handler(CommandHandler('leet', leet, pass_args=True))

@@ -15,9 +15,9 @@ def process_img(bot, update):
         linelist = list(f)
         linecount = len(linelist) - 10
         for i in range(5):
-            del_line = randint(1, linecount - 1)
+            i = randint(1, linecount - 1)
             linecount = linecount - 1
-            del linelist[del_line]
+            del linelist[i]
     with open(glitch_folder + 'result.jpg', 'wb') as f:
         for content in linelist:
             f.write(content)
