@@ -1,10 +1,15 @@
-import yaml, subprocess, datetime, requests, re
+import yaml
+import subprocess
+import datetime
+import requests
+import re
 
-#import path
+# import path
 with open('config.yml', 'r') as f:
     kek_folder = yaml.load(f)["path"]["kek"]
 
-#kek process + send
+
+# kek process + send
 def kekify(bot, update, kek_param):
     try:
         if kek_param == "-l" or kek_param == "":
@@ -41,11 +46,14 @@ def kekify(bot, update, kek_param):
         subprocess.run(mirror, shell=True)
         append = "convert " + order + append + kek_folder + "kek.jpg"
         subprocess.run(append, shell=True)
-        with open(kek_folder+"kek.jpg","rb") as f:
+        with open(kek_folder+"kek.jpg", "rb") as f:
             bot.sendPhoto(update.message.chat_id, f, reply_to_message_id=update.message.message_id)
         print(datetime.datetime.now(), ">>>", "Done kek", ">>>", update.message.from_user.username)
     except:
-        bot.sendMessage(update.message.chat_id, text="Unknown kek parameter.\nUse -l, -r, -t or -b", reply_to_message_id=update.message.message_id)
+        bot.sendMessage(update.message.chat_id,
+                        text="Unknown kek parameter.\nUse -l, -r, -t or -b",
+                        reply_to_message_id=update.message.message_id)
+
 
 # init; checking if it is photo, reply with photo or reply with link
 def kek(bot, update):
@@ -64,7 +72,9 @@ def kek(bot, update):
                     bot.getFile(update.message.reply_to_message.photo[-1].file_id).download(kek_folder+"original.jpg")
                     kekify(bot, update, kek_param)
             except:
-                bot.sendMessage(update.message.chat_id, text="I can't get the image! :c", reply_to_message_id=update.message.message_id)
+                bot.sendMessage(update.message.chat_id,
+                                text="I can't get the image! :c",
+                                reply_to_message_id=update.message.message_id)
     elif "/kek" in update.message.caption:
         kek_param = "".join(update.message.caption[5:7])
         bot.getFile(update.message.photo[-1].file_id).download(kek_folder+"original.jpg")

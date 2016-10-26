@@ -1,9 +1,13 @@
-import datetime, requests, re, yaml
+import datetime
+import requests
+import re
+import yaml
 from modules.memegenerator import make_meme
 
-#import paths
+# import paths
 with open('config.yml', 'r') as f:
     memes_folder = yaml.load(f)["path"]["memes"]
+
 
 def meme(bot, update):
     if "/meme" in update.message.caption:
@@ -41,5 +45,7 @@ def meme(bot, update):
                 with open(memes_folder+"meme.jpg", "rb") as meme:
                     bot.sendPhoto(update.message.chat_id, meme, reply_to_message_id=update.message.message_id)
                     print(datetime.datetime.now(), ">>>", "Done /meme", ">>>", update.message.from_user.username)
-            except: 
-                bot.sendMessage(update.message.chat_id, text="I can't get the image!", reply_to_message_id=update.message.message_id)
+            except:
+                bot.sendMessage(update.message.chat_id,
+                                text="I can't get the image!",
+                                reply_to_message_id=update.message.message_id)

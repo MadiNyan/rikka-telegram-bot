@@ -1,5 +1,7 @@
 import datetime
 kappas = ["kappa", "каппа"]
+
+
 def kappa(bot, update):
     for word in kappas:
         if word in update.message.text.lower():

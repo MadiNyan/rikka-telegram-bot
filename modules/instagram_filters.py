@@ -1,5 +1,6 @@
 import subprocess
 
+
 # Cut & resize before processing
 def cut_img(path):
     cut = "convert " + path + "original.jpg ( +clone +level-colors white \
@@ -7,24 +8,33 @@ def cut_img(path):
            -composite -bordercolor white -border 1 -trim +repage ) +swap -compose Src \
            -gravity center -composite -resize 612x612 " + path + "temp.jpg"
     subprocess.run(cut, shell=True)
+
+
 # Add border of chosen color
 def border(path, color):
     border = "convert  " + path + "temp.jpg -bordercolor " + color + " -border 20x20  " + path + "temp.jpg"
     subprocess.run(border, shell=True)
+
+
 # Add frame
 def frame(path, file):
     frame = "convert  " + path + "temp.jpg resources/frames/" + file + ".png -geometry +0+0 \
              -composite  " + path + "temp.jpg"
     subprocess.run(frame, shell=True)
+
+
 # Vignette
 def vignette(path, color1, color2):
     vignette = "convert " + path + "temp.jpg -size 918x918 radial-gradient:" + color1 + "-" + color2 + " \
                 -gravity center -crop 612x612+0+0 +repage -compose multiply -flatten " + path + "temp.jpg"
     subprocess.run(vignette, shell=True)
+
+
 # Resize (if modified) and rename
 def finish(path, result_name):
     finish = "convert " + path + "temp.jpg -resize 612x612 " + path + result_name + ".jpg"
     subprocess.run(finish, shell=True)
+
 
 # Filters to apply
 def filt_Gotham(path):
@@ -35,6 +45,7 @@ def filt_Gotham(path):
     border(path, "black")
     finish(path, "gotham")
 
+
 def filt_Kelvin(path):
     cut_img(path)
     primary_filter = "convert " + path + "temp.jpg -auto-gamma -modulate 120,50,100 \
@@ -44,6 +55,7 @@ def filt_Kelvin(path):
     frame(path, "kelvin")
     finish(path, "kelvin")
 
+
 def filt_Lomo(path):
     cut_img(path)
     primary_filter = "convert " + path + "temp.jpg -channel R -level 25% \
@@ -51,6 +63,7 @@ def filt_Lomo(path):
     subprocess.run(primary_filter, shell=True)
     vignette(path, "none", "black")
     finish(path, "lomo")
+
 
 def filt_Nashville(path):
     cut_img(path)
@@ -66,6 +79,7 @@ def filt_Nashville(path):
     subprocess.run(color_overlay2, shell=True)
     frame(path, "nashville")
     finish(path, "nashville")
+
 
 def filt_Toaster(path):
     cut_img(path)
