@@ -12,7 +12,7 @@ with open('config.yml', 'r') as f:
     anime_folder = yaml.load(f)['path']['anime']
 
 
-def get_anime(bot, update, query):
+def get_anime(query):
     client = Pybooru('yandere')
     max_posts_to_load = 200
     posts = client.posts_list(query, max_posts_to_load)
@@ -32,7 +32,7 @@ def anime(bot, update, args):
     else:
         input_query = ' '.join(args).lower()
     try:
-        cap = get_anime(bot, update, input_query)
+        cap = get_anime(input_query)
         with open(anime_folder + 'anime_temp.jpg', 'rb') as f:
             bot.sendPhoto(update.message.chat_id, f, caption=cap,
                           reply_to_message_id=update.message.message_id)
@@ -40,7 +40,7 @@ def anime(bot, update, args):
                '>>> Sent anime:', input_query, '>>>',
                update.message.from_user.username)
     except:
-        cap = get_anime(bot, update, 'rating:s')
+        cap = get_anime('rating:s')
         with open(anime_folder + 'anime_temp.jpg', 'rb') as f:
             bot.sendPhoto(update.message.chat_id, f,
                           caption="Nothing found, onii-chan, \

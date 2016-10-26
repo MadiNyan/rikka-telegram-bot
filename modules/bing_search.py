@@ -4,8 +4,6 @@ from py_bing_search import PyBingImageSearch, PyBingVideoSearch, \
     PyBingNewsSearch
 from random import randint
 import datetime
-import urllib3
-import requests
 import yaml
 
 with open('config.yml', 'r') as f:
@@ -52,17 +50,17 @@ def vid_search(bot, update, args):
                         text="Sorry, I can't find anything :(",
                         reply_to_message_id=update.message.message_id)
     else:
-        list = []
+        vid_list = []
         for i in range(0, len(result) - 1):
             if 'youtube' in result[i].media_url:
-                list.append(result[i].media_url)
-        if len(list) == 0:
+                vid_list.append(result[i].media_url)
+        if len(vid_list) == 0:
             bot.sendMessage(chat_id=update.message.chat_id,
                             text="Sorry, I can't find anything :(",
                             reply_to_message_id=update.message.message_id)
         else:
-            vid = randint(0, len(list) - 1)
-            link = list[vid]
+            vid = randint(0, len(vid_list) - 1)
+            link = vid_list[vid]
             text = '[link](%s)' % link
             bot.sendMessage(chat_id=update.message.chat_id, text=text,
                             reply_to_message_id=update.message.message_id,

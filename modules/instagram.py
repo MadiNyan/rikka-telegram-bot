@@ -43,13 +43,13 @@ def instagram(bot, update):
 
 def instagram_button(bot, update):
     instagram_query = update.callback_query
-    filter = update.callback_query.data
-    filter_name = str(filter)[5:]
+    chosen_filter = update.callback_query.data
+    filter_name = str(chosen_filter)[5:]
     bot.editMessageText(text="Selected filter: %s\nProcessing..." % filter_name,
                         chat_id=instagram_query.message.chat_id,
                         message_id=instagram_query.message.message_id)
     try:
-        getattr(modules.instagram_filters, filter)(path)
+        getattr(modules.instagram_filters, chosen_filter)(path)
     except:
         print("Instagram error")
     with open(path+filter_name+".jpg", "rb") as f:

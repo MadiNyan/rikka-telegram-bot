@@ -5,7 +5,6 @@ import datetime
 import yaml
 from random import randint
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
 with open('config.yml', 'r') as f:
     gif_folder = yaml.load(f)['path']['gifs']
@@ -31,14 +30,14 @@ def gif(bot, update, args):
                                   reply_markup=reply_markup)
     else:
         if args in avail_folders or args == '':
-            dir = gif_folder + args
-            gifs = [f for f in os.listdir(dir)
-                    if os.path.isfile(os.path.join(dir, f))
+            gifs_dir = gif_folder + args
+            gifs = [f for f in os.listdir(gifs_dir)
+                    if os.path.isfile(os.path.join(gifs_dir, f))
                     and f.endswith(('.mp4', '.gif'))]
             filecount = len(gifs)
             rand = randint(0, filecount - 1)
             result = list(gifs)[rand]
-            with open(dir + '/' + str(result), 'rb') as f:
+            with open(gifs_dir + '/' + str(result), 'rb') as f:
                 bot.sendDocument(update.message.chat_id, f,
                                  reply_to_message_id=update.message.message_id)
             print (datetime.datetime.now(),
@@ -56,14 +55,14 @@ def gif_button(bot, update):
     bot.editMessageText(text='Selected option: %s\nUploading can take a while!'
                         % query.data, chat_id=query.message.chat_id,
                         message_id=query.message.message_id)
-    dir = gif_folder + query.data
-    gifs = [f for f in os.listdir(dir)
-            if os.path.isfile(os.path.join(dir, f))
+    gifs_dir = gif_folder + query.data
+    gifs = [f for f in os.listdir(gifs_dir)
+            if os.path.isfile(os.path.join(gifs_dir, f))
             and f.endswith(('.mp4', '.gif'))]
     filecount = len(gifs)
     rand = randint(0, filecount - 1)
     result = list(gifs)[rand]
-    with open(dir + '/' + str(result), 'rb') as f:
+    with open(gifs_dir + '/' + str(result), 'rb') as f:
         bot.sendDocument(query.message.chat_id, f)
     print (datetime.datetime.now(),
            '>>> Sent gif >>>',

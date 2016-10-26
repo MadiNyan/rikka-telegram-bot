@@ -29,33 +29,33 @@ def finish(path, result_name):
 # Filters to apply
 def filt_Gotham(path):
     cut_img(path)
-    filter = "convert  " + path + "temp.jpg -modulate 120,10,100 -fill #222b6d \
+    primary_filter = "convert  " + path + "temp.jpg -modulate 120,10,100 -fill #222b6d \
               -colorize 20 -gamma 0.5 -contrast -contrast  " + path + "temp.jpg"
-    subprocess.run(filter, shell=True)
+    subprocess.run(primary_filter, shell=True)
     border(path, "black")
     finish(path, "gotham")
 
 def filt_Kelvin(path):
     cut_img(path)
-    filter = "convert " + path + "temp.jpg -auto-gamma -modulate 120,50,100 \
+    primary_filter = "convert " + path + "temp.jpg -auto-gamma -modulate 120,50,100 \
               -size 612x612 -fill rgba(255,153,0,0.5) -draw \"rectangle 0,0 612,612\" \
               -compose multiply " + path + "temp.jpg"
-    subprocess.run(filter, shell=True)
+    subprocess.run(primary_filter, shell=True)
     frame(path, "kelvin")
     finish(path, "kelvin")
 
 def filt_Lomo(path):
     cut_img(path)
-    filter = "convert " + path + "temp.jpg -channel R -level 25% \
+    primary_filter = "convert " + path + "temp.jpg -channel R -level 25% \
              -channel G -level 25% " + path + "temp.jpg"
-    subprocess.run(filter, shell=True)
+    subprocess.run(primary_filter, shell=True)
     vignette(path, "none", "black")
     finish(path, "lomo")
 
 def filt_Nashville(path):
     cut_img(path)
-    filter = "convert  " + path + "temp.jpg -contrast -modulate 100,150,100 -auto-gamma " + path + "temp.jpg"
-    subprocess.run(filter, shell=True)
+    primary_filter = "convert  " + path + "temp.jpg -contrast -modulate 100,150,100 -auto-gamma " + path + "temp.jpg"
+    subprocess.run(primary_filter, shell=True)
     color_overlay = "convert  " + path + "temp.jpg ( -clone 0 -fill #222b6d -colorize 100% ) \
                     ( -clone 0 -colorspace gray -negate ) -compose blend \
                     -define compose:args=50,50 -composite  " + path + "temp.jpg"
@@ -73,8 +73,8 @@ def filt_Toaster(path):
                     ( -clone 0 -colorspace gray -negate ) -compose blend \
                     -define compose:args=50,50 -composite  " + path + "temp.jpg"
     subprocess.run(color_overlay, shell=True)
-    filter = "convert  " + path + "temp.jpg -modulate 150,80,100 -gamma 1.2 -contrast -contrast " + path + "temp.jpg"
-    subprocess.run(filter, shell=True)
+    primary_filter = "convert  " + path + "temp.jpg -modulate 150,80,100 -gamma 1.2 -contrast -contrast " + path + "temp.jpg"
+    subprocess.run(primary_filter, shell=True)
     vignette(path, "none", "LavenderBlush3")
     vignette(path, "#ff9966", "none")
     border(path, "white")
