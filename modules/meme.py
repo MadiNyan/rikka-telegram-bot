@@ -5,7 +5,7 @@ import yaml
 from modules.memegenerator import make_meme
 
 # import paths
-with open('config.yml', 'r') as f:
+with open("config.yml", "r") as f:
     memes_folder = yaml.load(f)["path"]["memes"]
 
 
@@ -20,14 +20,14 @@ def meme(bot, update):
         else:
             split_text = initial_text
             make_meme("", split_text, memes_folder+"original.jpg")
-        with open(memes_folder+"meme.jpg", "rb") as meme:
-            bot.sendPhoto(update.message.chat_id, meme, reply_to_message_id=update.message.message_id)
+        with open(memes_folder+"meme.jpg", "rb") as f:
+            update.message.reply_photo(f)
             print(datetime.datetime.now(), ">>>", "Done /meme", ">>>", update.message.from_user.username)
     elif update.message.reply_to_message is not None:
         if "/meme" in update.message.text:
             try:
                 if "http" in update.message.reply_to_message.text:
-                    url = re.findall('http[s]?://\S+?\.(?:jpg|jpeg|png|gif)', update.message.reply_to_message.text)
+                    url = re.findall("http[s]?://\S+?\.(?:jpg|jpeg|png|gif)", update.message.reply_to_message.text)
                     link = str(url)
                     r = requests.get(link[2:-2])
                     with open(memes_folder+"original.jpg", "wb") as code:
@@ -42,10 +42,8 @@ def meme(bot, update):
                 else:
                     split_text = initial_text
                     make_meme("", split_text, memes_folder+"original.jpg")
-                with open(memes_folder+"meme.jpg", "rb") as meme:
-                    bot.sendPhoto(update.message.chat_id, meme, reply_to_message_id=update.message.message_id)
+                with open(memes_folder+"meme.jpg", "rb") as f:
+                    update.message.reply_photo(f)
                     print(datetime.datetime.now(), ">>>", "Done /meme", ">>>", update.message.from_user.username)
             except:
-                bot.sendMessage(update.message.chat_id,
-                                text="I can't get the image!",
-                                reply_to_message_id=update.message.message_id)
+                update.message.reply_text("I can't get the image!")

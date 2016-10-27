@@ -5,7 +5,7 @@ import requests
 import re
 
 # import path
-with open('config.yml', 'r') as f:
+with open("config.yml", "r") as f:
     kek_folder = yaml.load(f)["path"]["kek"]
 
 
@@ -47,12 +47,10 @@ def kekify(bot, update, kek_param):
         append = "convert " + order + append + kek_folder + "kek.jpg"
         subprocess.run(append, shell=True)
         with open(kek_folder+"kek.jpg", "rb") as f:
-            bot.sendPhoto(update.message.chat_id, f, reply_to_message_id=update.message.message_id)
+            update.message.reply_photo(f)
         print(datetime.datetime.now(), ">>>", "Done kek", ">>>", update.message.from_user.username)
     except:
-        bot.sendMessage(update.message.chat_id,
-                        text="Unknown kek parameter.\nUse -l, -r, -t or -b",
-                        reply_to_message_id=update.message.message_id)
+        update.message.reply_text("Unknown kek parameter.\nUse -l, -r, -t or -b")
 
 
 # init; checking if it is photo, reply with photo or reply with link
@@ -62,7 +60,7 @@ def kek(bot, update):
             kek_param = "".join(update.message.text[5:7])
             try:
                 if "http" in update.message.reply_to_message.text:
-                    url = re.findall('http[s]?://\S+?\.(?:jpg|jpeg|png|gif)', update.message.reply_to_message.text)
+                    url = re.findall("http[s]?://\S+?\.(?:jpg|jpeg|png|gif)", update.message.reply_to_message.text)
                     link = str(url)
                     r = requests.get(link[2:-2])
                     with open(kek_folder+"original.jpg", "wb") as code:
@@ -72,9 +70,7 @@ def kek(bot, update):
                     bot.getFile(update.message.reply_to_message.photo[-1].file_id).download(kek_folder+"original.jpg")
                     kekify(bot, update, kek_param)
             except:
-                bot.sendMessage(update.message.chat_id,
-                                text="I can't get the image! :c",
-                                reply_to_message_id=update.message.message_id)
+                update.message.reply_text("I can't get the image! :c")
     elif "/kek" in update.message.caption:
         kek_param = "".join(update.message.caption[5:7])
         bot.getFile(update.message.photo[-1].file_id).download(kek_folder+"original.jpg")

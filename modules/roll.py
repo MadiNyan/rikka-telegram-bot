@@ -13,7 +13,7 @@ def roll(bot, update, args):
             if not c.isdigit():
                 break
         capitalized = uncapitalized[:i] + uncapitalized[i:].capitalize()
-        bot.sendMessage(chat_id=update.message.chat_id, text=capitalized, reply_to_message_id=update.message.message_id)
+        update.message.reply_text(capitalized)
     elif splitter_en in text_roll:
         split_text = text_roll.split(splitter_en)
         randoms = len(split_text) - 1
@@ -23,5 +23,5 @@ def roll(bot, update, args):
             if not c.isdigit():
                 break
         capitalized = uncapitalized[:i] + uncapitalized[i:].capitalize()
-        bot.sendMessage(chat_id=update.message.chat_id, text=capitalized, reply_to_message_id=update.message.message_id)
+        update.message.reply_text(capitalized)
     print(datetime.datetime.now(), ">>>", "Done /roll", ">>>", update.message.from_user.username)

@@ -21,14 +21,10 @@ def lego(bot, update):
                 try:
                     size = int(parts[1])
                 except:
-                    bot.sendMessage(chat_id=update.message.chat_id,
-                                    text="Paremeter needs to be a number!",
-                                    reply_to_message_id=update.message.message_id)
+                    update.message.reply_text("Paremeter needs to be a number!")
                     return
                 if size > 100:
-                    bot.sendMessage(chat_id=update.message.chat_id,
-                                    text="Baka, make it from 1 to 100!",
-                                    reply_to_message_id=update.message.message_id)
+                    update.message.reply_text("Baka, make it from 1 to 100!")
                     return
             # if replied message had a link, download image
             try:
@@ -45,12 +41,10 @@ def lego(bot, update):
                             output_path=lego_folder+"legofied.jpg",
                             size=size, palette_mode=None, dither=False)
                 with open(lego_folder+"legofied.jpg", "rb") as f:
-                    bot.sendPhoto(update.message.chat_id, f, reply_to_message_id=update.message.message_id)
+                    update.message.reply_photo(f)
                 print(datetime.datetime.now(), ">>>", "Done legofying", ">>>", update.message.from_user.username)
             except:
-                bot.sendMessage(update.message.chat_id,
-                                text="I can't get the image!",
-                                reply_to_message_id=update.message.message_id)
+                update.message.reply_text("I can't get the image!")
 
     # check message with photo and caption
     elif "/lego" in update.message.caption:
@@ -61,19 +55,15 @@ def lego(bot, update):
             try:
                 size = int(parts[1])
             except:
-                bot.sendMessage(chat_id=update.message.chat_id,
-                                text="Paremeter needs to be a number!",
-                                reply_to_message_id=update.message.message_id)
+                update.message.reply_text("Paremeter needs to be a number!")
                 return
             if size > 100:
-                bot.sendMessage(chat_id=update.message.chat_id,
-                                text="Baka, make it from 1 to 100!",
-                                reply_to_message_id=update.message.message_id)
+                update.message.reply_text("Baka, make it from 1 to 100!")
                 return
         bot.getFile(update.message.photo[-1].file_id).download(lego_folder+"original.jpg")
         legofy.main(image_path=lego_folder+"original.jpg",
                     output_path=lego_folder+"legofied.jpg",
                     size=size, palette_mode=None, dither=False)
         with open(lego_folder+"legofied.jpg", "rb") as f:
-            bot.sendPhoto(update.message.chat_id, f, reply_to_message_id=update.message.message_id)
+            update.message.reply_photo(f)
         print(datetime.datetime.now(), ">>>", "Done legofying", ">>>", update.message.from_user.username)

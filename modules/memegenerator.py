@@ -7,9 +7,9 @@ import sys
 import yaml
 
 # import paths
-with open('config.yml', 'r') as f:
+with open("config.yml", "r") as f:
     memes_folder = yaml.load(f)["path"]["memes"]
-with open('config.yml', 'r') as f:
+with open("config.yml", "r") as f:
     meme_font = yaml.load(f)["path"]["meme_font"]
 
 
@@ -59,7 +59,7 @@ def get_upper(somedata):
     '''
     Handle Python 2/3 differences in argv encoding
     '''
-    result = ''
+    result = ""
     try:
         result = somedata.decode("utf-8").upper()
     except:
@@ -71,21 +71,21 @@ def get_lower(somedata):
     '''
     Handle Python 2/3 differences in argv encoding
     '''
-    result = ''
+    result = ""
     try:
         result = somedata.decode("utf-8").lower()
     except:
         result = somedata.lower()
     return result
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args_len = len(sys.argv)
-    topString = ''
-    meme = 'standard'
+    topString = ""
+    meme = "standard"
 
     if args_len == 1:
         # no args except the launch of the script
-        print('args plz')
+        print("args plz")
 
     elif args_len == 2:
         # only one argument, use standard meme
@@ -105,7 +105,7 @@ if __name__ == '__main__':
         # so many args
         # what do they mean
         # too intense
-        print('to many argz')
+        print("to many argz")
     print(meme)
-    filename = str(meme)+'.jpg'
+    filename = str(meme)+".jpg"
     make_meme(topString, bottomString, filename)

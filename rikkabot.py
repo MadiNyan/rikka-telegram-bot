@@ -7,17 +7,16 @@ import logging
 import yaml
 import re
 
-with open('config.yml', 'r') as f:
+with open("config.yml", "r") as f:
     key = yaml.load(f)["keys"]["telegram_token"]
 updater = Updater(token=key)
 dp = updater.dispatcher
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
 # Import /help from a text file
-helpfile = open("resources/help.txt", "r")
-help_text = helpfile.read()
-print("Help textfile imported successfully")
-helpfile.close()
+with open("resources/help.txt", "r") as helpfile:
+    help_text = helpfile.read()
+    print("Help textfile imported successfully")
 
 
 # custom filters
@@ -33,17 +32,16 @@ def text_filter(text):
 # start feature
 def start(bot, update):
     with open("resources/hello.webp", "rb") as hello:
-        bot.sendSticker(update.message.chat_id, hello)
+        update.message.reply_sticker(hello, quote=False)
     personname = update.message.from_user.first_name
-    bot.sendMessage(chat_id=update.message.chat_id,
-                    text="Konnichiwa, " + personname + "! \nMy name is Takanashi Rikka desu! \
-                    \nUse /help to see what I can do! :3")
+    update.message.reply_text("Konnichiwa, " + personname + "! \nMy name is Takanashi Rikka desu! \
+                              \nUse /help to see what I can do! :3", quote=False)
     print(datetime.datetime.now(), ">>>", "Done /start", ">>>", update.message.from_user.username)
 
 
 # show help
 def help(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text=help_text)
+    update.message.reply_text(help_text)
     print(datetime.datetime.now(), ">>>", "Done /help", ">>>", update.message.from_user.username)
 
 # leetspeak convert
@@ -56,7 +54,7 @@ print("Toristats imported")
 
 # roll
 from modules.roll import roll
-print("Or imported")
+print("Roll imported")
 
 # Glitch image
 from modules.glitch import glitch
@@ -103,28 +101,28 @@ from modules.anime import anime, get_anime
 print("Anime imported")
 
 # All the handlers for feature functions go here:
-dp.add_handler(CommandHandler('start', start))
+dp.add_handler(CommandHandler("start", start))
 dp.add_handler(CommandHandler("help", help))
-dp.add_handler(CommandHandler('leet', leet, pass_args=True))
-dp.add_handler(CommandHandler('toribash', toristats, pass_args=True))
-dp.add_handler(CommandHandler('roll', roll, pass_args=True))
+dp.add_handler(CommandHandler("leet", leet, pass_args=True))
+dp.add_handler(CommandHandler("toribash", toristats, pass_args=True))
+dp.add_handler(CommandHandler("roll", roll, pass_args=True))
 dp.add_handler(MessageHandler(caption_filter("/glitch"), glitch))
-dp.add_handler(CommandHandler('glitch', glitch))
+dp.add_handler(CommandHandler("glitch", glitch))
 dp.add_handler(MessageHandler(caption_filter("/lego"), lego))
-dp.add_handler(CommandHandler('lego', lego))
-dp.add_handler(CommandHandler('gif', gif, pass_args=True))
+dp.add_handler(CommandHandler("lego", lego))
+dp.add_handler(CommandHandler("gif", gif, pass_args=True))
 dp.add_handler(MessageHandler(caption_filter("/meme"), meme))
-dp.add_handler(CommandHandler('meme', meme))
-dp.add_handler(CommandHandler('nya', nya))
-dp.add_handler(CommandHandler('status', status))
-dp.add_handler(CommandHandler('img', img_search, pass_args=True))
-dp.add_handler(CommandHandler('vid', vid_search, pass_args=True))
-dp.add_handler(CommandHandler('news', news_search, pass_args=True))
+dp.add_handler(CommandHandler("meme", meme))
+dp.add_handler(CommandHandler("nya", nya))
+dp.add_handler(CommandHandler("status", status))
+dp.add_handler(CommandHandler("img", img_search, pass_args=True))
+dp.add_handler(CommandHandler("vid", vid_search, pass_args=True))
+dp.add_handler(CommandHandler("news", news_search, pass_args=True))
 dp.add_handler(MessageHandler(caption_filter("/kek"), kek))
-dp.add_handler(CommandHandler('kek', kek))
+dp.add_handler(CommandHandler("kek", kek))
 dp.add_handler(MessageHandler(caption_filter("/instagram"), instagram))
-dp.add_handler(CommandHandler('instagram', instagram))
-dp.add_handler(CommandHandler('a', anime, pass_args=True))
+dp.add_handler(CommandHandler("instagram", instagram))
+dp.add_handler(CommandHandler("a", anime, pass_args=True))
 dp.add_handler(MessageHandler(Filters.text, kappa))
 
 dp.add_handler(CallbackQueryHandler(instagram_button, pattern="(filt_)\w+"))

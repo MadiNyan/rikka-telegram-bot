@@ -44,7 +44,7 @@ def status(bot, update):
     ram_text = "".join(ram_text)
 
     # HDD info
-    hdd = psutil.disk_usage('/')
+    hdd = psutil.disk_usage("/")
     hdd_total = round(hdd[0] / 1024**3, 1)
     hdd_used = round(hdd[1] / 1024**3, 1)
     # hdd_free = round(hdd[2] / 1024**3, 1)
@@ -55,5 +55,5 @@ def status(bot, update):
 
     # combine everything
     server_status = "💻 \nOS: " + OS + "\n" + cpu_cores + "\n" + cpu_text + "\n" + ram_text + "\n" + hdd_text + "\n" + uptime_text
-    bot.sendMessage(update.message.chat_id, text=server_status, reply_to_message_id=update.message.message_id)
+    update.message.reply_text(server_status)
     print(datetime.datetime.now(), ">>>", "Done /status", ">>>", update.message.from_user.username)
