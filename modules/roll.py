@@ -16,9 +16,6 @@ def rolling_process(update, split_text):
     randoms = len(split_text) - 1
     answer = randint(0, randoms)
     uncapitalized = split_text[answer]
-    for i, c in enumerate(uncapitalized):
-        if not c.isdigit():
-            break
-    capitalized = uncapitalized[:i] + uncapitalized[i:].capitalize()
+    capitalized = uncapitalized[0].upper() + uncapitalized[1:]
     update.message.reply_text(capitalized)
     print(datetime.datetime.now(), ">>>", "Done /roll", ">>>", update.message.from_user.username)
