@@ -10,7 +10,6 @@ with open("config.yml", "r") as f:
 
 # get image, pass parameter
 def kek(bot, update):
-
     if update.message.reply_to_message is not None:
         kek_param = "".join(update.message.text[5:7])
     else:
@@ -18,7 +17,7 @@ def kek(bot, update):
     try:
         get_image(bot, update, kek_folder)
     except:
-        update.message.reply_text("Can't get the image! :('")
+        update.message.reply_text("Can't get the image! :(")
         return
     kekify(bot, update, kek_param)
 

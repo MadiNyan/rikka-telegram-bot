@@ -2,6 +2,7 @@ import requests
 import re
 import subprocess
 
+
 def get_image(bot, update, dl_path):
     if update.message.reply_to_message is not None:
         if "http" in update.message.reply_to_message.text:
@@ -15,7 +16,6 @@ def get_image(bot, update, dl_path):
             stick = "convert  " + dl_path + "original.png -background white -flatten " + dl_path + "original.jpg"
             subprocess.run(stick, shell=True)
         elif update.message.reply_to_message.document is not None:
-            print(update.message.reply_to_message.document.file_name)
             if update.message.reply_to_message.document.file_name.endswith((".jpg", ".png")):
                 document = update.message.reply_to_message.document.file_id
                 bot.getFile(document).download(dl_path + "original.jpg")
