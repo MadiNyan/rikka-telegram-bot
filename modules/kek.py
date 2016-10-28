@@ -14,7 +14,7 @@ def kek(bot, update):
     try:
         get_image(bot, update, kek_folder)
     except:
-        update.message.reply_text("no")
+        update.message.reply_text("Can't get the image! :('")
         return
     kekify(bot, update, kek_param)
 
