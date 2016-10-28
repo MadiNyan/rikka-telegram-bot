@@ -1,6 +1,6 @@
 import requests
 import re
-
+import subprocess
 
 def get_image(bot, update, dl_path):
     if update.message.reply_to_message is not None:
@@ -11,7 +11,9 @@ def get_image(bot, update, dl_path):
                     f.write(r.content)
         elif update.message.reply_to_message.sticker is not None:
             sticker = update.message.reply_to_message.sticker.file_id
-            bot.getFile(sticker).download(dl_path + "original.jpg")
+            bot.getFile(sticker).download(dl_path + "original.png")
+            stick = "convert  " + dl_path + "original.png -background white -flatten " + dl_path + "original.jpg"
+            subprocess.run(stick, shell=True)
         elif update.message.reply_to_message.document is not None:
             print(update.message.reply_to_message.document.file_name)
             if update.message.reply_to_message.document.file_name.endswith((".jpg", ".png")):

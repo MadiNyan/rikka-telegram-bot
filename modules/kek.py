@@ -2,8 +2,6 @@ from modules.get_image import get_image
 import yaml
 import subprocess
 import datetime
-import requests
-import re
 
 # import path
 with open("config.yml", "r") as f:
