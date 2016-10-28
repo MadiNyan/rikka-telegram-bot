@@ -1,49 +1,35 @@
-import datetime
-import requests
-import re
-import yaml
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+from modules.get_image import get_image
 from modules.memegenerator import make_meme
+import datetime
+import yaml
 
 # import paths
 with open("config.yml", "r") as f:
-    memes_folder = yaml.load(f)["path"]["memes"]
+    meme_folder = yaml.load(f)["path"]["memes"]
 
 
 def meme(bot, update):
-    if "/meme" in update.message.caption:
+    meme_splitter = "@"
+    if update.message.reply_to_message is not None:
+        initial_text = "".join(update.message.text[6:]).upper()
+    else:
         initial_text = "".join(update.message.caption[6:]).upper()
-        meme_splitter = "@"
-        bot.getFile(update.message.photo[-1].file_id).download(memes_folder+"original.jpg")
-        if meme_splitter in update.message.caption:
-            split_text = initial_text.split(meme_splitter)
-            make_meme(split_text[0], split_text[1], memes_folder+"original.jpg")
-        else:
-            split_text = initial_text
-            make_meme("", split_text, memes_folder+"original.jpg")
-        with open(memes_folder+"meme.jpg", "rb") as f:
-            update.message.reply_photo(f)
-            print(datetime.datetime.now(), ">>>", "Done /meme", ">>>", update.message.from_user.username)
-    elif update.message.reply_to_message is not None:
-        if "/meme" in update.message.text:
-            try:
-                if "http" in update.message.reply_to_message.text:
-                    url = re.findall("http[s]?://\S+?\.(?:jpg|jpeg|png|gif)", update.message.reply_to_message.text)
-                    link = str(url)
-                    r = requests.get(link[2:-2])
-                    with open(memes_folder+"original.jpg", "wb") as code:
-                        code.write(r.content)
-                else:
-                    bot.getFile(update.message.reply_to_message.photo[-1].file_id).download(memes_folder+"original.jpg")
-                initial_text = "".join(update.message.text[6:]).upper()
-                meme_splitter = "@"
-                if meme_splitter in update.message.text:
-                    split_text = initial_text.split(meme_splitter)
-                    make_meme(split_text[0], split_text[1], memes_folder+"original.jpg")
-                else:
-                    split_text = initial_text
-                    make_meme("", split_text, memes_folder+"original.jpg")
-                with open(memes_folder+"meme.jpg", "rb") as f:
-                    update.message.reply_photo(f)
-                    print(datetime.datetime.now(), ">>>", "Done /meme", ">>>", update.message.from_user.username)
-            except:
-                update.message.reply_text("I can't get the image!")
+    split_text = initial_text.split(meme_splitter)
+    try:
+        get_image(bot, update, meme_folder)
+    except:
+        update.message.reply_text("Can't get the image! :(")
+        return
+    if split_text[0] == "":
+        update.message.reply_text("Type in some text!")
+        return
+    elif len(split_text) > 1:
+        make_meme(split_text[0], split_text[1], meme_folder+"original.jpg")
+    else:
+        make_meme("", split_text[0], meme_folder+"original.jpg")
+    with open(meme_folder+"meme.jpg", "rb") as f:
+        update.message.reply_photo(f)
+    print (datetime.datetime.now(), ">>>", "Done meme", ">>>",
+           update.message.from_user.username)
