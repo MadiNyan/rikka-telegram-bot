@@ -8,7 +8,7 @@ with open("config.yml", "r") as f:
     kek_folder = yaml.load(f)["path"]["kek"]
 
 
-# init; checking if it is photo, reply with photo or reply with link
+# get image, pass parameter
 def kek(bot, update):
     kek_param = "".join(update.message.text[5:7])
     try:
