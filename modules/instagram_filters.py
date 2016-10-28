@@ -46,6 +46,13 @@ def filt_Gotham(path):
     finish(path, "gotham")
 
 
+def filt_Grayscale(path):
+    cut_img(path)
+    primary_filter = "convert  " + path + "temp.jpg -colorspace Gray " + path + "temp.jpg"
+    subprocess.run(primary_filter, shell=True)
+    finish(path, "grayscale")
+
+
 def filt_Kelvin(path):
     cut_img(path)
     primary_filter = "convert " + path + "temp.jpg -auto-gamma -modulate 120,50,100 \
@@ -93,3 +100,17 @@ def filt_Toaster(path):
     vignette(path, "#ff9966", "none")
     border(path, "white")
     finish(path, "toaster")
+
+
+def filt_VHS(path):
+    cut_img(path)
+    red = "convert " + path + "temp.jpg -page +4+4 -background black -flatten -channel B -fx 0 " + path + "temp_r.jpg"
+    subprocess.run(red, shell=True)
+    green = "convert " + path + "temp.jpg -channel R -fx 0 " + path + "temp_g.jpg"
+    subprocess.run(green, shell=True)
+    blue = "convert " + path + "temp.jpg -page -4-4 -background black -flatten -channel G -fx 0 " + path + "temp_b.jpg"
+    subprocess.run(blue, shell=True)
+    combine = "convert " + path + "temp_r.jpg " + path + "temp_g.jpg " + path + "temp_b.jpg -average " + path + "temp.jpg"
+    subprocess.run(combine, shell=True)
+    frame(path, "scan")
+    finish(path, "VHS")
