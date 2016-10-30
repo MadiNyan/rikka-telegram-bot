@@ -1,5 +1,10 @@
-# rikka-telegram-bot
-Multipurpose chat bot
+![Rikka Bot Logo](http://madi.so/rikka-bot.png)
+*My personal multipurpose chat bot with completely random features*
+*Can be found at [@Rikka_Bot](https://telegram.me/Rikka_Bot)*
+
+![Python ver](http://img.shields.io/badge/Python-3.5-yellow.svg) [![Build Status](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/build.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/quality-score.png?b=external-img-dl)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/?branch=external-img-dl) [![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) [![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan) 
+
+----------
 
 ## Requirements:
 + Python 3.5
@@ -7,13 +12,13 @@ Multipurpose chat bot
 
 ### Libraries:
 + [python-telegram-bot](https://github.com/python-telegram-bot)
-+ [py_bing_search](https://github.com/tristantao/py-bing-search)
++ [py-bing-search](https://github.com/tristantao/py-bing-search)
 + [legofy](https://github.com/JuanPotato/Legofy)
++ [PyBooru](https://github.com/LuqueDaniel/pybooru)
 + Pillow
 + psutil
 + requests
 + uptime
-+ [PyBooru](https://github.com/LuqueDaniel/pybooru)
 
 ## How to
 Configure your token, api key and paths in config.yml (without any quotations)
