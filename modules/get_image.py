@@ -45,7 +45,7 @@ def get_image(bot, update, dl_path):
         return True
     # Sticker
     if reply.sticker is not None:
-        bot.getFile(reply.sticker.file_id).download(output)
+        bot.getFile(reply.sticker.file_id).download(temp_png)
         stick = "convert  " + temp_png + " -background white -flatten " + output
         subprocess.run(stick, shell=True)
         return True
