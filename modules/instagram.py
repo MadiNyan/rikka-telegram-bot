@@ -1,17 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from modules.get_image import get_image
 import modules.instagram_filters
 import inspect
 import yaml
 import datetime
-import requests
-import re
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-# import paths
-
+# import path
 with open("config.yml", "r") as f:
-    path = yaml.load(f)["path"]["instagram"]
+    instagram_folder = yaml.load(f)["path"]["instagram"]
 
 filters = []
 all_funcs = inspect.getmembers(modules.instagram_filters, inspect.isfunction)
@@ -21,26 +19,11 @@ for i in range(0, len(all_funcs)):
 
 
 def instagram(bot, update):
-    if "/instagram" in update.message.text:
-        if update.message.reply_to_message is not None:
-            try:
-                if "http" in update.message.reply_to_message.text:
-                    url = re.findall("http[s]?://\S+?\.(?:jpg|jpeg|png|gif)",
-                                     update.message.reply_to_message.text)
-                    link = str(url)
-                    r = requests.get(link[2:-2])
-                    with open(path + "original.jpg", "wb") as code:
-                        code.write(r.content)
-                else:
-                    bot.getFile(update.message.reply_to_message.photo[-1].file_id).download(path + "original.jpg")
-            except:
-                update.message.reply_text("I can't get the image! :c")
-                return
-        else:
-            update.message.reply_text("You need an image for that ^_^")
-            return
-    elif "/instagram" in update.message.caption:
-        bot.getFile(update.message.photo[-1].file_id).download(path + "original.jpg")
+    try:
+        get_image(bot, update, instagram_folder)
+    except:
+        update.message.reply_text("I can't get the image! :(")
+        return
     instagram_key_list = []
     for i in filters:
         instagram_key = InlineKeyboardButton(str(i)[5:], callback_data=i)
@@ -61,9 +44,9 @@ def instagram_button(bot, update):
                         chat_id=instagram_query.message.chat_id,
                         message_id=instagram_query.message.message_id)
     try:
-        getattr(modules.instagram_filters, chosen_filter)(path)
+        getattr(modules.instagram_filters, chosen_filter)(instagram_folder)
     except:
-        print("Instagram error")
-    with open(path + filter_name + ".jpg", "rb") as f:
+        raise Exception("Instagram error")
+    with open(instagram_folder + filter_name + ".jpg", "rb") as f:
         bot.sendPhoto(instagram_query.message.chat_id, f)
     print (datetime.datetime.now(), ">>>", "Sent instagram photo", ">>>", instagram_query.message.from_user.username)

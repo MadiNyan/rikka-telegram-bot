@@ -1,12 +1,25 @@
+from modules.get_image import get_image
 import yaml
 import subprocess
 import datetime
-import requests
-import re
 
 # import path
 with open("config.yml", "r") as f:
     kek_folder = yaml.load(f)["path"]["kek"]
+
+
+# get image, pass parameter
+def kek(bot, update):
+    if update.message.reply_to_message is not None:
+        kek_param = "".join(update.message.text[5:7])
+    else:
+        kek_param = "".join(update.message.caption[5:7])
+    try:
+        get_image(bot, update, kek_folder)
+    except:
+        update.message.reply_text("Can't get the image! :(")
+        return
+    kekify(bot, update, kek_param)
 
 
 # kek process + send
@@ -51,27 +64,3 @@ def kekify(bot, update, kek_param):
         print(datetime.datetime.now(), ">>>", "Done kek", ">>>", update.message.from_user.username)
     except:
         update.message.reply_text("Unknown kek parameter.\nUse -l, -r, -t or -b")
-
-
-# init; checking if it is photo, reply with photo or reply with link
-def kek(bot, update):
-    if update.message.reply_to_message is not None:
-        if "/kek" in update.message.text:
-            kek_param = "".join(update.message.text[5:7])
-            try:
-                if "http" in update.message.reply_to_message.text:
-                    url = re.findall("http[s]?://\S+?\.(?:jpg|jpeg|png|gif)", update.message.reply_to_message.text)
-                    link = str(url)
-                    r = requests.get(link[2:-2])
-                    with open(kek_folder+"original.jpg", "wb") as code:
-                        code.write(r.content)
-                    kekify(bot, update, kek_param)
-                else:
-                    bot.getFile(update.message.reply_to_message.photo[-1].file_id).download(kek_folder+"original.jpg")
-                    kekify(bot, update, kek_param)
-            except:
-                update.message.reply_text("I can't get the image! :c")
-    elif "/kek" in update.message.caption:
-        kek_param = "".join(update.message.caption[5:7])
-        bot.getFile(update.message.photo[-1].file_id).download(kek_folder+"original.jpg")
-        kekify(bot, update, kek_param)

@@ -1,16 +1,27 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.get_image import get_image
+from random import randint
 import yaml
+import datetime
 
 # import path
 with open("config.yml", "r") as f:
     glitch_folder = yaml.load(f)["path"]["glitch"]
 
 
+# get image, then glitch
+def glitch(bot, update):
+    try:
+        get_image(bot, update, glitch_folder)
+    except:
+        update.message.reply_text("I can't get the image! :(")
+        return
+    process_img(update)
+
+
 # glitch processing; deleting lines in .jpg file
-def process_img(bot, update):
-    from random import randint
-    import datetime
+def process_img(update):
     with open(glitch_folder + "original.jpg", "rb") as f:
         linelist = list(f)
         linecount = len(linelist) - 10
@@ -25,30 +36,3 @@ def process_img(bot, update):
         update.message.reply_photo(f)
     print (datetime.datetime.now(), ">>>", "Done glitching", ">>>",
            update.message.from_user.username)
-
-
-# checking if it is photo, reply with photo or reply with link
-def glitch(bot, update):
-    import requests
-    import re
-    if update.message.reply_to_message is not None:
-        if "/glitch" in update.message.text:
-            try:
-                if "http" in update.message.reply_to_message.text:
-                    url = re.findall("http[s]?://\S+?\.(?:jpg|jpeg|png|gif)",
-                                     update.message.reply_to_message.text)
-                    link = str(url)
-                    r = requests.get(link[2:-2])
-                    with open(glitch_folder + "original.jpg", "wb") as code:
-                        code.write(r.content)
-                    process_img(bot, update)
-                else:
-                    photo = update.message.reply_to_message.photo[-1].file_id
-                    bot.getFile(photo).download(glitch_folder + "original.jpg")
-                    process_img(bot, update)
-            except:
-                update.message.reply_text("I can't get the image!")
-    elif "/glitch" in update.message.caption:
-        photo = update.message.photo[-1].file_id
-        bot.getFile(photo).download(glitch_folder + "original.jpg")
-        process_img(bot, update)
