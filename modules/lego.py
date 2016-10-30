@@ -23,7 +23,7 @@ def lego(bot, update):
         except:
             update.message.reply_text("Paremeter needs to be a number!")
             return
-        if size > 100:
+        if size > 100 or size < 1:
             update.message.reply_text("Baka, make it from 1 to 100!")
             return
     try:

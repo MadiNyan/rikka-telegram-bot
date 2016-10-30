@@ -10,8 +10,8 @@ def extract_url(entity, text):
     if entity["type"] == "text_link":
         return entity["url"]
     elif entity["type"] == "url":
-        offset = entity[i]["offset"]
-        length = entity[i]["length"]
+        offset = entity["offset"]
+        length = entity["length"]
         return text[offset:offset+length]
     else:
         return None
