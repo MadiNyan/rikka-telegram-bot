@@ -29,7 +29,8 @@ def get_image(bot, update, dl_path):
     temp_png = os.path.join(dl_path, "original.png")
     reply = update.message.reply_to_message
     if reply is None:
-        return False
+        bot.getFile(update.message.photo[-1].file_id).download(output)
+        return True
     # Entities; url, text_link
     if reply.entities is not None:
         urls = (extract_url(x, reply.text) for x in reply.entities)
