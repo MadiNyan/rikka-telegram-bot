@@ -17,7 +17,7 @@ def liquid(bot, update):
     else:
         parts = update.message.caption.split(" ", 1)
     if len(parts) == 1:
-        power = 60
+        power = 50
     else:
         try:
             power = int(parts[1])
