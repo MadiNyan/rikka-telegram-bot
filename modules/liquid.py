@@ -32,8 +32,8 @@ def liquid(bot, update):
     except:
         update.message.reply_text("I can't get the image! :(")
         return
-    id = subprocess.Popen("identify " + path + "original.jpg", stdout=subprocess.PIPE).communicate()[0]
-    res = str(id.split()[2])[2:-1]
+    identify = subprocess.Popen("identify " + path + "original.jpg", stdout=subprocess.PIPE).communicate()[0]
+    res = str(identify.split()[2])[2:-1]
     size = str(100 - (power / 1.3))
     x = "convert " + path + "original.jpg -liquid-rescale " + size + "%x" + size + "% -resize " + res + "! " + path + "liquid.jpg"
     subprocess.run(x, shell=True)
