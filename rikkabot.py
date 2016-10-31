@@ -89,7 +89,7 @@ from modules.bing_search import img_search, vid_search, news_search
 print("Bing search imported")
 
 # Kek images
-from modules.kek import kekify, kek
+from modules.kek import kek
 print("Kek imported")
 
 # Instagram

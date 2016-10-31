@@ -19,7 +19,13 @@ def kek(bot, update):
     except:
         update.message.reply_text("Can't get the image! :(")
         return
-    kekify(bot, update, kek_param)
+    result = kekify(bot, update, kek_param)
+    try:
+        with open(kek_folder+result, "rb") as f:
+            update.message.reply_photo(f)
+        print(datetime.datetime.now(), ">>>", "Done kek", ">>>", update.message.from_user.username)
+    except:
+        return
 
 
 # kek process + send
@@ -32,6 +38,7 @@ def kekify(bot, update, kek_param):
             flip = "-flop "
             order = kek_folder + piece_one + kek_folder + piece_two
             append = "+append "
+            result = "kek-left.jpg"
         elif kek_param == "-r":
             crop = "50%x100% "
             piece_one = "result-1.jpg "
@@ -39,6 +46,7 @@ def kekify(bot, update, kek_param):
             flip = "-flop "
             order = kek_folder + piece_two + kek_folder + piece_one
             append = "+append "
+            result = "kek-right.jpg"
         elif kek_param == "-t":
             crop = "100%x50% "
             piece_one = "result-0.jpg "
@@ -46,6 +54,7 @@ def kekify(bot, update, kek_param):
             flip = "-flip "
             order = kek_folder + piece_one + kek_folder + piece_two
             append = "-append "
+            result = "kek-top.jpg"
         elif kek_param == "-b":
             crop = "100%x50% "
             piece_one = "result-1.jpg "
@@ -53,14 +62,26 @@ def kekify(bot, update, kek_param):
             flip = "-flip "
             order = kek_folder + piece_two + kek_folder + piece_one
             append = "-append "
+            result = "kek-bot.jpg"
+        elif kek_param == "-m":
+            kekify(bot, update, "-l")
+            kekify(bot, update, "-r")
+            kekify(bot, update, "-t")
+            kekify(bot, update, "-b")
+            append_lr = "convert " + kek_folder + "kek-left.jpg " + kek_folder + "kek-right.jpg +append " + kek_folder + "kek-lr-temp.jpg"
+            subprocess.run(append_lr, shell=True)
+            append_tb = "convert " + kek_folder + "kek-top.jpg " + kek_folder + "kek-bot.jpg +append " + kek_folder + "kek-tb-temp.jpg"
+            subprocess.run(append_tb, shell=True)
+            append_all = "convert " + kek_folder + "kek-lr-temp.jpg " + kek_folder + "kek-tb-temp.jpg -append " + kek_folder + "multikek.jpg"
+            subprocess.run(append_all, shell=True)
+            result = "multikek.jpg"
+            return result
         cut = "convert " + kek_folder + "original.jpg -crop " + crop + kek_folder + "result.jpg"
         subprocess.run(cut, shell=True)
         mirror = "convert " + kek_folder + piece_one + flip + kek_folder + piece_two
         subprocess.run(mirror, shell=True)
-        append = "convert " + order + append + kek_folder + "kek.jpg"
+        append = "convert " + order + append + kek_folder + result
         subprocess.run(append, shell=True)
-        with open(kek_folder+"kek.jpg", "rb") as f:
-            update.message.reply_photo(f)
-        print(datetime.datetime.now(), ">>>", "Done kek", ">>>", update.message.from_user.username)
+        return result
     except:
-        update.message.reply_text("Unknown kek parameter.\nUse -l, -r, -t or -b")
+        update.message.reply_text("Unknown kek parameter.\nUse -l, -r, -t, -b or -m")
