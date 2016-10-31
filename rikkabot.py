@@ -100,6 +100,10 @@ print("Instagram imported")
 from modules.anime import anime, get_anime
 print("Anime imported")
 
+# Liquid rescale
+from modules.liquid import liquid
+print("Liquid imported")
+
 # All the handlers for feature functions go here:
 dp.add_handler(CommandHandler("start", start))
 dp.add_handler(CommandHandler("help", help))
@@ -123,6 +127,9 @@ dp.add_handler(CommandHandler("kek", kek))
 dp.add_handler(MessageHandler(caption_filter("/instagram"), instagram))
 dp.add_handler(CommandHandler("instagram", instagram))
 dp.add_handler(CommandHandler("a", anime, pass_args=True))
+dp.add_handler(MessageHandler(caption_filter("/liq"), liquid))
+dp.add_handler(CommandHandler("liq", liquid))
+
 dp.add_handler(MessageHandler(Filters.text, kappa))
 
 dp.add_handler(CallbackQueryHandler(instagram_button, pattern="(filt_)\w+"))

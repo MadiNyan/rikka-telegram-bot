@@ -51,6 +51,7 @@ Configure your token, api key and paths in config.yml (without any quotations), 
 + /nya - get random asian girl pic
 + /meme [top text] @ [bottom text] - make a meme from image
 + /kek [-l, -r, -t, -b] - mirror one side of an image to another
++ /liq [from 1 to 100] - liquid rescale image
 + /instagram - add filter to an image
 + /img, /vid, /news [query] - Bing search for random result
 + /a [tag] - get pic from yande.re

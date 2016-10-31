@@ -4,6 +4,7 @@
 /lego [from 1 to 100] - legofy image
 /meme [top text] @ [bottom text] - make a meme from image
 /kek [-l, -r, -t, -b] - mirror one side of an image to another
+/liq [from 1 to 100] - liquid rescale image
 /instagram - add filter to an image
 /gif - get random gif, "/gif help" to see categories
 /nya - get random girl pic
