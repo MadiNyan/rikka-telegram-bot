@@ -9,17 +9,21 @@ def toristats(bot, update, args):
     toristats = "http://forum.toribash.com/tori_stats.php?format=json"
     full_link = toristats + "&username=" + user
     r = requests.get(full_link)
-    json = r.json()
+    try:
+        tori_json = r.json()
+    except:
+        update.message.reply_text("No such player")
+        return
 
-    userid = json["userid"]
-    username = json["username"]
-    qi = json["qi"]
-    belt = json["belt"]
-    clanname = json["clanname"]
-    elo = json["elo"]
-    winratio = json["winratio"]
-    tc = json["tc"]
-    lastact = str(datetime.datetime.fromtimestamp(int(json["lastactivity"])))
+    userid = tori_json["userid"]
+    username = tori_json["username"]
+    qi = tori_json["qi"]
+    belt = tori_json["belt"]
+    clanname = tori_json["clanname"]
+    elo = tori_json["elo"]
+    winratio = tori_json["winratio"]
+    tc = tori_json["tc"]
+    lastact = str(datetime.datetime.fromtimestamp(int(tori_json["lastactivity"])))
 
     output = ("User ID: " + userid + "\nUsername: " + username +
               "\nQi: " + str(qi) + ", " + belt +
