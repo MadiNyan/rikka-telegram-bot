@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from modules.get_image import get_image
 from modules.memegenerator import make_meme
+from telegram import ChatAction
 import datetime
 import yaml
 
@@ -22,6 +23,7 @@ def meme(bot, update):
     except:
         update.message.reply_text("Can't get the image! :(")
         return
+    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     if split_text[0] == "":
         update.message.reply_text("Type in some text!")
         return

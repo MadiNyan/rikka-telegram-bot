@@ -1,4 +1,5 @@
 from modules.get_image import get_image
+from telegram import ChatAction
 import yaml
 import subprocess
 import datetime
@@ -19,6 +20,7 @@ def kek(bot, update):
     except:
         update.message.reply_text("Can't get the image! :(")
         return
+    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     result = kekify(bot, update, kek_param)
     try:
         with open(kek_folder+result, "rb") as f:

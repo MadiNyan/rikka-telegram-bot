@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.get_image import get_image
+from telegram import ChatAction
 from random import randint
 import yaml
 import datetime
@@ -17,6 +18,7 @@ def glitch(bot, update):
     except:
         update.message.reply_text("I can't get the image! :(")
         return
+    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     process_img(update)
 
 

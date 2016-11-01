@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
+from random import randint
 import datetime
 import yaml
-from random import randint
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+import os
 
 with open("config.yml", "r") as f:
     gif_folder = yaml.load(f)["path"]["gifs"]
@@ -28,6 +28,7 @@ def gif(bot, update, args):
         reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text("Available folders for /gif are:", reply_markup=reply_markup)
     elif args in avail_folders or args == "":
+        update.message.chat.send_action(ChatAction.UPLOAD_DOCUMENT)
         gifs_dir = gif_folder + args
         gifs = [f for f in os.listdir(gifs_dir)
                 if os.path.isfile(os.path.join(gifs_dir, f))
@@ -48,6 +49,7 @@ def gif_button(bot, update):
     bot.editMessageText(text="Selected option: %s\nUploading can take a while!"
                         % query.data, chat_id=query.message.chat_id,
                         message_id=query.message.message_id)
+    query.message.chat.send_action(ChatAction.UPLOAD_DOCUMENT)
     gifs_dir = gif_folder + query.data
     gifs = [f for f in os.listdir(gifs_dir)
             if os.path.isfile(os.path.join(gifs_dir, f))

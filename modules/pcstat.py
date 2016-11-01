@@ -1,7 +1,8 @@
+from telegram import ChatAction
 from uptime import uptime
-import psutil
 import platform
 import datetime
+import psutil
 
 
 def seconds_to_str(seconds):
@@ -12,6 +13,8 @@ def seconds_to_str(seconds):
 
 
 def status(bot, update):
+    update.message.chat.send_action(ChatAction.TYPING)
+
     # Uptime
     f = int(uptime())
     pcuptime = seconds_to_str(f)

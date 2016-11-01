@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.get_image import get_image
+from telegram import ChatAction
 import subprocess
 import datetime
 import yaml
@@ -32,6 +33,7 @@ def liquid(bot, update):
     except:
         update.message.reply_text("I can't get the image! :(")
         return
+    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     identify = subprocess.Popen("identify " + path + "original.jpg", stdout=subprocess.PIPE).communicate()[0]
     res = str(identify.split()[2])[2:-1]
     size = str(100 - (power / 1.3))

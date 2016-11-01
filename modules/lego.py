@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.get_image import get_image
+from telegram import ChatAction
 import legofy
 import datetime
 import yaml
@@ -31,6 +32,7 @@ def lego(bot, update):
     except:
         update.message.reply_text("Can't get the image! :(")
         return
+    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     legofy.main(image_path=lego_folder+"original.jpg",
                 output_path=lego_folder+"legofied.jpg",
                 size=size, palette_mode=None, dither=False)

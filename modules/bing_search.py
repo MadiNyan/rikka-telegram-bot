@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from py_bing_search import PyBingImageSearch, PyBingVideoSearch, \
     PyBingNewsSearch
+from telegram import ChatAction
 from random import randint
 import datetime
 import yaml
@@ -14,6 +15,7 @@ def img_search(bot, update, args):
     if len(args) == 0:
         update.message.reply_text("You need a query to search!")
         return
+    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     search = " ".join(args)
     bing_image = PyBingImageSearch(key, search,
                                    custom_params="&Adult='Off'")
@@ -33,6 +35,7 @@ def vid_search(bot, update, args):
     if len(args) == 0:
         update.message.reply_text("You need a query to search!")
         return
+    update.message.chat.send_action(ChatAction.UPLOAD_VIDEO)
     search = " ".join(args)
     bing_video = PyBingVideoSearch(key, search,
                                    custom_params="&Adult='Off'")
@@ -58,6 +61,7 @@ def vid_search(bot, update, args):
 
 
 def news_search(bot, update, args):
+    update.message.chat.send_action(ChatAction.TYPING)
     search = " ".join(args)
     bing_news = PyBingNewsSearch(key, search)
     result = bing_news.search(limit=20, format="json")

@@ -1,7 +1,8 @@
-import os
+from telegram import ChatAction
+from random import randint
 import datetime
 import yaml
-from random import randint
+import os
 
 # import paths
 with open("config.yml", "r") as f:
@@ -14,6 +15,7 @@ print("Nyan images: ", filecount)
 
 
 def nya(bot, update):
+    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     rand = randint(0, filecount-1)
     result = files[rand]
     with open(nya_folder+"/"+str(result), "rb") as f:

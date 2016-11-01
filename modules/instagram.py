@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
 from modules.get_image import get_image
 import modules.instagram_filters
 import inspect
@@ -36,17 +36,18 @@ def instagram(bot, update):
 
 
 def instagram_button(bot, update):
-    instagram_query = update.callback_query
+    query = update.callback_query
     chosen_filter = update.callback_query.data
     filter_name = str(chosen_filter)[5:]
     bot.editMessageText(text="Selected filter: %s\nProcessing..."
                         % filter_name,
-                        chat_id=instagram_query.message.chat_id,
-                        message_id=instagram_query.message.message_id)
+                        chat_id=query.message.chat_id,
+                        message_id=query.message.message_id)
+    query.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     try:
         getattr(modules.instagram_filters, chosen_filter)(instagram_folder)
     except:
         raise Exception("Instagram error")
     with open(instagram_folder + filter_name + ".jpg", "rb") as f:
-        bot.sendPhoto(instagram_query.message.chat_id, f)
-    print (datetime.datetime.now(), ">>>", "Sent instagram photo", ">>>", instagram_query.message.from_user.username)
+        bot.sendPhoto(query.message.chat_id, f)
+    print (datetime.datetime.now(), ">>>", "Sent instagram photo", ">>>", query.message.from_user.username)

@@ -1,8 +1,10 @@
+from telegram import ChatAction
 import requests
 import datetime
 
 
 def toristats(bot, update, args):
+    update.message.chat.send_action(ChatAction.TYPING)
     user = args[0]
     toristats = "http://forum.toribash.com/tori_stats.php?format=json"
     full_link = toristats + "&username=" + user
