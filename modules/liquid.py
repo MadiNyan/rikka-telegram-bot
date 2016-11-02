@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from telegram.ext import CommandHandler, MessageHandler
 from modules.custom_filters import caption_filter
+from telegram.ext.dispatcher import run_async
 from modules.get_image import get_image
 from telegram import ChatAction
 import subprocess
@@ -19,6 +20,7 @@ with open("config.yml", "r") as f:
 
 
 # get image, then rescale
+@run_async
 def liquid(bot, update):
     if update.message.reply_to_message is not None:
         parts = update.message.text.split(" ", 1)

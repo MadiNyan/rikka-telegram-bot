@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from telegram.ext import CommandHandler, MessageHandler
 from modules.custom_filters import caption_filter
+from telegram.ext.dispatcher import run_async
 from modules.memegenerator import make_meme
 from modules.get_image import get_image
 from telegram import ChatAction
@@ -18,6 +19,7 @@ with open("config.yml", "r") as f:
     meme_folder = yaml.load(f)["path"]["memes"]
 
 
+@run_async
 def meme(bot, update):
     meme_splitter = "@"
     if update.message.reply_to_message is not None:
