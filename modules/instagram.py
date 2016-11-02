@@ -47,8 +47,9 @@ def instagram_button(bot, update):
     query = update.callback_query
     chosen_filter = update.callback_query.data
     filter_name = str(chosen_filter)[5:]
-    bot.editMessageText(text="Selected filter: %s\nProcessing..."
-                        % filter_name,
+    user = query.from_user.username
+    bot.editMessageText(text="%s selected: %s\nProcessing..."
+                        % (user, filter_name),
                         chat_id=query.message.chat_id,
                         message_id=query.message.message_id)
     query.message.chat.send_action(ChatAction.UPLOAD_PHOTO)

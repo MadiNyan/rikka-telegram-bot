@@ -52,8 +52,10 @@ def gif(bot, update, args):
 
 def gif_button(bot, update):
     query = update.callback_query
-    bot.editMessageText(text="Selected option: %s\nUploading can take a while!"
-                        % query.data, chat_id=query.message.chat_id,
+    user = query.from_user.username
+    bot.editMessageText(text="%s selected: %s\nUploading can take a while!"
+                        % (user, query.data), 
+                        chat_id=query.message.chat_id,
                         message_id=query.message.message_id)
     query.message.chat.send_action(ChatAction.UPLOAD_DOCUMENT)
     gifs_dir = gif_folder + query.data
