@@ -1,3 +1,4 @@
+from telegram.ext.dispatcher import run_async
 from telegram.ext import CommandHandler
 from telegram import ChatAction
 import requests
@@ -8,6 +9,7 @@ def handler(dp):
     dp.add_handler(CommandHandler("toribash", toristats, pass_args=True))
 
 
+@run_async
 def toristats(bot, update, args):
     update.message.chat.send_action(ChatAction.TYPING)
     user = args[0]

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+from telegram.ext.dispatcher import run_async
 from telegram.ext import CommandHandler
 from telegram import ChatAction
 from random import randint
@@ -18,6 +21,7 @@ filecount = len(files)
 print("Nya images: ", filecount)
 
 
+@run_async
 def nya(bot, update):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     rand = randint(0, filecount-1)

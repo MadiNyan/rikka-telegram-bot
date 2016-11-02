@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
 from telegram.ext import CommandHandler, CallbackQueryHandler
+from telegram.ext.dispatcher import run_async
 from random import randint
 import datetime
 import yaml
@@ -16,6 +17,7 @@ with open("config.yml", "r") as f:
     gif_folder = yaml.load(f)["path"]["gifs"]
 
 
+@run_async
 def gif(bot, update, args):
     folders = os.walk(gif_folder)
     args = str(args)[2:-2]

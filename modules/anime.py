@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from telegram.ext.dispatcher import run_async
 from telegram.ext import CommandHandler
 from telegram import ChatAction
 from pybooru import Pybooru
@@ -32,6 +33,7 @@ def get_anime(update, query):
     return image_post
 
 
+@run_async
 def anime(bot, update, args):
     if args == []:
         input_query = "rating:s"
