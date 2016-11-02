@@ -1,10 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from telegram.ext import CommandHandler, MessageHandler
+from modules.custom_filters import caption_filter
 from modules.get_image import get_image
 from telegram import ChatAction
-import legofy
 import datetime
+import legofy
 import yaml
+
+
+def handler(dp):
+    dp.add_handler(MessageHandler(caption_filter("/lego"), lego))
+    dp.add_handler(CommandHandler("lego", lego))
 
 # import paths
 with open('config.yml', 'r') as f:

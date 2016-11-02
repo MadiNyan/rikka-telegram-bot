@@ -1,10 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from telegram.ext import CommandHandler, MessageHandler
+from modules.custom_filters import caption_filter
 from modules.get_image import get_image
 from telegram import ChatAction
 from random import randint
-import yaml
 import datetime
+import yaml
+
+
+def handler(dp):
+    dp.add_handler(MessageHandler(caption_filter("/glitch"), glitch))
+    dp.add_handler(CommandHandler("glitch", glitch))
 
 # import path
 with open("config.yml", "r") as f:

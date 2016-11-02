@@ -1,4 +1,9 @@
+from telegram.ext import MessageHandler, Filters
 import datetime
+
+def handler(dp):
+    dp.add_handler(MessageHandler(Filters.text, kappa))
+
 kappas = ["kappa", "каппа"]
 
 

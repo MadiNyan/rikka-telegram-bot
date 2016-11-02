@@ -1,11 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
+from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler
+from modules.custom_filters import caption_filter
 from modules.get_image import get_image
 import modules.instagram_filters
+import datetime
 import inspect
 import yaml
-import datetime
+
+
+def handler(dp):
+    dp.add_handler(MessageHandler(caption_filter("/instagram"), instagram))
+    dp.add_handler(CommandHandler("instagram", instagram))
+    dp.add_handler(CallbackQueryHandler(instagram_button, pattern="(filt_)\w+"))
 
 # import path
 with open("config.yml", "r") as f:

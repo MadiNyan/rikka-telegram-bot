@@ -1,6 +1,11 @@
+from telegram.ext import CommandHandler
 from telegram import ChatAction
 import requests
 import datetime
+
+
+def handler(dp):
+    dp.add_handler(CommandHandler("toribash", toristats, pass_args=True))
 
 
 def toristats(bot, update, args):

@@ -1,8 +1,13 @@
+from telegram.ext import CommandHandler
 from telegram import ChatAction
 from uptime import uptime
 import platform
 import datetime
 import psutil
+
+
+def handler(dp):
+    dp.add_handler(CommandHandler("status", status))
 
 
 def seconds_to_str(seconds):

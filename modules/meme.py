@@ -1,10 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.get_image import get_image
+from telegram.ext import CommandHandler, MessageHandler
+from modules.custom_filters import caption_filter
 from modules.memegenerator import make_meme
+from modules.get_image import get_image
 from telegram import ChatAction
 import datetime
 import yaml
+
+
+def handler(dp):
+    dp.add_handler(MessageHandler(caption_filter("/meme"), meme))
+    dp.add_handler(CommandHandler("meme", meme))
 
 # import paths
 with open("config.yml", "r") as f:

@@ -1,8 +1,13 @@
+from telegram.ext import CommandHandler
 from telegram import ChatAction
 from random import randint
 import datetime
 import yaml
 import os
+
+
+def handler(dp):
+    dp.add_handler(CommandHandler("nya", nya))
 
 # import paths
 with open("config.yml", "r") as f:
@@ -10,8 +15,7 @@ with open("config.yml", "r") as f:
 
 files = os.listdir(nya_folder)
 filecount = len(files)
-
-print("Nyan images: ", filecount)
+print("Nya images: ", filecount)
 
 
 def nya(bot, update):
@@ -20,4 +24,4 @@ def nya(bot, update):
     result = files[rand]
     with open(nya_folder+"/"+str(result), "rb") as f:
         update.message.reply_photo(f)
-    print(datetime.datetime.now(), ">>>", "Sent nyan tyan", ">>>", update.message.from_user.username)
+    print(datetime.datetime.now(), ">>>", "Sent nya", ">>>", update.message.from_user.username)

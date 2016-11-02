@@ -1,10 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
+from telegram.ext import CommandHandler, CallbackQueryHandler
 from random import randint
 import datetime
 import yaml
 import os
+
+
+def handler(dp):
+    dp.add_handler(CommandHandler("gif", gif, pass_args=True))
+    dp.add_handler(CallbackQueryHandler(gif_button, pattern="([A-z0-9\\\])"))
 
 with open("config.yml", "r") as f:
     gif_folder = yaml.load(f)["path"]["gifs"]

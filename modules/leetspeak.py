@@ -1,6 +1,10 @@
+from telegram.ext import CommandHandler
 from functools import reduce
 import datetime
 
+
+def handler(dp):
+    dp.add_handler(CommandHandler("leet", leet, pass_args=True))
 
 def leet(bot, update, args):
     if update.message.reply_to_message is not None:

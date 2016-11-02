@@ -1,15 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from py_bing_search import PyBingImageSearch, PyBingVideoSearch, \
-    PyBingNewsSearch
+from py_bing_search import PyBingImageSearch, PyBingVideoSearch, PyBingNewsSearch
+from telegram.ext import CommandHandler, MessageHandler
 from telegram import ChatAction
 from random import randint
 import datetime
 import yaml
 
+
+def handler(dp):
+    dp.add_handler(CommandHandler("img", img_search, pass_args=True))
+    dp.add_handler(CommandHandler("vid", vid_search, pass_args=True))
+    dp.add_handler(CommandHandler("news", news_search, pass_args=True))
+
 with open("config.yml", "r") as f:
     key = yaml.load(f)["keys"]["bing_api_key"]
-
 
 def img_search(bot, update, args):
     if len(args) == 0:

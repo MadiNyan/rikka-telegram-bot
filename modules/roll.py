@@ -1,5 +1,10 @@
+from telegram.ext import CommandHandler
 from random import randint
 import datetime
+
+
+def handler(dp):
+    dp.add_handler(CommandHandler("roll", roll, pass_args=True))
 
 
 def roll(bot, update, args):
