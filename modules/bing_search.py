@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from py_bing_search import PyBingImageSearch, PyBingVideoSearch, PyBingNewsSearch
-from telegram.ext import CommandHandler, MessageHandler
+from telegram.ext import CommandHandler
 from telegram.ext.dispatcher import run_async
 from telegram import ChatAction
 from random import randint
