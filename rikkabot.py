@@ -45,6 +45,8 @@ with open("resources/help.txt", "r") as helpfile:
 
 # start feature
 def start(bot, update):
+    if update.message.chat.type != "private":
+        return
     with open("resources/hello.webp", "rb") as hello:
         update.message.reply_sticker(hello, quote=False)
     personname = update.message.from_user.first_name
