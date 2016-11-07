@@ -3,6 +3,7 @@
 from telegram.ext import CommandHandler, MessageHandler
 from modules.custom_filters import caption_filter
 from telegram.ext.dispatcher import run_async
+from modules.send_image import send_image
 from modules.get_image import get_image
 from telegram import ChatAction
 import datetime
@@ -16,8 +17,10 @@ def handler(dp):
 
 # import paths
 with open('config.yml', 'r') as f:
-    lego_folder = yaml.load(f)["path"]["lego"]
+    path = yaml.load(f)["path"]["lego"]
 
+extensions = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".webp")
+name = "legofied"
 
 @run_async
 def lego(bot, update):
@@ -37,14 +40,16 @@ def lego(bot, update):
             update.message.reply_text("Baka, make it from 1 to 100!")
             return
     try:
-        get_image(bot, update, lego_folder)
+        extension = get_image(bot, update, path)
     except:
         update.message.reply_text("Can't get the image! :(")
         return
+    if extension not in extensions:
+        update.message.reply_text("Unsupported file, onii-chan!")
+        return False
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    legofy.main(image_path=lego_folder+"original.jpg",
-                output_path=lego_folder+"legofied.jpg",
+    legofy.main(image_path=path + "original" + extension,
+                output_path=path + name + extension,
                 size=size, palette_mode=None, dither=False)
-    with open(lego_folder+"legofied.jpg", "rb") as f:
-        update.message.reply_photo(f)
+    send_image(bot, update, path, name, extension)
     print(datetime.datetime.now(), ">>>", "Done legofying", ">>>", update.message.from_user.username)
