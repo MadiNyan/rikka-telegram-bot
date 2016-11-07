@@ -3,6 +3,7 @@
 from telegram.ext import CommandHandler, MessageHandler
 from modules.custom_filters import caption_filter
 from telegram.ext.dispatcher import run_async
+from modules.send_image import send_image
 from modules.get_image import get_image
 from telegram import ChatAction
 import subprocess
@@ -38,16 +39,24 @@ def liquid(bot, update):
             update.message.reply_text("Baka, make it from 1 to 100!")
             return
     try:
-        get_image(bot, update, path)
+        extension = get_image(bot, update, path)
     except:
         update.message.reply_text("I can't get the image! :(")
         return
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    identify = subprocess.Popen("identify " + path + "original.jpg", stdout=subprocess.PIPE).communicate()[0]
+    identify = subprocess.Popen("identify " + path + "original" + extension, stdout=subprocess.PIPE).communicate()[0]
     res = str(identify.split()[2])[2:-1]
     size = str(100 - (power / 1.3))
-    x = "convert " + path + "original.jpg -liquid-rescale " + size + "%x" + size + "% -resize " + res + "! " + path + "liquid.jpg"
+    name = "liquid"
+    x = "convert " + path + "original" + extension + " -liquid-rescale " + \
+         size + "%x" + size + "% -resize " + res + "! " + path + name + extension
     subprocess.run(x, shell=True)
-    with open(path + "liquid.jpg", "rb") as f:
-        update.message.reply_photo(f)
+    if extension == ".mp4":
+        mp4fix = "ffmpeg -loglevel panic -i " + path + name + extension + \
+                  " -an -vf scale=trunc(iw/2)*2:trunc(ih/2)*2 \
+                  -pix_fmt yuv420p -c:v libx264 -profile:v high -level:v 2.0 " \
+                  + path + name + "_mp4" + extension + " -y"
+        subprocess.run(mp4fix, shell=True)
+        name = name + "_mp4"
+    send_image(bot, update, path, name, extension)
     print(datetime.datetime.now(), ">>>", "Done liquid rescale", ">>>", update.message.from_user.username)

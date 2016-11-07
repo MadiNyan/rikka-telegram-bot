@@ -18,40 +18,46 @@ def extract_url(entity, text):
 
 
 def is_image(path):
-    image_extensions = (".jpg", ".png", ".gif")
+    image_extensions = (".jpg", ".jpeg", ".png", ".gif", ".svg", ".tif", ".bmp", ".mp4")
     if path is None:
         return False
-    return path.casefold().endswith(image_extensions)
+    for i in image_extensions:
+        if path.casefold().endswith(i):
+            ext = i
+            return ext
+    return False
 
 
 def get_image(bot, update, dl_path):
-    output = os.path.join(dl_path, "original.jpg")
-    temp_png = os.path.join(dl_path, "original.png")
+    output = os.path.join(dl_path, "original")
     reply = update.message.reply_to_message
     if reply is None:
-        bot.getFile(update.message.photo[-1].file_id).download(output)
-        return True
+        extension = ".jpg"
+        bot.getFile(update.message.photo[-1].file_id).download(output + extension)
+        return extension
     # Entities; url, text_link
     if reply.entities is not None:
         urls = (extract_url(x, reply.text) for x in reply.entities)
         images = [x for x in urls if is_image(x)]
         if len(images) > 0:
+            extension = is_image(images[0])
             r = requests.get(images[0])  # use only first image url
-            with open(output, "wb") as f:
+            with open(output+extension, "wb") as f:
                 f.write(r.content)
-            return True
+            return extension
     # Document
     if reply.document is not None and is_image(reply.document.file_name):
-        bot.getFile(reply.document.file_id).download(output)
-        return True
+        extension = is_image(reply.document.file_name)
+        bot.getFile(reply.document.file_id).download(output + extension)
+        return extension
     # Sticker
     if reply.sticker is not None:
-        bot.getFile(reply.sticker.file_id).download(temp_png)
-        stick = "convert  " + temp_png + " -background white -flatten " + output
-        subprocess.run(stick, shell=True)
-        return True
+        extension = ".webp"
+        bot.getFile(reply.sticker.file_id).download(output+extension)
+        return extension
     # Photo in reply
     if reply.photo is not None:
-        bot.getFile(reply.photo[-1].file_id).download(output)
-        return True
+        extension = ".jpg"
+        bot.getFile(reply.photo[-1].file_id).download(output + extension)
+        return extension
     return False
