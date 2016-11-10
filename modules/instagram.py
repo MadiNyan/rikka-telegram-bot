@@ -3,6 +3,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
 from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler
 from modules.custom_filters import caption_filter
+from modules.send_image import send_image
 from modules.get_image import get_image
 import modules.instagram_filters
 import datetime
@@ -17,8 +18,9 @@ def handler(dp):
 
 # import path
 with open("config.yml", "r") as f:
-    instagram_folder = yaml.load(f)["path"]["instagram"]
+    path = yaml.load(f)["path"]["instagram"]
 
+extensions = (".jpg", ".jpeg", ".png", ".bmp", ".webp", ".svg", ".mp4", ".gif")
 filters = []
 all_funcs = inspect.getmembers(modules.instagram_filters, inspect.isfunction)
 for i in range(0, len(all_funcs)):
@@ -28,13 +30,17 @@ for i in range(0, len(all_funcs)):
 
 def instagram(bot, update):
     try:
-        get_image(bot, update, instagram_folder)
+        extension = get_image(bot, update, path)
     except:
         update.message.reply_text("I can't get the image! :(")
         return
+    if extension not in extensions:
+        update.message.reply_text("Unsupported file, onii-chan!")
+        return False
     instagram_key_list = []
     for i in filters:
-        instagram_key = InlineKeyboardButton(str(i)[5:], callback_data=i)
+        filter = i
+        instagram_key = InlineKeyboardButton(str(i)[5:], callback_data=",".join([filter, extension]))
         instagram_key_list.append(instagram_key)
     row_split = lambda list, size, acc=[]: (row_split(list[size:], size, acc + [list[:size]]) if list else acc)
     rows = row_split(instagram_key_list, 3)
@@ -45,7 +51,7 @@ def instagram(bot, update):
 
 def instagram_button(bot, update):
     query = update.callback_query
-    chosen_filter = update.callback_query.data
+    chosen_filter, extension = update.callback_query.data.split(",")
     filter_name = str(chosen_filter)[5:]
     user = query.from_user.username
     bot.editMessageText(text="%s selected: %s\nProcessing..."
@@ -54,9 +60,8 @@ def instagram_button(bot, update):
                         message_id=query.message.message_id)
     query.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     try:
-        getattr(modules.instagram_filters, chosen_filter)(instagram_folder)
+        getattr(modules.instagram_filters, chosen_filter)(path, extension)
     except:
         raise Exception("Instagram error")
-    with open(instagram_folder + filter_name + ".jpg", "rb") as f:
-        bot.sendPhoto(query.message.chat_id, f)
+    send_image(bot, query, path, filter_name, extension)
     print (datetime.datetime.now(), ">>>", "Sent instagram photo", ">>>", query.message.from_user.username)
