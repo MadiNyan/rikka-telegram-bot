@@ -63,7 +63,7 @@ def get_image(bot, update, dl_path):
     return False
 
 
-def send_image(bot, update, filepath, name, extension):
+def send_image(update, filepath, name, extension):
     photo_extensions = (".jpg", ".jpeg")
     doc_extensions = (".png", ".svg", ".tif", ".bmp", ".gif", ".mp4")
     sticker_extension = ".webp"

@@ -35,7 +35,7 @@ def kek(bot, update):
         return False
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     result = kekify(bot, update, kek_param, extension)
-    send_image(bot, update, path, result, extension)
+    send_image(update, path, result, extension)
     print(datetime.datetime.now(), ">>>", "Done kek", ">>>", update.message.from_user.username)
 
 

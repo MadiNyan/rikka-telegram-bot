@@ -61,5 +61,5 @@ def instagram_button(bot, update):
         getattr(modules.instagram_filters, chosen_filter)(path, extension)
     except:
         raise Exception("Instagram error")
-    send_image(bot, query, path, filter_name, extension)
+    send_image(query, path, filter_name, extension)
     print (datetime.datetime.now(), ">>>", "Sent instagram photo", ">>>", query.message.from_user.username)

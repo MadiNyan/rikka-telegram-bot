@@ -53,5 +53,5 @@ def lego(bot, update):
     legofy.main(image_path=path + "original" + extension,
                 output_path=path + name + extension,
                 size=size, palette_mode=None, dither=False)
-    send_image(bot, update, path, name, extension)
+    send_image(update, path, name, extension)
     print(datetime.datetime.now(), ">>>", "Done legofying", ">>>", update.message.from_user.username)

@@ -56,5 +56,5 @@ def liquid(bot, update):
                   + path + name + "_mp4" + extension + " -y"
         subprocess.run(mp4fix, shell=True)
         name = name + "_mp4"
-    send_image(bot, update, path, name, extension)
+    send_image(update, path, name, extension)
     print(datetime.datetime.now(), ">>>", "Done liquid rescale", ">>>", update.message.from_user.username)

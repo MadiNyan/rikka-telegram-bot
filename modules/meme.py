@@ -45,6 +45,6 @@ def meme(bot, update):
         make_meme(split_text[0], split_text[1], path + "original" + extension, extension)
     else:
         make_meme("", split_text[0], path + "original" + extension, extension)
-    send_image(bot, update, path, name, extension)
+    send_image(update, path, name, extension)
     print (datetime.datetime.now(), ">>>", "Done meme", ">>>",
            update.message.from_user.username)
