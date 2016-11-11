@@ -37,8 +37,8 @@ def instagram(bot, update):
         return False
     instagram_key_list = []
     for i in filters:
-        filter = i
-        instagram_key = InlineKeyboardButton(str(i)[5:], callback_data=",".join([filter, extension]))
+        inst_filter = i
+        instagram_key = InlineKeyboardButton(str(i)[5:], callback_data=",".join([inst_filter, extension]))
         instagram_key_list.append(instagram_key)
     row_split = lambda list, size, acc=[]: (row_split(list[size:], size, acc + [list[:size]]) if list else acc)
     rows = row_split(instagram_key_list, 3)
