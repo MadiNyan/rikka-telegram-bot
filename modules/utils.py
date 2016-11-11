@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # get_image func courtesy of Slko
 import requests
-import subprocess
 import os.path
 
 

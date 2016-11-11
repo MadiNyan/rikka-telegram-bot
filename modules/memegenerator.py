@@ -2,8 +2,6 @@
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
-
-import sys
 import yaml
 
 # import paths
