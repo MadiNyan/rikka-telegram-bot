@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.utils import caption_filter, get_image, send_image
+from modules.utils import caption_filter, get_image, send_image, get_param
 from telegram.ext import CommandHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
 from telegram import ChatAction
@@ -23,21 +23,7 @@ name = "legofied"
 
 @run_async
 def lego(bot, update):
-    if update.message.reply_to_message is not None:
-        parts = update.message.text.split(" ", 1)
-    else:
-        parts = update.message.caption.split(" ", 1)
-    if len(parts) == 1:
-        size = 60
-    else:
-        try:
-            size = int(parts[1])
-        except:
-            update.message.reply_text("Paremeter needs to be a number!")
-            return
-        if size > 100 or size < 1:
-            update.message.reply_text("Baka, make it from 1 to 100!")
-            return
+    size = get_param(update)
     try:
         extension = get_image(bot, update, path)
     except:
