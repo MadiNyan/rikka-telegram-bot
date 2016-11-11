@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from telegram.ext import CommandHandler, MessageHandler
-from modules.custom_filters import caption_filter
-from modules.get_image import get_image
+from modules.utils import get_image, caption_filter
 from telegram import ChatAction
 from random import randint
 import subprocess

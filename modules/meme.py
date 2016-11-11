@@ -1,11 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.utils import caption_filter, get_image, send_image
 from telegram.ext import CommandHandler, MessageHandler
-from modules.custom_filters import caption_filter
 from telegram.ext.dispatcher import run_async
 from modules.memegenerator import make_meme
-from modules.send_image import send_image
-from modules.get_image import get_image
 from telegram import ChatAction
 import datetime
 import yaml
