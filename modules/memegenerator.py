@@ -13,7 +13,7 @@ with open("config.yml", "r") as f:
     meme_font = yaml.load(f)["path"]["meme_font"]
 
 
-def make_meme(topString, bottomString, filename):
+def make_meme(topString, bottomString, filename, extension):
 
     img = Image.open(filename)
     imageSize = img.size
@@ -52,7 +52,7 @@ def make_meme(topString, bottomString, filename):
     draw.text(topTextPosition, topString, (255, 255, 255), font=font)
     draw.text(bottomTextPosition, bottomString, (255, 255, 255), font=font)
 
-    img.save(memes_folder+"meme.jpg")
+    img.save(memes_folder+"meme"+extension)
 
 
 def get_upper(somedata):
@@ -107,5 +107,5 @@ if __name__ == "__main__":
         # too intense
         print("to many argz")
     print(meme)
-    filename = str(meme)+".jpg"
+    filename = str(meme)+extension
     make_meme(topString, bottomString, filename)
