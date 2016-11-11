@@ -38,6 +38,7 @@ Configure your token, api key and paths in config.yml (without any quotations), 
         kek: examples/kek/
         instagram: examples/instagram/
         anime: examples/
+        liquid: examples/liquid
 ```
 
 ## Available functions:
@@ -45,14 +46,14 @@ Configure your token, api key and paths in config.yml (without any quotations), 
 + /leet - convert text to 1337 5P34K
 + /roll [1] or [2] - choose one option randomly
 + /toribash [username] - show Toribash stats
-+ /glitch - break an image
++ /glitch - glitch an image
 + /lego [from 1 to 100] - legofy image
 + /gif - get random gif, "/gif help" to see folders
 + /nya - get random asian girl pic
 + /meme [top text] @ [bottom text] - make a meme from image
 + /kek [-l, -r, -t, -b] - mirror one side of an image to another
 + /liq [from 1 to 100] - liquid rescale image
-+ /instagram - add filter to an image
++ /instagram or /ig - add filter to an image
 + /img, /vid, /news [query] - Bing search for random result
 + /a [tag] - get pic from yande.re
 + /status - show server cpu, ram, hdd load and uptime
