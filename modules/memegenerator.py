@@ -14,7 +14,7 @@ with open("config.yml", "r") as f:
 
 
 def make_meme(topString, bottomString, filename, extension):
-
+    ext = extension
     img = Image.open(filename)
     imageSize = img.size
 
@@ -52,7 +52,7 @@ def make_meme(topString, bottomString, filename, extension):
     draw.text(topTextPosition, topString, (255, 255, 255), font=font)
     draw.text(bottomTextPosition, bottomString, (255, 255, 255), font=font)
 
-    img.save(memes_folder+"meme"+extension)
+    img.save(memes_folder+"meme"+ext)
 
 
 def get_upper(somedata):
