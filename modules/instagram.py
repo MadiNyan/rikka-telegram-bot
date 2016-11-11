@@ -12,6 +12,8 @@ import yaml
 def handler(dp):
     dp.add_handler(MessageHandler(caption_filter("/instagram"), instagram))
     dp.add_handler(CommandHandler("instagram", instagram))
+    dp.add_handler(MessageHandler(caption_filter("/ig"), instagram))
+    dp.add_handler(CommandHandler("ig", instagram))
     dp.add_handler(CallbackQueryHandler(instagram_button, pattern="(filt_)\w+"))
 
 # import path
