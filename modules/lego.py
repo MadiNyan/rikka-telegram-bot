@@ -6,6 +6,7 @@ from telegram.ext.dispatcher import run_async
 from modules.send_image import send_image
 from modules.get_image import get_image
 from telegram import ChatAction
+import subprocess
 import datetime
 import legofy
 import yaml
@@ -48,6 +49,9 @@ def lego(bot, update):
         update.message.reply_text("Unsupported file, onii-chan!")
         return False
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    if extension == ".webp" or ".png":
+        stick = "convert " + path + "original" + extension + " -background white -flatten " + path + "original" + extension
+        subprocess.run(stick, shell=True)
     legofy.main(image_path=path + "original" + extension,
                 output_path=path + name + extension,
                 size=size, palette_mode=None, dither=False)
