@@ -34,13 +34,13 @@ def kek(bot, update):
         update.message.reply_text("Unsupported file, onii-chan!")
         return False
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    result = kekify(bot, update, kek_param, extension)
+    result = kekify(update, kek_param, extension)
     send_image(update, path, result, extension)
     print(datetime.datetime.now(), ">>>", "Done kek", ">>>", update.message.from_user.username)
 
 
 # kek process + send
-def kekify(bot, update, kek_param, extension):
+def kekify(update, kek_param, extension):
     try:
         if kek_param == "-l" or kek_param == "":
             crop = "50%x100% "
@@ -75,17 +75,7 @@ def kekify(bot, update, kek_param, extension):
             append = "-append "
             result = "kek-bot"
         elif kek_param == "-m":
-            kekify(bot, update, "-l", extension)
-            kekify(bot, update, "-r", extension)
-            kekify(bot, update, "-t", extension)
-            kekify(bot, update, "-b", extension)
-            append_lr = "convert " + path + "kek-left" + extension + " " + path + "kek-right" + extension + " +append " + path + "kek-lr-temp" + extension
-            subprocess.run(append_lr, shell=True)
-            append_tb = "convert " + path + "kek-top" + extension + " " + path + "kek-bot" + extension + " +append " + path + "kek-tb-temp" + extension
-            subprocess.run(append_tb, shell=True)
-            append_all = "convert " + path + "kek-lr-temp" + extension + " " + path + "kek-tb-temp" + extension + " -append " + path + "multikek" + extension
-            subprocess.run(append_all, shell=True)
-            result = "multikek"
+            result = multikek(update, extension)
             return result
         cut = "convert " + path + "original" + extension + " -crop " + crop + path + "result" + extension
         subprocess.run(cut, shell=True)
@@ -96,3 +86,18 @@ def kekify(bot, update, kek_param, extension):
         return result
     except:
         update.message.reply_text("Unknown kek parameter.\nUse -l, -r, -t, -b or -m")
+
+
+def multikek(update, extension):
+    kekify(update, "-l", extension)
+    kekify(update, "-r", extension)
+    kekify(update, "-t", extension)
+    kekify(update, "-b", extension)
+    append_lr = "convert " + path + "kek-left" + extension + " " + path + "kek-right" + extension + " +append " + path + "kek-lr-temp" + extension
+    subprocess.run(append_lr, shell=True)
+    append_tb = "convert " + path + "kek-top" + extension + " " + path + "kek-bot" + extension + " +append " + path + "kek-tb-temp" + extension
+    subprocess.run(append_tb, shell=True)
+    append_all = "convert " + path + "kek-lr-temp" + extension + " " + path + "kek-tb-temp" + extension + " -append " + path + "multikek" + extension
+    subprocess.run(append_all, shell=True)
+    result = "multikek"
+    return result
