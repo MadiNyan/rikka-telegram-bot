@@ -18,6 +18,8 @@ def handler(dp):
 with open("config.yml", "r") as f:
     path = yaml.load(f)["path"]["kek"]
 
+extensions = (".jpg", ".jpeg", ".png", ".bmp", ".webp")
+
 
 # get image, pass parameter
 def kek(bot, update):
@@ -30,6 +32,9 @@ def kek(bot, update):
     except:
         update.message.reply_text("Can't get the image! :(")
         return
+    if extension not in extensions:
+        update.message.reply_text("Unsupported file, onii-chan!")
+        return False
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     result = kekify(bot, update, kek_param, extension)
     send_image(bot, update, path, result, extension)
