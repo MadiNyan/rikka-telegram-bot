@@ -23,17 +23,7 @@ def gif(bot, update, args):
     args = str(args)[2:-2]
     avail_folders = next(folders)[1]
     if args == "help" or args == "?":
-        key_list = []
-        for i in avail_folders:
-            key = InlineKeyboardButton(i, callback_data=i)
-            key_list.append(key)
-        row_split = lambda list, size, acc=[]: (row_split(list[size:], size, acc + [list[:size]]) if list else acc)
-        rows = row_split(key_list, 4)
-        root_btn = [InlineKeyboardButton("[unsorted]",
-                    callback_data="\\")]
-        rows.insert(0, root_btn)
-        keyboard = rows
-        reply_markup = InlineKeyboardMarkup(keyboard)
+        reply_markup = make_keyboard(avail_folders)
         update.message.reply_text("Available folders for /gif are:", reply_markup=reply_markup)
     elif args in avail_folders or args == "":
         update.message.chat.send_action(ChatAction.UPLOAD_DOCUMENT)
@@ -46,8 +36,7 @@ def gif(bot, update, args):
         result = list(gifs)[rand]
         with open(gifs_dir + "/" + str(result), "rb") as f:
             update.message.reply_document(f)
-        print (datetime.datetime.now(), ">>> Sent gif >>>",
-               update.message.from_user.username, ">", result)
+        print(datetime.datetime.now(), ">>> Sent gif >>>", update.message.from_user.username, ">", result)
     else:
         update.message.reply_text("No such folder, try /gif help")
 
@@ -69,5 +58,18 @@ def gif_button(bot, update):
     result = list(gifs)[rand]
     with open(gifs_dir + "/" + str(result), "rb") as f:
         bot.sendDocument(query.message.chat_id, f)
-    print (datetime.datetime.now(), ">>> Sent gif >>>",
-           query.message.from_user.username, ">", result)
+    print(datetime.datetime.now(), ">>> Sent gif >>>", query.message.from_user.username, ">", result)
+
+
+def make_keyboard(folders):
+    key_list = []
+    for i in folders:
+        key = InlineKeyboardButton(i, callback_data=i)
+        key_list.append(key)
+    row_split = lambda list, size, acc=[]: (row_split(list[size:], size, acc + [list[:size]]) if list else acc)
+    rows = row_split(key_list, 4)
+    root_btn = [InlineKeyboardButton("[unsorted]", callback_data="\\")]
+    rows.insert(0, root_btn)
+    keyboard = rows
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    return reply_markup
