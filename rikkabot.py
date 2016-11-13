@@ -35,7 +35,8 @@ load_modules(dp,
              "nya",
              "pcstat",
              "roll",
-             "toribash")
+             "toribash",
+             "tts")
 
 # Import /help from a text file
 with open("resources/help.txt", "r") as helpfile:
