@@ -15,7 +15,11 @@ with open("config.yml", "r") as f:
 
 
 def tts(bot, update, args):
-    text = "".join(args)
+    reply = update.message.reply_to_message
+    if reply is None:
+        text = "".join(args)
+    elif reply.text is not None:
+        text = reply.text
     if len(text) == 0:
         update.message.reply_text("Type in some text ^^")
         return
