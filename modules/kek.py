@@ -86,6 +86,7 @@ def kekify(update, kek_param, extension):
         return result
     except:
         update.message.reply_text("Unknown kek parameter.\nUse -l, -r, -t, -b or -m")
+        return
 
 
 def multikek(update, extension):
