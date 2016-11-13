@@ -77,6 +77,9 @@ def kekify(update, kek_param, extension):
         elif kek_param == "-m":
             result = multikek(update, extension)
             return result
+        elif kek_param == "-v":
+            update.message.reply_text("What are you a fucking faggot?")
+            return
         cut = "convert " + path + "original" + extension + " -crop " + crop + path + "result" + extension
         subprocess.run(cut, shell=True)
         mirror = "convert " + path + piece_one + " " + flip + " " + path + piece_two
