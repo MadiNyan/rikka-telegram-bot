@@ -13,7 +13,7 @@
 
 ### Libraries:
 + [python-telegram-bot](https://github.com/python-telegram-bot)
-+ [py-bing-search](https://github.com/tristantao/py-bing-search)
++ [py-ms-cognitive](https://github.com/tristantao/py-ms-cognitive)
 + [legofy](https://github.com/JuanPotato/Legofy)
 + [PyBooru](https://github.com/LuqueDaniel/pybooru)
 + Pillow
@@ -22,7 +22,7 @@
 + uptime
 
 ## How to
-Configure your token, api key and paths in config.yml (without any quotations), and don't forget the font
+Configure your token, api keys and paths in config.yml (without any quotations), and don't forget the font
 ```
     keys:
         telegram_token: 123455
@@ -43,10 +43,8 @@ Configure your token, api key and paths in config.yml (without any quotations), 
 
 ## Available functions:
 + /start - start a bot or view welcome message
-+ /leet - convert text to 1337 5P34K
 + /roll [1] or [2] - choose one option randomly
 + /toribash [username] - show Toribash stats
-+ /glitch - glitch an image
 + /lego [from 1 to 100] - legofy image
 + /gif - get random gif, "/gif help" to see folders
 + /nya - get random asian girl pic
