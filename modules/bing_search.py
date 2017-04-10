@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from py_bing_search import PyBingImageSearch, PyBingVideoSearch, PyBingNewsSearch
+from py_ms_cognitive import PyMsCognitiveImageSearch, PyMsCognitiveVideoSearch, PyMsCognitiveNewsSearch
 from telegram.ext import CommandHandler
 from telegram.ext.dispatcher import run_async
 from telegram import ChatAction
 from random import randint
 import datetime
+import requests
 import yaml
 
 
@@ -25,14 +26,15 @@ def img_search(bot, update, args):
         return
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     search = " ".join(args)
-    bing_image = PyBingImageSearch(key, search,
-                                   custom_params="&Adult='Off'")
+    bing_image = PyMsCognitiveImageSearch(key, search,
+                                   custom_params={"adlt": "off"})
     result = bing_image.search(limit=40, format="json")
     if len(result) == 0:
         update.message.reply_text("Sorry, I can't find anything :(")
     else:
         img = randint(0, len(result) - 1)
-        link = result[img].media_url
+        r = requests.get(result[img].content_url)
+        link = r.url
         text = "[link](%s)" % link
         update.message.reply_text(text, parse_mode="Markdown")
         print (datetime.datetime.now(), ">>>", "Done /img", ">>>",
@@ -46,16 +48,16 @@ def vid_search(bot, update, args):
         return
     update.message.chat.send_action(ChatAction.UPLOAD_VIDEO)
     search = " ".join(args)
-    bing_video = PyBingVideoSearch(key, search,
-                                   custom_params="&Adult='Off'")
-    result = bing_video.search(limit=30, format="json")
+    bing_video = PyMsCognitiveVideoSearch(key, search,
+                                   custom_params={"adlt": "off"})
+    result = bing_video.search(limit=20, format="json")
     if len(result) == 0:
         update.message.reply_text("Sorry, I can't find anything :(")
     else:
         vid_list = []
         for i in range(0, len(result) - 1):
-            if "youtube" in result[i].media_url:
-                vid_list.append(result[i].media_url)
+            if "youtube" in result[i].host_page_display_url:
+                vid_list.append(result[i].host_page_display_url)
         if len(vid_list) == 0:
             update.message.reply_text("Sorry, I can't find anything :(")
         else:
@@ -73,13 +75,14 @@ def vid_search(bot, update, args):
 def news_search(bot, update, args):
     update.message.chat.send_action(ChatAction.TYPING)
     search = " ".join(args)
-    bing_news = PyBingNewsSearch(key, search)
+    bing_news = PyMsCognitiveNewsSearch(key, search)
     result = bing_news.search(limit=20, format="json")
     if len(result) == 0:
         update.message.reply_text("Sorry, I can't find anything :(")
     else:
         news = randint(0, len(result) - 1)
-        link = result[news].url
+        r = requests.get(result[news].url)
+        link = r.url
         bot.sendMessage(chat_id=update.message.chat_id, text=link,
                         reply_to_message_id=update.message.message_id,
                         parse_mode="Markdown")
