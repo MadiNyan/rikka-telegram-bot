@@ -1,6 +1,4 @@
-/leet - convert text to 1337 5P34K
 /roll [1] or [2] - choose one option randomly
-/glitch - glitch an image
 /lego [from 1 to 100] - legofy image
 /meme [top text] @ [bottom text] - make a meme from image
 /kek [-l, -r, -t, -b] - mirror one side of an image to another
