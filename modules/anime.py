@@ -22,7 +22,7 @@ def get_anime(update, query):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     client = Moebooru("yandere")
     max_posts_to_load = 200
-    posts = client.post_list(query, max_posts_to_load)
+    posts = client.post_list(tags=query, limit=max_posts_to_load)
     post_count = len(posts)
     random = randint(0, post_count - 1)
     image_post = "https://yande.re/post/show/" + str(posts[random]["id"])
