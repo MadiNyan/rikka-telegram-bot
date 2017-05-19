@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from telegram.ext.dispatcher import run_async
 from telegram.ext import CommandHandler
 from telegram import ChatAction
-from pybooru import Pybooru
+from pybooru import Moebooru
 from random import randint
 import requests
 import datetime
@@ -20,9 +20,9 @@ with open("config.yml", "r") as f:
 
 def get_anime(update, query):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    client = Pybooru("yandere")
+    client = Moebooru("yandere")
     max_posts_to_load = 200
-    posts = client.posts_list(query, max_posts_to_load)
+    posts = client.post_list(query, max_posts_to_load)
     post_count = len(posts)
     random = randint(0, post_count - 1)
     image_post = "https://yande.re/post/show/" + str(posts[random]["id"])
