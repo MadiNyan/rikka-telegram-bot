@@ -3,12 +3,12 @@
 *My personal multipurpose chat bot with completely random features*  
 *Can be found at [@Rikka_Bot](https://telegram.me/Rikka_Bot)*
 
-![Python ver](http://img.shields.io/badge/Python-3.5-yellow.svg) [![Build Status](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/build.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/?branch=external-img-dl) [![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) [![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan) 
+![Python ver](http://img.shields.io/badge/Python-3.6-yellow.svg) [![Build Status](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/build.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/?branch=external-img-dl) [![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) [![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan) 
 
 ----------
 
 ## Requirements:
-+ Python 3.5
++ Python 3.5+
 + ImageMagick
 
 ### Libraries:
@@ -16,9 +16,7 @@
 + [py-ms-cognitive](https://github.com/tristantao/py-ms-cognitive)
 + [legofy](https://github.com/JuanPotato/Legofy)
 + [PyBooru](https://github.com/LuqueDaniel/pybooru)
-+ Pillow
 + psutil
-+ requests
 + uptime
 
 ## How to
@@ -32,7 +30,6 @@ Configure your token, api keys and paths in config.yml (without any quotations),
         gifs: examples/gifs/
         memes: examples/memes/
         meme_font: resources/font_name.ttf
-        glitch: examples/glitch/
         lego: examples/lego/
         nya: examples/nya/
         kek: examples/kek/
@@ -43,6 +40,7 @@ Configure your token, api keys and paths in config.yml (without any quotations),
 
 ## Available functions:
 + /start - start a bot or view welcome message
++ /roll - fortune tell
 + /roll [1] or [2] - choose one option randomly
 + /toribash [username] - show Toribash stats
 + /lego [from 1 to 100] - legofy image
