@@ -57,7 +57,7 @@ dp.add_handler(CommandHandler("start", start))
 
 # show help
 def help(bot, update):
-    update.message.reply_text(help_text)
+    bot.send_message(update.message.chat_id, help_text, parse_mode="Markdown")
     print(datetime.datetime.now(), ">>>", "Done /help", ">>>", update.message.from_user.username)
 dp.add_handler(CommandHandler("help", help))
 

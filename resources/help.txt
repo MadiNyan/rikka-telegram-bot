@@ -1,12 +1,12 @@
-/roll [1] or [2] - choose one option randomly
-/lego [from 1 to 100] - legofy image
-/meme [top text] @ [bottom text] - make a meme from image
-/kek [-l, -r, -t, -b] - mirror one side of an image to another
-/liq [from 1 to 100] - liquid rescale image
+/roll - fortune tell; /roll *[1] or [2]* - choose one option randomly
+/lego *1-100* - legofy image
+/meme *top text @ bottom text* - make a meme from image
+/kek *-l, -r, -t, -b* - mirror one side of an image to another
+/liq *1-100* - liquid rescale image
 /instagram or /ig - add filter to an image
-/gif - get random gif, "/gif help" to see categories
+/gif - get random gif, /gif *help* to see categories
 /nya - get random girl pic
-/img, /vid, /news [query] - Bing search for random result
-/a [tag] - get pic from yande.re
+/img, /vid, /news *query* - Bing search for random result
+/a *tag* - get pic from yande.re
 
-Made by @Madi_Nyan
+Made by @Madi\_Nyan
