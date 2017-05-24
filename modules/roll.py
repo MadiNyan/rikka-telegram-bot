@@ -18,8 +18,8 @@ def mysteryball(update, string):
     if string is "":
         seed()
     else:
-        hash = zlib.adler32(string.encode())
-        seed(hash)
+        input_hash = zlib.adler32(string.encode())
+        seed(input_hash)
     answer = randint(0, len(choices)-1)
     update.message.reply_text(choices[answer])
 
@@ -39,8 +39,8 @@ def roll(bot, update, args):
     print(datetime.datetime.now(), ">>>", "Done /roll", ">>>", update.message.from_user.username)
 
 def rolling_process(update, full_text, split_text):
-    hash = zlib.adler32(full_text.encode())
-    seed(hash)
+    input_hash = zlib.adler32(full_text.encode())
+    seed(input_hash)
     randoms = len(split_text) - 1
     answer = randint(0, randoms)
     uncapitalized = split_text[answer]

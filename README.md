@@ -3,7 +3,7 @@
 *My personal multipurpose chat bot with completely random features*  
 *Can be found at [@Rikka_Bot](https://telegram.me/Rikka_Bot)*
 
-![Python ver](http://img.shields.io/badge/Python-3.6-yellow.svg) [![Build Status](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/build.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/?branch=external-img-dl) [![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) [![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan) 
+![Python ver](http://img.shields.io/badge/Python-3.6-yellow.svg) [![Build Status](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/build.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/?branch=master) [![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) [![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan) 
 
 ----------
 
@@ -53,3 +53,4 @@ Configure your token, api keys and paths in config.yml (without any quotations),
 + /img, /vid, /news [query] - Bing search for random result
 + /a [tag] - get pic from yande.re
 + /status - show server cpu, ram, hdd load and uptime
++ /say - TTS

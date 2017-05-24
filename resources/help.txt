@@ -8,5 +8,6 @@
 /nya - get random girl pic
 /img, /vid, /news *query* - Bing search for random result
 /a *tag* - get pic from yande.re
+/say *something* - Text-to-Speech
 
 Made by @Madi\_Nyan
