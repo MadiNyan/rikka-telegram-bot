@@ -103,7 +103,7 @@ def get_param(update):
 # custom filters for message handler
 # photo with caption
 def caption_filter(text):
-    return lambda msg: bool(msg.photo) and msg.caption.startswith(text)
+    return lambda msg: bool(msg.photo) and bool(msg.caption) and msg.caption.startswith(text)
 
 
 # text of choice

@@ -10,31 +10,26 @@ import re
 
 with open("config.yml", "r") as f:
     key = yaml.load(f)["keys"]["telegram_token"]
+
 updater = Updater(token=key)
 dp = updater.dispatcher
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
 
-def load_modules(dp, *modules):
-    for i in modules:
-        importlib.import_module("modules." + i).handler(dp)
-        print(i, "imported")
+# Importing modules and handlers
+def load_modules(dp, module):
+    importlib.import_module("modules." + module).handler(dp)
+    print(module, "imported")
 
-load_modules(dp,
-             "anime",
-             "bing_search",
-             "instagram",
-             "gif",
-             "kappa",
-             "kek",
-             "lego",
-             "liquid",
-             "meme",
-             "nya",
-             "pcstat",
-             "roll",
-             "toribash",
-             "tts")
+# Dynamic module imports
+modules_path = "modules"
+modules = os.listdir(modules_path)
+# These do net have handlers and are imported to other modules directly
+not_to_import = ["__init__.py", "instagram_filters.py", "memegenerator.py", "utils.py"]
+for module in modules:
+    if module in not_to_import or module[-3:] != '.py':
+        continue
+    load_modules(dp, module[:-3])
 
 # Import /help from a text file
 with open("resources/help.txt", "r") as helpfile:
@@ -42,7 +37,7 @@ with open("resources/help.txt", "r") as helpfile:
     print("Help textfile imported")
 
 
-# start feature
+# Start feature
 def start(bot, update):
     if update.message.chat.type != "private":
         return
@@ -55,7 +50,7 @@ def start(bot, update):
 dp.add_handler(CommandHandler("start", start))
 
 
-# show help
+# Show help
 def help(bot, update):
     bot.send_message(update.message.chat_id, help_text, parse_mode="Markdown")
     print(datetime.datetime.now(), ">>>", "Done /help", ">>>", update.message.from_user.username)
