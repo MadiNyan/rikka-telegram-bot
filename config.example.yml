@@ -3,14 +3,15 @@ keys:
      bing_api_key: 123456
 
 path:
+    anime: examples/
     gifs: examples/gifs/
     glitch: examples/glitch/
-    memes: examples/memes/
-    meme_font: resources/impact.ttf
-    lego: examples/lego/
-    leet_dictionary: resources/leetdict.txt
-    nya: examples/nya/
-    kek: examples/kek/
     instagram: examples/instagram/
-    anime: examples/
+    kek: examples/kek/
+    leet_dictionary: resources/leetdict.txt
+    lego: examples/lego/
     liquid: examples/
+    meme_font: resources/impact.ttf
+    memes: examples/memes/
+    nya: examples/nya/
+    tts: examples/

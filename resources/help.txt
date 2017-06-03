@@ -1,13 +1,13 @@
-/roll - fortune tell; /roll *[1] or [2]* - choose one option randomly
-/lego *1-100* - legofy image
-/meme *top text @ bottom text* - make a meme from image
-/kek *-l, -r, -t, -b* - mirror one side of an image to another
-/liq *1-100* - liquid rescale image
-/instagram or /ig - add filter to an image
-/gif - get random gif, /gif *help* to see categories
-/nya - get random girl pic
-/img, /vid, /news *query* - Bing search for random result
 /a *tag* - get pic from yande.re
+/gif - get random gif, /gif *help* to see categories
+/img, /vid, /news *query* - Bing search for random result
+/instagram or /ig - add filter to an image
+/kek *-l, -r, -t, -b* - mirror one side of an image to another
+/lego *1-100* - legofy image
+/liq *1-100* - liquid rescale image
+/meme *top text @ bottom text* - make a meme from image
+/nya - get random girl pic
+/roll - fortune tell; /roll *[1] or [2]* - choose one option randomly; /roll *[X-Y]* - returns random number between X and Y
 /say *something* - Text-to-Speech
 
 Made by @Madi\_Nyan

@@ -20,6 +20,7 @@
 + uptime
 
 ## How to
+Run `update_deps.bat` to automatically install `requirements.txt` libraries
 Configure your token, api keys and paths in config.yml (without any quotations), and don't forget the font
 ```
     keys:
@@ -39,20 +40,21 @@ Configure your token, api keys and paths in config.yml (without any quotations),
 ```
 
 ## Available functions:
-+ /start - start a bot or view welcome message
-+ /roll - fortune tell
-+ /roll [1] or [2] - choose one option randomly
-+ /toribash [username] - show Toribash stats
-+ /lego [from 1 to 100] - legofy image
++ /a [tag] - get pic from yande.re
 + /gif - get random gif, "/gif help" to see folders
 + /glitch - glitch an image
-+ /nya - get random asian girl pic
-+ /meme [top text] @ [bottom text] - make a meme from image
++ /img, /vid, /news [query] - Bing search for random result
++ /instagram or /ig - add filter to an image
 + /kek [-l, -r, -t, -b] - mirror one side of an image to another
 + /leet - convert text to 1337 5P34K
++ /lego [from 1 to 100] - legofy image
 + /liq [from 1 to 100] - liquid rescale image
-+ /instagram or /ig - add filter to an image
-+ /img, /vid, /news [query] - Bing search for random result
-+ /a [tag] - get pic from yande.re
-+ /status - show server cpu, ram, hdd load and uptime
++ /meme [top text] @ [bottom text] - make a meme from image
++ /nya - get random asian girl pic
++ /roll - fortune tell
++ /roll [1] or [2] - choose one option randomly
++ /roll [X-Y] - returns random number between X and Y
 + /say - TTS
++ /start - start a bot or view welcome message
++ /status - show server cpu, ram, hdd load and uptime
++ /toribash [username] - show Toribash stats
