@@ -1,3 +1,5 @@
+﻿#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from telegram.ext import CommandHandler
 from random import randint, seed
 import datetime

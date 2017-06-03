@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from telegram.ext import MessageHandler, Filters
 import datetime
 

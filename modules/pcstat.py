@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from telegram.ext import CommandHandler
 from telegram import ChatAction
 from uptime import uptime
