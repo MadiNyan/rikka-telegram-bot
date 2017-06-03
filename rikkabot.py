@@ -1,5 +1,6 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+# -*- coding: utf-8 -*-
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from random import randint
 import importlib
