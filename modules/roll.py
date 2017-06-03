@@ -45,7 +45,7 @@ def numbers_check(update, text):
     try:
         rng_end = int(text)
         return 0, rng_end
-    except:
+    except ValueError:
         pass
     if "-" in text:
         numbers = text.split("-")
