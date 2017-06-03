@@ -4,9 +4,11 @@ keys:
 
 path:
     gifs: examples/gifs/
+    glitch: examples/glitch/
     memes: examples/memes/
     meme_font: resources/impact.ttf
     lego: examples/lego/
+    leet_dictionary: resources/leetdict.txt
     nya: examples/nya/
     kek: examples/kek/
     instagram: examples/instagram/

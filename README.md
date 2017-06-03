@@ -45,9 +45,11 @@ Configure your token, api keys and paths in config.yml (without any quotations),
 + /toribash [username] - show Toribash stats
 + /lego [from 1 to 100] - legofy image
 + /gif - get random gif, "/gif help" to see folders
++ /glitch - glitch an image
 + /nya - get random asian girl pic
 + /meme [top text] @ [bottom text] - make a meme from image
 + /kek [-l, -r, -t, -b] - mirror one side of an image to another
++ /leet - convert text to 1337 5P34K
 + /liq [from 1 to 100] - liquid rescale image
 + /instagram or /ig - add filter to an image
 + /img, /vid, /news [query] - Bing search for random result
