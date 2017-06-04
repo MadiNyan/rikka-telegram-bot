@@ -23,8 +23,10 @@ extensions = (".jpg", ".jpeg", ".png", ".bmp", ".webp")
 def kek(bot, update):
     if update.message.reply_to_message is not None:
         kek_param = "".join(update.message.text[5:7])
-    else:
+    elif update.message.caption is not None:
         kek_param = "".join(update.message.caption[5:7])
+    else:
+        update.message.reply_text("You need an image for that!")
     try:
         extension = get_image(bot, update, path)
     except:
@@ -77,9 +79,6 @@ def kekify(update, kek_param, extension):
         elif kek_param == "-m":
             result = multikek(update, extension)
             return result
-        elif kek_param == "-v":
-            update.message.reply_text("What are you a fucking faggot?")
-            return
         cut = "convert " + path + "original" + extension + " -crop " + crop + path + "result" + extension
         subprocess.run(cut, shell=True)
         mirror = "convert " + path + piece_one + " " + flip + " " + path + piece_two
