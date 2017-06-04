@@ -51,10 +51,11 @@ Configure your token, api keys and paths in config.yml (without any quotations),
 + /liq [from 1 to 100] - liquid rescale image
 + /meme [top text] @ [bottom text] - make a meme from image
 + /nya - get random asian girl pic
++ /rate - rate stuff
 + /roll - fortune tell
 + /roll [1] or [2] - choose one option randomly
 + /roll [X-Y] - returns random number between X and Y
-+ /say - TTS
++ /say - Text-to-Speech
 + /start - start a bot or view welcome message
 + /status - show server cpu, ram, hdd load and uptime
 + /toribash [username] - show Toribash stats
