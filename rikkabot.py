@@ -34,7 +34,7 @@ for module in modules:
     load_modules(dp, module[:-3])
 
 # Import /help from a text file
-with open("resources/help.txt", "r") as helpfile:
+with open("resources/help.txt", "r", encoding="UTF-8") as helpfile:
     help_text = helpfile.read()
     print("Help textfile imported")
 

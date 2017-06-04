@@ -22,7 +22,7 @@ def leet(bot, update, args):
     if text_leet == "":
         return
     replace_dict = []
-    with open(leet_dictionary, "r") as file:
+    with open(leet_dictionary, "r", encoding="UTF-8") as file:
         for i in file.readlines():
             tmp = i.split(",")
             try:
