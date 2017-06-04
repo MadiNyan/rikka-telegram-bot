@@ -27,6 +27,7 @@ def kek(bot, update):
         kek_param = "".join(update.message.caption[5:7])
     else:
         update.message.reply_text("You need an image for that!")
+        return
     try:
         extension = get_image(bot, update, path)
     except:
