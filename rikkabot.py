@@ -10,6 +10,7 @@ import yaml
 import os
 import re
 
+# Get Telegram API token
 with open("config.yml", "r") as f:
     key = yaml.load(f)["keys"]["telegram_token"]
 
@@ -17,13 +18,18 @@ updater = Updater(token=key)
 dp = updater.dispatcher
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
+# Import logo from a text file
+with open("resources/logo.txt", "r", encoding="UTF-8") as logo_file:
+    logo = logo_file.read()
+    print(logo)
 
 # Importing modules and handlers
 def load_modules(dp, module):
     importlib.import_module("modules." + module).handler(dp)
-    print(module, "imported")
+    print(module)
 
 # Dynamic module imports
+print("Loading modules...\n")
 modules_path = "modules"
 modules = os.listdir(modules_path)
 # These do net have handlers and are imported to other modules directly
