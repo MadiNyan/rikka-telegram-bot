@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, Job
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from modules.sonyan import sonyan_post
 from random import randint
 import importlib
 import datetime
@@ -13,6 +14,8 @@ import re
 # Get Telegram API token
 with open("config.yml", "r") as f:
     key = yaml.load(f)["keys"]["telegram_token"]
+with open("config.yml", "r") as f:
+    channel = yaml.load(f)["keys"]["channel"]
 
 updater = Updater(token=key)
 dp = updater.dispatcher
@@ -68,4 +71,8 @@ dp.add_handler(CommandHandler("help", help))
 updater.start_polling(clean=True)
 # Run the bot until you presses Ctrl+C
 print("=====================\nUp and running!\n")
+#Job Queue for channel posts
+jobQueue = updater.job_queue
+jobQueue.run_repeating(callback=sonyan_post, interval=60, first=0, context="@"+channel, name='RepeatingJob')
+#Idle
 updater.idle()
