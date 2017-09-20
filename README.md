@@ -13,7 +13,6 @@
 
 ### Libraries:
 + [python-telegram-bot](https://github.com/python-telegram-bot)
-+ [py-ms-cognitive](https://github.com/tristantao/py-ms-cognitive)
 + [legofy](https://github.com/JuanPotato/Legofy)
 + [PyBooru](https://github.com/LuqueDaniel/pybooru)
 + psutil
@@ -25,7 +24,6 @@ Configure your token, api keys and paths in config.yml (without any quotations),
 ```
     keys:
         telegram_token: 123455
-        bing_api_key: 123456
 
     path:
         gifs: examples/gifs/
@@ -43,7 +41,6 @@ Configure your token, api keys and paths in config.yml (without any quotations),
 + /a [tag] - get pic from yande.re
 + /gif - get random gif, "/gif help" to see folders
 + /glitch - glitch an image
-+ /img, /vid, /news [query] - Bing search for random result
 + /instagram or /ig - add filter to an image
 + /kek [-l, -r, -t, -b] - mirror one side of an image to another
 + /leet - convert text to 1337 5P34K
