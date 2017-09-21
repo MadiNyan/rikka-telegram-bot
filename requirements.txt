@@ -1,11 +1,11 @@
-python-telegram-bot==6.1b2
-legofy==1.0.0
-Pybooru==4.1.0
-gTTS==1.2.0
-psutil==5.2.2
-py_ms_cognitive==0.4.0
+python-telegram-bot (6.1.0)
 uptime==3.0.1
-requests==2.14.2
+Pybooru==4.1.0
 telegram==0.0.1
-Pillow==4.1.1
+gTTS==1.2.0
+requests==2.18.3
+psutil==5.2.2
+legofy==1.0.0
+Pillow==4.2.1
+google_api_python_client==1.6.4
 PyYAML==3.12

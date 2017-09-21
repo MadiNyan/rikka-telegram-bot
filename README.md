@@ -8,11 +8,12 @@
 ----------
 
 ## Requirements:
-+ Python 3.5+
++ Python 3.6+
 + ImageMagick
 
 ### Libraries:
 + [python-telegram-bot](https://github.com/python-telegram-bot)
++ [google-api-python-client] (https://github.com/google/google-api-python-client)
 + [legofy](https://github.com/JuanPotato/Legofy)
 + [PyBooru](https://github.com/LuqueDaniel/pybooru)
 + psutil
@@ -24,6 +25,8 @@ Configure your token, api keys and paths in config.yml (without any quotations),
 ```
     keys:
         telegram_token: 123455
+         google_dev_key: AIzaFXHYLv4
+         google_cse_id: 0087961083454546782236:prc9jbvfddi
 
     path:
         gifs: examples/gifs/
@@ -41,6 +44,7 @@ Configure your token, api keys and paths in config.yml (without any quotations),
 + /a [tag] - get pic from yande.re
 + /gif - get random gif, "/gif help" to see folders
 + /glitch - glitch an image
++/img - Google image search
 + /instagram or /ig - add filter to an image
 + /kek [-l, -r, -t, -b] - mirror one side of an image to another
 + /leet - convert text to 1337 5P34K
