@@ -13,7 +13,7 @@
 
 ### Libraries:
 + [python-telegram-bot](https://github.com/python-telegram-bot)
-+ [google-api-python-client] (https://github.com/google/google-api-python-client)
++ [google-api-python-client](https://github.com/google/google-api-python-client)
 + [legofy](https://github.com/JuanPotato/Legofy)
 + [PyBooru](https://github.com/LuqueDaniel/pybooru)
 + psutil
@@ -25,8 +25,8 @@ Configure your token, api keys and paths in config.yml (without any quotations),
 ```
     keys:
         telegram_token: 123455
-         google_dev_key: AIzaFXHYLv4
-         google_cse_id: 0087961083454546782236:prc9jbvfddi
+        google_dev_key: AIzaFXHYLv4
+        google_cse_id: 0087961083454546782236:prc9jbvfddi
 
     path:
         gifs: examples/gifs/
