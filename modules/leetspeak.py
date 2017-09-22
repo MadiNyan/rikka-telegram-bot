@@ -7,7 +7,7 @@ import yaml
 
 # import path
 with open("config.yml", "r") as f:
-    leet_dictionary = yaml.load(f)["path"]["leet_dictionary"]
+    leet_dictionary = yaml.load(f)["sys_paths"]["leet_dictionary"]
 
 
 def handler(dp):

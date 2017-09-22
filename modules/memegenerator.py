@@ -9,7 +9,7 @@ import yaml
 with open("config.yml", "r") as f:
     memes_folder = yaml.load(f)["path"]["memes"]
 with open("config.yml", "r") as f:
-    meme_font = yaml.load(f)["path"]["meme_font"]
+    meme_font = yaml.load(f)["sys_paths"]["meme_font"]
 
 
 def make_meme(topString, bottomString, filename, extension):

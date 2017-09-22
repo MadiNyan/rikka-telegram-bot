@@ -12,9 +12,10 @@ def handler(dp):
     dp.add_handler(CommandHandler("sonyan", sonyan_post))
 
 with open("config.yml", "r") as f:
-    access_token = yaml.load(f)["keys"]["vk_token"]
-with open("config.yml", "r") as f:
-    channel = yaml.load(f)["keys"]["channel"]
+    config = yaml.load(f)
+    access_token = config["keys"]["vk_token"]
+    channel = config["keys"]["channel"]
+    path = config["path"]["vk"]
 owner = "-98881019"
 count = "1"
 offset = 0
@@ -92,7 +93,7 @@ def dlpic(owner, offset, count, access_token):
                     return None
 
     dl = requests.get(pic_link)
-    with open("sonyan/"+pic_link[-13:], "wb") as code:
+    with open(path+pic_link[-13:], "wb") as code:
         code.write(dl.content)
 
     return post_link, pic_link[-13:], text, pics_amount

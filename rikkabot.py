@@ -11,11 +11,17 @@ import yaml
 import os
 import re
 
-# Get Telegram API token
+# Load configs & create folders
 with open("config.yml", "r") as f:
-    key = yaml.load(f)["keys"]["telegram_token"]
-with open("config.yml", "r") as f:
-    channel = yaml.load(f)["keys"]["channel"]
+    config = yaml.load(f)
+    key = config["keys"]["telegram_token"]
+    channel = config["keys"]["channel"]
+    directories = config["path"]
+
+# Create folders for temporary files
+for i in directories.values():
+    if not os.path.exists(i):
+        os.makedirs(i)
 
 updater = Updater(token=key)
 dp = updater.dispatcher
@@ -72,7 +78,7 @@ updater.start_polling(clean=True)
 # Run the bot until you presses Ctrl+C
 print("=====================\nUp and running!\n")
 #Job Queue for channel posts
-jobQueue = updater.job_queue
-jobQueue.run_repeating(callback=sonyan_post, interval=60, first=0, context="@"+channel, name='RepeatingJob')
+#jobQueue = updater.job_queue
+#jobQueue.run_repeating(callback=sonyan_post, interval=60, first=0, context="@"+channel, name='RepeatingJob')
 #Idle
 updater.idle()

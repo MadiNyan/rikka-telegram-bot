@@ -1,16 +1,23 @@
 keys:
-     telegram_token: 123455
+     telegram_token: telegram api token goes here
+     google_dev_key: google custom seaech API key (if needed)
+     google_cse_id: see above
+     channel: vk.com channel for autorepost
+     vk_token: vk api token goes here
 
-path:
-    anime: examples/
-    gifs: examples/gifs/
-    glitch: examples/glitch/
-    instagram: examples/instagram/
-    kek: examples/kek/
+sys_paths:
     leet_dictionary: resources/leetdict.txt
-    lego: examples/lego/
-    liquid: examples/
     meme_font: resources/impact.ttf
-    memes: examples/memes/
-    nya: examples/nya/
-    tts: examples/
+
+path: #you can change these
+    yandere_search: userdata/
+    gifs: userdata/mp4/
+    glitch: userdata/glitch/
+    instagram: userdata/instagram/
+    kek: userdata/kek/
+    lego: userdata/lego/
+    liquid: userdata/liquid/
+    memes: userdata/memes/
+    nya: userdata/nya/
+    tts: userdata/
+    vk: userdata/channel
