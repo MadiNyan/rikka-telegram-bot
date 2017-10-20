@@ -5,7 +5,6 @@ from telegram.ext import CommandHandler, CallbackQueryHandler
 from telegram.ext.dispatcher import run_async
 from random import randint
 import datetime
-import yaml
 import os
 
 

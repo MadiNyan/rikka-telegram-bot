@@ -4,7 +4,6 @@ from telegram.ext import CommandHandler
 from telegram import ChatAction
 from gtts import gTTS
 import datetime
-import yaml
 
 
 def module_init(gd):

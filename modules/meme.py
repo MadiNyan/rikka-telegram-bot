@@ -6,7 +6,6 @@ from telegram.ext.dispatcher import run_async
 from modules.memegenerator import make_meme
 from telegram import ChatAction
 import datetime
-import yaml
 
 
 def module_init(gd):

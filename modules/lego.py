@@ -7,7 +7,6 @@ from telegram import ChatAction
 import subprocess
 import datetime
 import legofy
-import yaml
 
 
 def module_init(gd):

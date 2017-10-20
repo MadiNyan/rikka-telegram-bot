@@ -5,7 +5,6 @@ from telegram.ext import CommandHandler
 from telegram import ChatAction
 from random import randint
 import datetime
-import yaml
 import os
 
 

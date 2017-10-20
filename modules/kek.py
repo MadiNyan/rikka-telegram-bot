@@ -5,7 +5,6 @@ from telegram.ext import CommandHandler, MessageHandler
 from telegram import ChatAction
 import subprocess
 import datetime
-import yaml
 
 
 def module_init(gd):

@@ -7,9 +7,7 @@ from telegram.ext import CommandHandler
 from telegram import ChatAction
 from random import randint
 import datetime
-import requests
 import logging
-import yaml
 
 
 def module_init(gd):

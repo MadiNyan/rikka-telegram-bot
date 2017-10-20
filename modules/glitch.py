@@ -6,7 +6,6 @@ from telegram import ChatAction
 from random import randint
 import subprocess
 import datetime
-import yaml
 
 
 def module_init(gd):

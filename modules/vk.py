@@ -1,11 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from telegram.ext import CommandHandler, Filters, Job
+from telegram.ext import CommandHandler
 from datetime import datetime
 from random import randint
 import requests
 import yaml
-import os
 
 owner = "-98881019"
 count = "1"
@@ -72,9 +71,9 @@ def dlpic(owner, offset, count, token):
                              "&v=5.60")
     serverjson = wallposts.json()
 
-    id = serverjson["response"]["items"][0]["id"]
+    vk_id = serverjson["response"]["items"][0]["id"]
     text = serverjson["response"]["items"][0]["text"]
-    post_link = "https://vk.com/wall-98881019_"+str(id)
+    post_link = "https://vk.com/wall-98881019_"+str(vk_id)
     try:
         attachments = serverjson["response"]["items"][0]["attachments"]
     except:

@@ -3,7 +3,6 @@
 from telegram.ext import CommandHandler
 from functools import reduce
 import datetime
-import yaml
 
 
 def module_init(gd):

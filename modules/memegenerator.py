@@ -3,7 +3,6 @@
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
-import yaml
 
 
 def make_meme(topString, bottomString, filename, extension, path, meme_font):

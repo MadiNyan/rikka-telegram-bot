@@ -8,8 +8,6 @@ from pybooru import Moebooru
 from random import randint
 import requests
 import datetime
-import yaml
-import os
 
 
 def module_init(gd):

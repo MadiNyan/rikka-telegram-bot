@@ -6,7 +6,6 @@ from modules.utils import caption_filter, get_image, send_image
 import modules.instagram_filters
 import datetime
 import inspect
-import yaml
 
 
 def module_init(gd):

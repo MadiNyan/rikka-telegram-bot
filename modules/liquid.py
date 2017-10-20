@@ -6,7 +6,6 @@ from telegram.ext.dispatcher import run_async
 from telegram import ChatAction
 import subprocess
 import datetime
-import yaml
 
 
 def module_init(gd):
