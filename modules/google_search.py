@@ -11,15 +11,15 @@ import requests
 import logging
 import yaml
 
-logging.getLogger('googleapiclient.discovery').setLevel(logging.ERROR)
 
-def handler(dp):
-    dp.add_handler(CommandHandler("img", g_search, pass_args=True))
-
-with open("config.yml", "r") as f:
-    yaml_file = yaml.load(f)
-    dev_key = yaml_file["keys"]["google_dev_key"]
-    cse_id = yaml_file["keys"]["google_cse_id"]
+def module_init(gd):
+    global dev_key, cse_id
+    dev_key = gd.config["google_dev_key"]
+    cse_id = gd.config["google_cse_id"]
+    commands = gd.config["commands_image"]
+    for command in commands:
+        gd.dp.add_handler(CommandHandler(command, g_search, pass_args=True))
+    logging.getLogger('googleapiclient.discovery').setLevel(logging.ERROR)
 
 
 @run_async

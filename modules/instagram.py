@@ -9,23 +9,21 @@ import inspect
 import yaml
 
 
-def handler(dp):
-    dp.add_handler(MessageHandler(caption_filter("/instagram"), instagram))
-    dp.add_handler(CommandHandler("instagram", instagram))
-    dp.add_handler(MessageHandler(caption_filter("/ig"), instagram))
-    dp.add_handler(CommandHandler("ig", instagram))
-    dp.add_handler(CallbackQueryHandler(instagram_button, pattern="(filt_)\w+"))
+def module_init(gd):
+    global path, extensions, filters
+    path = gd.config["path"]
+    extensions = gd.config["extensions"]
+    commands = gd.config["commands"]
+    for command in commands:
+        gd.dp.add_handler(MessageHandler(caption_filter("/"+command), instagram))
+        gd.dp.add_handler(CommandHandler(command, instagram))
+    gd.dp.add_handler(CallbackQueryHandler(instagram_button, pattern="(filt_)\w+"))
 
-# import path
-with open("config.yml", "r") as f:
-    path = yaml.load(f)["path"]["instagram"]
-
-extensions = (".jpg", ".jpeg", ".png", ".bmp", ".webp", ".svg", ".mp4", ".gif")
-filters = []
-all_funcs = inspect.getmembers(modules.instagram_filters, inspect.isfunction)
-for i in range(0, len(all_funcs)):
-    if all_funcs[i][0].startswith("filt_"):
-        filters.append(all_funcs[i][0])
+    filters = []
+    all_funcs = inspect.getmembers(modules.instagram_filters, inspect.isfunction)
+    for i in range(0, len(all_funcs)):
+        if all_funcs[i][0].startswith("filt_"):
+            filters.append(all_funcs[i][0])
 
 
 def instagram(bot, update):

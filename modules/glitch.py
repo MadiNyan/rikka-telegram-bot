@@ -9,16 +9,18 @@ import datetime
 import yaml
 
 
-def handler(dp):
-    dp.add_handler(MessageHandler(caption_filter("/glitch"), glitch))
-    dp.add_handler(CommandHandler("glitch", glitch))
+def module_init(gd):
+    global path, extensions
+    path = gd.config["path"]
+    extensions = gd.config["extensions"]
+    commands = gd.config["commands"]
+    for command in commands:
+        gd.dp.add_handler(MessageHandler(caption_filter(command), glitch))
+        gd.dp.add_handler(CommandHandler(command, glitch))
 
-# import path
-with open("config.yml", "r") as f:
-    path = yaml.load(f)["path"]["glitch"]
 
 name = "glitch"
-extensions = (".jpg", ".jpeg", ".png", ".bmp", ".webp")
+
 
 # get image, then glitch
 def glitch(bot, update):

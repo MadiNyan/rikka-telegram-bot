@@ -8,15 +8,14 @@ import datetime
 import yaml
 
 
-def handler(dp):
-    dp.add_handler(MessageHandler(caption_filter("/kek"), kek))
-    dp.add_handler(CommandHandler("kek", kek))
-
-# import path
-with open("config.yml", "r") as f:
-    path = yaml.load(f)["path"]["kek"]
-
-extensions = (".jpg", ".jpeg", ".png", ".bmp", ".webp")
+def module_init(gd):
+    global path, extensions
+    path = gd.config["path"]
+    extensions = gd.config["extensions"]
+    commands = gd.config["commands"]
+    for command in commands:
+        gd.dp.add_handler(MessageHandler(caption_filter("/"+command), kek))
+        gd.dp.add_handler(CommandHandler(command, kek))
 
 
 # get image, pass parameter

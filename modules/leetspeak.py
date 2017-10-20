@@ -5,13 +5,13 @@ from functools import reduce
 import datetime
 import yaml
 
-# import path
-with open("config.yml", "r") as f:
-    leet_dictionary = yaml.load(f)["sys_paths"]["leet_dictionary"]
 
-
-def handler(dp):
-    dp.add_handler(CommandHandler("leet", leet, pass_args=True))
+def module_init(gd):
+    global leet_dictionary, extensions
+    leet_dictionary = gd.config["leet_dictionary"]
+    commands = gd.config["commands"]
+    for command in commands:
+        gd.dp.add_handler(CommandHandler(command, leet, pass_args=True))
 
 
 def leet(bot, update, args):

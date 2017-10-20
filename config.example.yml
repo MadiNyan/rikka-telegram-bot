@@ -1,23 +1,148 @@
 keys:
-     telegram_token: telegram api token goes here
-     google_dev_key: google custom seaech API key (if needed)
-     google_cse_id: see above
-     channel: vk.com channel for autorepost
-     vk_token: vk api token goes here
+     telegram_token: =====key=====
 
-sys_paths:
-    leet_dictionary: resources/leetdict.txt
-    meme_font: resources/impact.ttf
+features:
+    gif:
+        enabled: true
+        commands: 
+            - gif
+        path: userdata/mp4/
 
-path: #you can change these
-    yandere_search: userdata/
-    gifs: userdata/mp4/
-    glitch: userdata/glitch/
-    instagram: userdata/instagram/
-    kek: userdata/kek/
-    lego: userdata/lego/
-    liquid: userdata/liquid/
-    memes: userdata/memes/
-    nya: userdata/nya/
-    tts: userdata/
-    vk: userdata/channel
+    glitch:
+        enabled: true
+        commands: 
+            - glitch
+        path: userdata/glitch/
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+            - .bmp 
+            - .webp
+
+    google_search:
+        enabled: true
+        commands_image: 
+            - img
+        commands_video: 
+            - vid
+        google_dev_key: =====key=====
+        google_cse_id: =====key=====
+
+    instagram:
+        enabled: true
+        commands: 
+            - instagram
+            - ig
+        path: userdata/instagram/
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+            - .bmp 
+            - .webp
+            - .svg
+            - .mp4
+            - .gif
+
+    kek:
+        enabled: true
+        commands: 
+            - kek
+        path: userdata/kek/
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+            - .bmp
+            - .webp
+
+    leetspeak:
+        enabled: true
+        commands: 
+            - leet
+        leet_dictionary: resources/leetdict.txt
+
+    lego:
+        enabled: true
+        commands: 
+            - lego
+        path: userdata/lego/
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+            - .bmp
+            - .gif
+            - .webp
+
+    liquid:
+        enabled: true
+        commands: 
+            - liq
+        path: userdata/liquid/
+
+    meme:
+        enabled: true
+        commands: 
+            - meme
+        path: userdata/meme/
+        fontpath: resources/impact.ttf
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+            - .webp
+
+    nya:
+        enabled: true
+        commands: 
+            - nya
+        path: userdata/nya/
+
+    pcstat:
+        enabled: true
+        commands: 
+            - status
+
+    rate:
+        enabled: true
+        commands:
+            - rate
+
+    roll:
+        enabled: true
+        commands:
+            - roll
+
+    sticker_reply:
+        enabled: true
+        sticker_path: resources/kappa.webp
+        keywords:
+            - Kappa
+
+    toribash:
+        enabled: true
+        commands: 
+            - toribash
+
+    tts:
+        enabled: true
+        commands: 
+            - say
+        path: userdata/
+
+    vk:
+        enabled: true
+        commands: 
+            - sonyan
+        path: userdata/vk/
+        channel: madi_test
+        vk_token: =====key=====
+        database: resources/date.yml
+
+    yandere_search:
+        enabled: true
+        commands: 
+            - a
+        path: userdata/

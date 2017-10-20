@@ -1,34 +1,39 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from telegram.ext import CommandHandler, Filters, Job, JobQueue
+from telegram.ext import CommandHandler, Filters, Job
 from datetime import datetime
 from random import randint
 import requests
 import yaml
 import os
 
-
-def handler(dp):
-    dp.add_handler(CommandHandler("sonyan", sonyan_post))
-
-with open("config.yml", "r") as f:
-    config = yaml.load(f)
-    access_token = config["keys"]["vk_token"]
-    channel = config["keys"]["channel"]
-    path = config["path"]["vk"]
 owner = "-98881019"
 count = "1"
 offset = 0
 
 
+def module_init(gd):
+    global path, channel, token, database
+    path = gd.config["path"]
+    channel = gd.config["channel"]
+    token = gd.config["vk_token"]
+    commands = gd.config["commands"]
+    database = gd.config["database"]
+    for command in commands:
+        gd.dp.add_handler(CommandHandler(command, sonyan_post))
+    jobQueue = gd.updater.job_queue
+    jobQueue.run_repeating(callback=sonyan_post, interval=60, first=0, context="@"+channel, name='RepeatingJob')
+
+
+
 def sonyan_post(bot, update):
-    with open("resources/date.yml", "r") as datefile:
+    with open(database, "r") as datefile:
         date_old = yaml.load(datefile)["date"]
-    date = check_post(owner, offset, count, access_token)
+    date = check_post(owner, offset, count, token)
 
     if date > date_old:
         print("New post!")
-        post_link, filename, text, pics_amount = dlpic(owner, offset, count, access_token)
+        post_link, filename, text, pics_amount = dlpic(owner, offset, count, token)
     else:
         return
 
@@ -37,33 +42,33 @@ def sonyan_post(bot, update):
     else:
         images_text = text+"\n["+str(pics_amount)+" images] \n"+post_link
 
-    with open("sonyan/"+filename, "rb") as file:
+    with open(path+filename, "rb") as file:
     	bot.sendPhoto(chat_id="@"+channel, photo=file, caption=images_text)
     data = {"date" : date}
-    with open("resources/date.yml", "w") as datefile:
+    with open(database, "w") as datefile:
         yaml.dump(data, datefile)
 
 
-def check_post(owner, offset, count, access_token):
+def check_post(owner, offset, count, token):
     wallposts = requests.get("https://api.vk.com/method/wall.get?"+
                             "owner_id="+owner+
                              "&offset="+str(offset)+
                              "&count="+count+
                              "&filter="+owner+
-                             "&access_token="+access_token+
+                             "&access_token="+token+
                              "&v=5.60")
     serverjson = wallposts.json()
     date = serverjson["response"]["items"][0]["date"]
     return date
 
-	
-def dlpic(owner, offset, count, access_token):
+
+def dlpic(owner, offset, count, token):
     wallposts = requests.get("https://api.vk.com/method/wall.get?"+
                              "owner_id="+owner+
                              "&offset="+str(offset)+
                              "&count="+count+
                              "&filter="+owner+
-                             "&access_token="+access_token+
+                             "&access_token="+token+
                              "&v=5.60")
     serverjson = wallposts.json()
 

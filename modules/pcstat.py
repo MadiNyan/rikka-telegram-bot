@@ -8,8 +8,10 @@ import datetime
 import psutil
 
 
-def handler(dp):
-    dp.add_handler(CommandHandler("status", status))
+def module_init(gd):
+    commands = gd.config["commands"]
+    for command in commands:
+        gd.dp.add_handler(CommandHandler(command, status))
 
 
 def seconds_to_str(seconds):

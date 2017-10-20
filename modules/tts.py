@@ -7,11 +7,12 @@ import datetime
 import yaml
 
 
-def handler(dp):
-    dp.add_handler(CommandHandler("say", tts, pass_args=True))
-
-with open("config.yml", "r") as f:
-    path = yaml.load(f)["path"]["tts"]
+def module_init(gd):
+    global path
+    path = gd.config["path"]
+    commands = gd.config["commands"]
+    for command in commands:
+        gd.dp.add_handler(CommandHandler(command, tts, pass_args=True))
 
 
 def tts(bot, update, args):

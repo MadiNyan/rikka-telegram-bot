@@ -5,8 +5,10 @@ from random import random, seed
 import datetime
 
 
-def handler(dp):
-    dp.add_handler(CommandHandler("rate", rate, pass_args=True))
+def module_init(gd):
+    commands = gd.config["commands"]
+    for command in commands:
+        gd.dp.add_handler(CommandHandler(command, rate, pass_args=True))
 
 
 def ifint(number):

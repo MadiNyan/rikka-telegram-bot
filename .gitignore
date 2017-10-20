@@ -1,12 +1,6 @@
 .git/
 .vscode/
-/mp4/
-/gifs/
-/nya/
-/glitch/
-/lego/
-/memes/
-/img/
+/userdata/
 impact.ttf
 config.yml
 *.ini

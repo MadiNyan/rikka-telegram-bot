@@ -7,8 +7,10 @@ import requests
 import datetime
 
 
-def handler(dp):
-    dp.add_handler(CommandHandler("toribash", toristats, pass_args=True))
+def module_init(gd):
+    commands = gd.config["commands"]
+    for command in commands:
+        gd.dp.add_handler(CommandHandler(command, toristats, pass_args=True))
 
 
 @run_async

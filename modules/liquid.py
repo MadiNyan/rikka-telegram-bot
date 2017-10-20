@@ -9,16 +9,15 @@ import datetime
 import yaml
 
 
-def handler(dp):
-    dp.add_handler(MessageHandler(caption_filter("/liq"), liquid))
-    dp.add_handler(CommandHandler("liq", liquid))
+def module_init(gd):
+    global path
+    path = gd.config["path"]
+    commands = gd.config["commands"]
+    for command in commands:
+        gd.dp.add_handler(MessageHandler(caption_filter("/"+command), liquid))
+        gd.dp.add_handler(CommandHandler(command, liquid))
 
-# import path
-with open("config.yml", "r") as f:
-    path = yaml.load(f)["path"]["liquid"]
 
-
-# get image, then rescale
 @run_async
 def liquid(bot, update):
     power = get_param(update)

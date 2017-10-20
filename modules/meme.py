@@ -9,16 +9,16 @@ import datetime
 import yaml
 
 
-def handler(dp):
-    dp.add_handler(MessageHandler(caption_filter("/meme"), meme))
-    dp.add_handler(CommandHandler("meme", meme))
-
-# import paths
-with open("config.yml", "r") as f:
-    path = yaml.load(f)["path"]["memes"]
-
-extensions = (".jpg", ".jpeg", ".png", ".webp")
-name = "meme"
+def module_init(gd):
+    global path, extensions, name, meme_font
+    path = gd.config["path"]
+    extensions = gd.config["extensions"]
+    commands = gd.config["commands"]
+    meme_font = gd.config["fontpath"]
+    name = "meme"
+    for command in commands:
+        gd.dp.add_handler(MessageHandler(caption_filter("/"+command), meme))
+        gd.dp.add_handler(CommandHandler(command, meme))
 
 
 @run_async
@@ -42,9 +42,9 @@ def meme(bot, update):
         update.message.reply_text("Type in some text!")
         return
     elif len(split_text) > 1:
-        make_meme(split_text[0], split_text[1], path + "original" + extension, extension)
+        make_meme(split_text[0], split_text[1], path + "original" + extension, extension, path, meme_font)
     else:
-        make_meme("", split_text[0], path + "original" + extension, extension)
+        make_meme("  ", split_text[0], path + "original" + extension, extension, path, meme_font)
     send_image(update, path, name, extension)
     print (datetime.datetime.now(), ">>>", "Done meme", ">>>",
            update.message.from_user.username)

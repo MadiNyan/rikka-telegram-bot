@@ -10,16 +10,16 @@ import legofy
 import yaml
 
 
-def handler(dp):
-    dp.add_handler(MessageHandler(caption_filter("/lego"), lego))
-    dp.add_handler(CommandHandler("lego", lego))
+def module_init(gd):
+    global path, extensions, name
+    path = gd.config["path"]
+    extensions = gd.config["extensions"]
+    commands = gd.config["commands"]
+    name = "legofied"
+    for command in commands:
+        gd.dp.add_handler(MessageHandler(caption_filter("/"+command), lego))
+        gd.dp.add_handler(CommandHandler(command, lego))
 
-# import paths
-with open('config.yml', 'r') as f:
-    path = yaml.load(f)["path"]["lego"]
-
-extensions = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".webp")
-name = "legofied"
 
 @run_async
 def lego(bot, update):

@@ -9,17 +9,18 @@ import yaml
 import os
 
 
-def handler(dp):
-    dp.add_handler(CommandHandler("gif", gif, pass_args=True))
-    dp.add_handler(CallbackQueryHandler(gif_button, pattern="(gif_)\w+"))
-
-with open("config.yml", "r") as f:
-    gif_folder = yaml.load(f)["path"]["gifs"]
+def module_init(gd):
+    global path
+    path = gd.config["path"]
+    commands = gd.config["commands"]
+    for command in commands:
+        gd.dp.add_handler(CommandHandler(command, gif, pass_args=True))
+    gd.dp.add_handler(CallbackQueryHandler(gif_button, pattern="(gif_)\w+"))
 
 
 @run_async
 def gif(bot, update, args):
-    folders = os.walk(gif_folder)
+    folders = os.walk(path)
     args = "gif_" + str(args)[2:-2]
     avail_folders = next(folders)[1]
     if args == "gif_help" or args == "gif_?":
@@ -27,10 +28,10 @@ def gif(bot, update, args):
         update.message.reply_text("Available folders for /gif are:", reply_markup=reply_markup)
     elif args in avail_folders:
         update.message.chat.send_action(ChatAction.UPLOAD_DOCUMENT)
-        gifs_dir = gif_folder + args
+        gifs_dir = path + args
         getgifs(update, gifs_dir)
     elif args == "gif_":
-        gifs_dir = gif_folder
+        gifs_dir = path
         getgifs(update, gifs_dir)
     else:
         update.message.reply_text("No such folder, try /gif help")
@@ -46,9 +47,9 @@ def gif_button(bot, update):
                         message_id=query.message.message_id)
     query.message.chat.send_action(ChatAction.UPLOAD_DOCUMENT)
     if display_data == "unsorted":
-        gifs_dir = gif_folder
+        gifs_dir = path
     else:
-        gifs_dir = gif_folder + query.data
+        gifs_dir = path + query.data
     gifs = [f for f in os.listdir(gifs_dir)
             if os.path.isfile(os.path.join(gifs_dir, f))
             and f.endswith((".mp4", ".gif"))]

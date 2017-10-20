@@ -12,11 +12,12 @@ import yaml
 import os
 
 
-def handler(dp):
-    dp.add_handler(CommandHandler("a", yandere_search, pass_args=True))
-
-with open("config.yml", "r") as f:
-    yandere_path = yaml.load(f)["path"]["yandere_search"]
+def module_init(gd):
+    global path
+    path = gd.config["path"]
+    commands = gd.config["commands"]
+    for command in commands:
+        gd.dp.add_handler(CommandHandler(command, yandere_search, pass_args=True))
 
 
 def get_anime(update, query):
@@ -29,7 +30,7 @@ def get_anime(update, query):
     image_post = "https://yande.re/post/show/" + str(posts[random]["id"])
     image_url = posts[random]["sample_url"]
     dl = requests.get(image_url)
-    with open(yandere_path + "anime_temp.jpg", "wb") as f:
+    with open(path + "anime_temp.jpg", "wb") as f:
         f.write(dl.content)
     return image_post
 
@@ -42,14 +43,14 @@ def yandere_search(bot, update, args):
         input_query = " ".join(args).lower()
     try:
         cap = get_anime(update, input_query)
-        with open(yandere_path + "anime_temp.jpg", "rb") as f:
+        with open(path + "anime_temp.jpg", "rb") as f:
             update.message.reply_photo(f, caption=cap)
         print (datetime.datetime.now(),
                ">>> Sent anime:", input_query, ">>>",
                update.message.from_user.username)
     except:
         cap = get_anime(update, "rating:s")
-        with open(yandere_path + "anime_temp.jpg", "rb") as f:
+        with open(path + "anime_temp.jpg", "rb") as f:
             update.message.reply_photo(f, caption="Nothing found, onii-chan, but here's one random pic:\n" + cap)
         print (datetime.datetime.now(),
                ">>> Tag not found:", input_query, ", sent random", ">>>",

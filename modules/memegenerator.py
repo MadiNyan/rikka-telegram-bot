@@ -5,14 +5,8 @@ from PIL import Image
 from PIL import ImageDraw
 import yaml
 
-# import paths
-with open("config.yml", "r") as f:
-    memes_folder = yaml.load(f)["path"]["memes"]
-with open("config.yml", "r") as f:
-    meme_font = yaml.load(f)["sys_paths"]["meme_font"]
 
-
-def make_meme(topString, bottomString, filename, extension):
+def make_meme(topString, bottomString, filename, extension, path, meme_font):
     ext = extension
     img = Image.open(filename)
     imageSize = img.size
@@ -51,4 +45,4 @@ def make_meme(topString, bottomString, filename, extension):
     draw.text(topTextPosition, topString, (255, 255, 255), font=font)
     draw.text(bottomTextPosition, bottomString, (255, 255, 255), font=font)
 
-    img.save(memes_folder+"meme"+ext)
+    img.save(path+"meme"+ext)
