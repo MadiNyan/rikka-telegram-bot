@@ -77,7 +77,7 @@ def dlpic(owner, offset, count, token):
     try:
         attachments = serverjson["response"]["items"][0]["attachments"]
     except:
-        return None
+        return None, None, None, None
     pics_amount = len(attachments)
     pic_to_get = randint(0, pics_amount-1)
 
@@ -94,7 +94,7 @@ def dlpic(owner, offset, count, token):
                     pic_link = serverjson["response"]["items"][0]["attachments"][pic_to_get]["photo"]["photo_604"]
                 except:
                     print("can't get link!")
-                    return None
+                    return None, None, None, None
 
     dl = requests.get(pic_link)
     with open(path+pic_link[-13:], "wb") as code:
