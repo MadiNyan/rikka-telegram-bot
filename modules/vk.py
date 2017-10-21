@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from telegram.ext import CommandHandler
-from datetime import datetime
 from random import randint
 import requests
 import yaml
