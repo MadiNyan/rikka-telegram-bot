@@ -18,13 +18,11 @@ def module_init(gd):
         gd.dp.add_handler(CommandHandler(command, glitch))
 
 
-name = "glitch"
-
-
 # get image, then glitch
 def glitch(bot, update):
+    filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
     try:
-        extension = get_image(bot, update, path)
+        extension = get_image(bot, update, path, filename)
     except:
         update.message.reply_text("I can't get the image! :(")
         return
@@ -32,24 +30,24 @@ def glitch(bot, update):
     if extension not in extensions:
         update.message.reply_text("Unsupported file, onii-chan!")
         return False
-    jpg = "convert " + path + "original" + extension + " -resize 100% " + path + "original.jpg"
+    jpg = "convert " + path + filename + extension + " -resize 100% " + path + filename + ".jpg"
     subprocess.run(jpg, shell=True)
-    process_img(update)
+    process_img(update, filename)
 
 
 # glitch processing; deleting lines in .jpg file
-def process_img(update):
-    with open(path + "original.jpg", "rb") as f:
+def process_img(update, filename):
+    with open(path + filename + ".jpg", "rb") as f:
         linelist = list(f)
         linecount = len(linelist) - 10
         for i in range(5):
             i = randint(1, linecount - 1)
             linecount = linecount - 1
             del linelist[i]
-    with open(path + name + ".jpg", "wb") as f:
+    with open(path + filename + "-glitched" + ".jpg", "wb") as f:
         for content in linelist:
             f.write(content)
-    with open(path + name + ".jpg", "rb") as f:
+    with open(path + filename + "-glitched" + ".jpg", "rb") as f:
         update.message.reply_photo(f)
-    print (datetime.datetime.now(), ">>>", "Done glitching", ">>>",
+    print (datetime.datetime.now(), ">>>", "glitch", ">>>",
            update.message.from_user.username)

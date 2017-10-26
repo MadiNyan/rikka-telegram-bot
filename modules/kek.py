@@ -5,6 +5,7 @@ from telegram.ext import CommandHandler, MessageHandler
 from telegram import ChatAction
 import subprocess
 import datetime
+import os
 
 
 def module_init(gd):
@@ -19,6 +20,7 @@ def module_init(gd):
 
 # get image, pass parameter
 def kek(bot, update):
+    filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
     if update.message.reply_to_message is not None:
         kek_param = "".join(update.message.text[5:7])
     elif update.message.caption is not None:
@@ -27,7 +29,7 @@ def kek(bot, update):
         update.message.reply_text("You need an image for that!")
         return
     try:
-        extension = get_image(bot, update, path)
+        extension = get_image(bot, update, path, filename)
     except:
         update.message.reply_text("Can't get the image! :(")
         return
@@ -35,13 +37,13 @@ def kek(bot, update):
         update.message.reply_text("Unsupported file, onii-chan!")
         return False
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    result = kekify(update, kek_param, extension)
+    result = kekify(update, kek_param, filename, extension)
     send_image(update, path, result, extension)
-    print(datetime.datetime.now(), ">>>", "Done kek", ">>>", update.message.from_user.username)
+    print(datetime.datetime.now(), ">>>", "kek", ">>>", update.message.from_user.username)
 
 
 # kek process + send
-def kekify(update, kek_param, extension):
+def kekify(update, kek_param, filename, extension):
     try:
         if kek_param == "-l" or kek_param == "":
             crop = "50%x100% "
@@ -50,7 +52,7 @@ def kekify(update, kek_param, extension):
             flip = "-flop "
             order = path + piece_one + " " + path + piece_two
             append = "+append "
-            result = "kek-left"
+            result = filename+"-kek-left"
         elif kek_param == "-r":
             crop = "50%x100% "
             piece_one = "result-1" + extension
@@ -58,7 +60,7 @@ def kekify(update, kek_param, extension):
             flip = "-flop "
             order = path + piece_two + " " + path + piece_one
             append = "+append "
-            result = "kek-right"
+            result = filename+"-kek-right"
         elif kek_param == "-t":
             crop = "100%x50% "
             piece_one = "result-0" + extension
@@ -66,7 +68,7 @@ def kekify(update, kek_param, extension):
             flip = "-flip "
             order = path + piece_one + " " + path + piece_two
             append = "-append "
-            result = "kek-top"
+            result = filename+"-kek-top"
         elif kek_param == "-b":
             crop = "100%x50% "
             piece_one = "result-1" + extension
@@ -74,32 +76,40 @@ def kekify(update, kek_param, extension):
             flip = "-flip "
             order = path + piece_two + " " + path + piece_one
             append = "-append "
-            result = "kek-bot"
+            result = filename+"-kek-bot"
         elif kek_param == "-m":
-            result = multikek(update, extension)
+            result = multikek(update, filename, extension)
             return result
-        cut = "convert " + path + "original" + extension + " -crop " + crop + path + "result" + extension
+        cut = "convert " + path + filename + extension + " -crop " + crop + path + "result" + extension
         subprocess.run(cut, shell=True)
         mirror = "convert " + path + piece_one + " " + flip + " " + path + piece_two
         subprocess.run(mirror, shell=True)
         append = "convert " + order + " " + append + path + result + extension
         subprocess.run(append, shell=True)
+        os.remove(path+"result-0.jpg")
+        os.remove(path+"result-1.jpg")
         return result
     except:
         update.message.reply_text("Unknown kek parameter.\nUse -l, -r, -t, -b or -m")
         return
 
 
-def multikek(update, extension):
-    kekify(update, "-l", extension)
-    kekify(update, "-r", extension)
-    kekify(update, "-t", extension)
-    kekify(update, "-b", extension)
-    append_lr = "convert " + path + "kek-left" + extension + " " + path + "kek-right" + extension + " +append " + path + "kek-lr-temp" + extension
+def multikek(update, filename, extension):
+    kekify(update, "-l", filename, extension)
+    kekify(update, "-r", filename, extension)
+    kekify(update, "-t", filename, extension)
+    kekify(update, "-b", filename, extension)
+    append_lr = "convert " + path + filename+ "-kek-left" + extension + " " + path + filename + "-kek-right" + extension + " +append " + path +  filename + "-kek-lr-temp" + extension
     subprocess.run(append_lr, shell=True)
-    append_tb = "convert " + path + "kek-top" + extension + " " + path + "kek-bot" + extension + " +append " + path + "kek-tb-temp" + extension
+    append_tb = "convert " + path + filename + "-kek-top" + extension + " " + path + filename + "-kek-bot" + extension + " +append " + path + filename + "-kek-tb-temp" + extension
     subprocess.run(append_tb, shell=True)
-    append_all = "convert " + path + "kek-lr-temp" + extension + " " + path + "kek-tb-temp" + extension + " -append " + path + "multikek" + extension
+    append_all = "convert " + path + filename + "-kek-lr-temp" + extension + " " + path + filename + "-kek-tb-temp" + extension + " -append " + path + filename + "-multikek" + extension
     subprocess.run(append_all, shell=True)
-    result = "multikek"
+    result = filename + "-multikek"
+    os.remove(path+filename+"-kek-left"+extension)
+    os.remove(path+filename+"-kek-right"+extension)
+    os.remove(path+filename+"-kek-top"+extension)
+    os.remove(path+filename+"-kek-bot"+extension)
+    os.remove(path+filename+"-kek-lr-temp"+extension)
+    os.remove(path+filename+"-kek-tb-temp"+extension)
     return result

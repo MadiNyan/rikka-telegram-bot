@@ -26,8 +26,10 @@ def module_init(gd):
 
 
 def instagram(bot, update):
+    global filename
+    filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
     try:
-        extension = get_image(bot, update, path)
+        extension = get_image(bot, update, path, filename)
     except:
         update.message.reply_text("I can't get the image! :(")
         return
@@ -57,8 +59,8 @@ def instagram_button(bot, update):
                         message_id=query.message.message_id)
     query.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     try:
-        getattr(modules.instagram_filters, chosen_filter)(path, extension)
+        getattr(modules.instagram_filters, chosen_filter)(path, filename, extension)
     except:
         raise Exception("Instagram error")
-    send_image(query, path, filter_name, extension)
+    send_image(query, path, filename+"-"+filter_name, extension)
     print (datetime.datetime.now(), ">>>", "Sent instagram photo", ">>>", query.message.from_user.username)

@@ -19,18 +19,19 @@ def module_init(gd):
 
 @run_async
 def liquid(bot, update):
+    filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
     power = get_param(update)
     try:
-        extension = get_image(bot, update, path)
+        extension = get_image(bot, update, path, filename)
     except:
         update.message.reply_text("I can't get the image! :(")
         return
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    identify = subprocess.Popen("identify " + path + "original" + extension, stdout=subprocess.PIPE).communicate()[0]
+    identify = subprocess.Popen("identify " + path + filename + extension, stdout=subprocess.PIPE).communicate()[0]
     res = str(identify.split()[2])[2:-1]
     size = str(100 - (power / 1.3))
-    name = "liquid"
-    x = "convert " + path + "original" + extension + " -liquid-rescale " + \
+    name = filename + "-liquid"
+    x = "convert " + path + filename + extension + " -liquid-rescale " + \
          size + "%x" + size + "% -resize " + res + "! " + path + name + extension
     subprocess.run(x, shell=True)
     if extension == ".mp4":
@@ -41,4 +42,4 @@ def liquid(bot, update):
         subprocess.run(mp4fix, shell=True)
         name = name + "_mp4"
     send_image(update, path, name, extension)
-    print(datetime.datetime.now(), ">>>", "Done liquid rescale", ">>>", update.message.from_user.username)
+    print(datetime.datetime.now(), ">>>", "liquid", ">>>", update.message.from_user.username)

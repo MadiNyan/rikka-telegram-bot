@@ -9,12 +9,11 @@ import datetime
 
 
 def module_init(gd):
-    global path, extensions, name, meme_font
+    global path, extensions, meme_font
     path = gd.config["path"]
     extensions = gd.config["extensions"]
     commands = gd.config["commands"]
     meme_font = gd.config["fontpath"]
-    name = "meme"
     for command in commands:
         gd.dp.add_handler(MessageHandler(caption_filter("/"+command), meme))
         gd.dp.add_handler(CommandHandler(command, meme))
@@ -22,6 +21,7 @@ def module_init(gd):
 
 @run_async
 def meme(bot, update):
+    filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
     meme_splitter = "@"
     if update.message.reply_to_message is not None:
         initial_text = "".join(update.message.text[6:]).upper()
@@ -29,7 +29,7 @@ def meme(bot, update):
         initial_text = "".join(update.message.caption[6:]).upper()
     split_text = initial_text.split(meme_splitter)
     try:
-        extension = get_image(bot, update, path)
+        extension = get_image(bot, update, path, filename)
     except:
         update.message.reply_text("Can't get the image! :(")
         return
@@ -41,9 +41,9 @@ def meme(bot, update):
         update.message.reply_text("Type in some text!")
         return
     elif len(split_text) > 1:
-        make_meme(split_text[0], split_text[1], path + "original" + extension, extension, path, meme_font)
+        make_meme(split_text[0], split_text[1], filename, extension, path, meme_font)
     else:
-        make_meme("  ", split_text[0], path + "original" + extension, extension, path, meme_font)
-    send_image(update, path, name, extension)
+        make_meme("  ", split_text[0], filename, extension, path, meme_font)
+    send_image(update, path, filename+"-meme", extension)
     print (datetime.datetime.now(), ">>>", "Done meme", ">>>",
            update.message.from_user.username)

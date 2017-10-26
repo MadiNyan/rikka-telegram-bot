@@ -27,8 +27,8 @@ def is_image(path):
     return False
 
 
-def get_image(bot, update, dl_path):
-    output = os.path.join(dl_path, "original")
+def get_image(bot, update, dl_path, filename):
+    output = os.path.join(dl_path, filename)
     reply = update.message.reply_to_message
     if reply is None:
         extension = ".jpg"
@@ -84,9 +84,11 @@ def send_image(update, filepath, name, extension):
 
 def get_param(update):
     if update.message.reply_to_message is not None:
-            parts = update.message.text.split(" ", 1)
-    else:
+        parts = update.message.text.split(" ", 1)
+    elif update.message.caption is not None:
         parts = update.message.caption.split(" ", 1)
+    else:
+        return None
     if len(parts) == 1:
         size = 60
     else:

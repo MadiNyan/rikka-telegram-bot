@@ -6,8 +6,7 @@ from PIL import ImageDraw
 
 
 def make_meme(topString, bottomString, filename, extension, path, meme_font):
-    ext = extension
-    img = Image.open(filename)
+    img = Image.open(path + filename + extension)
     imageSize = img.size
 
     # find biggest font size that works
@@ -44,4 +43,4 @@ def make_meme(topString, bottomString, filename, extension, path, meme_font):
     draw.text(topTextPosition, topString, (255, 255, 255), font=font)
     draw.text(bottomTextPosition, bottomString, (255, 255, 255), font=font)
 
-    img.save(path+"meme"+ext)
+    img.save(path+filename+"-meme"+extension)
