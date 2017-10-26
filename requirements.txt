@@ -1,11 +1,14 @@
-python-telegram-bot (6.1.0)
-uptime==3.0.1
+python-telegram-bot==8.0
 Pybooru==4.1.0
-telegram==0.0.1
+requests==2.18.4
+uptime==3.0.1
 gTTS==1.2.0
-requests==2.18.3
-psutil==5.2.2
+opencv_python==3.3.0.10
+telegram==0.0.1
 legofy==1.0.0
-Pillow==4.2.1
+numpy==1.13.3+mkl
+psutil==5.2.2
+Pillow==4.3.0
 google_api_python_client==1.6.4
+scikit_learn==0.19.1
 PyYAML==3.12

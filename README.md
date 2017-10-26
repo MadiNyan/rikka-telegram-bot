@@ -21,30 +21,44 @@
 
 ## How to
 Run `update_deps.bat` to automatically install `requirements.txt` libraries
-Configure your token, api keys and paths in config.yml (without any quotations), and don't forget the font
+Configure your token, api keys, commands, extensions and paths for each module in config.yml
 ```
-    keys:
-        telegram_token: 123455
-        google_dev_key: AIzaFXHYLv4
-        google_cse_id: 0087961083454546782236:prc9jbvfddi
+keys:
+     telegram_token: =====key=====
 
-    path:
-        gifs: examples/gifs/
-        memes: examples/memes/
-        meme_font: resources/font_name.ttf
-        lego: examples/lego/
-        nya: examples/nya/
-        kek: examples/kek/
-        instagram: examples/instagram/
-        anime: examples/
-        liquid: examples/liquid
+features:
+    gif:
+        enabled: true
+        commands: 
+            - gif
+        path: userdata/mp4/
+
+    glitch:
+        enabled: true
+        commands: 
+            - glitch
+        path: userdata/glitch/
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+            - .bmp 
+            - .webp
+
+    google_search:
+        enabled: true
+        commands_image: 
+            - img
+        google_dev_key: =====key=====
+        google_cse_id: =====key=====
 ```
 
 ## Available functions:
 + /a [tag] - get pic from yande.re
++ /colors [from 1 to 10] - generate image palette with given number of colors
 + /gif - get random gif, "/gif help" to see folders
 + /glitch - glitch an image
-+/img - Google image search
++ /img - Google image search
 + /instagram or /ig - add filter to an image
 + /kek [-l, -r, -t, -b] - mirror one side of an image to another
 + /leet - convert text to 1337 5P34K
