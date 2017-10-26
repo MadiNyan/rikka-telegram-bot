@@ -100,6 +100,21 @@ features:
             - nya
         path: userdata/nya/
 
+    palette:
+        enabled: true
+        commands:
+            - palette
+            - colors
+        path:
+            userdata/palette/
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+            - .webp
+            - .bmp
+            - .gif
+
     pcstat:
         enabled: true
         commands: 
@@ -135,11 +150,11 @@ features:
     vk:
         enabled: true
         commands: 
-            - sonyan
+            - vk
         path: userdata/vk/
-        channel: madi_test
+        channel: your_channel
         vk_token: =====key=====
-        database: resources/date.yml
+        database: resources/whatever
 
     yandere_search:
         enabled: true
