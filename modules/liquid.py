@@ -20,7 +20,9 @@ def module_init(gd):
 @run_async
 def liquid(bot, update):
     filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
-    power = get_param(update)
+    power = get_param(update, 50, 1, 100)
+    if power is None:
+        return
     try:
         extension = get_image(bot, update, path, filename)
     except:

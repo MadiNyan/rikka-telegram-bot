@@ -22,7 +22,9 @@ def module_init(gd):
 @run_async
 def lego(bot, update):
     filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
-    size = get_param(update)
+    size = get_param(update, 50, 1, 100)
+    if size is None:
+        return
     try:
         extension = get_image(bot, update, path, filename)
     except:
