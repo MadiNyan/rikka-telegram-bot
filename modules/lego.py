@@ -33,7 +33,7 @@ def lego(bot, update):
         return False
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     if extension == ".webp" or ".png":
-        stick = "convert " + path + filename + extension + " -background white -flatten " + path + "original" + extension
+        stick = "convert " + path + filename + extension + " -background white -flatten " + path + filename + extension
         subprocess.run(stick, shell=True)
     legofy.main(image_path=path + filename + extension,
                 output_path=path + filename + "-lego" + extension,
