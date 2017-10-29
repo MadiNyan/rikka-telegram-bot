@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 from telegram.ext.dispatcher import run_async
 from telegram.ext import CommandHandler
+from modules.logging import log_command
 from telegram import ChatAction
 from random import randint
-import datetime
+from datetime import datetime
 import os
 
 
@@ -21,9 +22,11 @@ def module_init(gd):
 
 @run_async
 def nya(bot, update):
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     rand = randint(0, filecount-1)
     result = files[rand]
     with open(path+"/"+str(result), "rb") as f:
         update.message.reply_photo(f)
-    print(datetime.datetime.now(), ">>>", "Sent nya", ">>>", update.message.from_user.username)
+    print(current_time, ">", "/nya", ">", update.message.from_user.username)
+    log_command(update, current_time, "nya")

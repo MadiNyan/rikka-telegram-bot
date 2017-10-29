@@ -4,8 +4,9 @@ from modules.utils import caption_filter, get_image, send_image
 from telegram.ext import CommandHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
 from modules.memegenerator import make_meme
+from modules.logging import log_command
 from telegram import ChatAction
-import datetime
+from datetime import datetime
 
 
 def module_init(gd):
@@ -21,7 +22,8 @@ def module_init(gd):
 
 @run_async
 def meme(bot, update):
-    filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     meme_splitter = "@"
     if update.message.reply_to_message is not None:
         initial_text = "".join(update.message.text[6:]).upper()
@@ -45,5 +47,5 @@ def meme(bot, update):
     else:
         make_meme("  ", split_text[0], filename, extension, path, meme_font)
     send_image(update, path, filename+"-meme", extension)
-    print (datetime.datetime.now(), ">>>", "Done meme", ">>>",
-           update.message.from_user.username)
+    print (current_time, ">", "/meme", ">", update.message.from_user.username)
+    log_command(update, current_time, "meme")

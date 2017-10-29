@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from telegram.ext import CommandHandler
+from modules.logging import log_command
 from telegram import ChatAction
+from datetime import datetime
 from gtts import gTTS
-import datetime
 
 
 def module_init(gd):
@@ -15,6 +16,8 @@ def module_init(gd):
 
 
 def tts(bot, update, args):
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     reply = update.message.reply_to_message
     if reply is None:
         text = "".join(args)
@@ -26,15 +29,16 @@ def tts(bot, update, args):
     update.message.chat.send_action(ChatAction.RECORD_AUDIO)
     lang="en"
     tts = gTTS(text, lang)
-    tts.save(path + "voice.mp3")
-    with open(path + "voice.mp3", "rb") as f:
+    tts.save(path + filename + ".mp3")
+    with open(path + filename + ".mp3", "rb") as f:
         linelist = list(f)
         linecount = len(linelist)
     if linecount == 1:
         update.message.chat.send_action(ChatAction.RECORD_AUDIO)
         lang = "ru"
         tts = gTTS(text, lang)
-        tts.save(path + "voice.mp3")
-    with open(path + "voice.mp3", "rb") as speech:
+        tts.save(path + filename + ".mp3")
+    with open(path + filename + ".mp3", "rb") as speech:
         update.message.reply_voice(speech, quote=False)
-    print(datetime.datetime.now(), ">>>", "Done tts", ">>>", update.message.from_user.username)
+    print(current_time, ">", "/say", ">", update.message.from_user.username)
+    log_command(update, current_time, "say")

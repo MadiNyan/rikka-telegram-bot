@@ -3,8 +3,9 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
 from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler
 from modules.utils import caption_filter, get_image, send_image
+from modules.logging import log_command
 import modules.instagram_filters
-import datetime
+from datetime import datetime
 import inspect
 
 
@@ -27,7 +28,7 @@ def module_init(gd):
 
 def instagram(bot, update):
     global filename
-    filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
+    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     try:
         extension = get_image(bot, update, path, filename)
     except:
@@ -49,6 +50,7 @@ def instagram(bot, update):
 
 
 def instagram_button(bot, update):
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     query = update.callback_query
     chosen_filter, extension = update.callback_query.data.split(",")
     filter_name = str(chosen_filter)[5:]
@@ -63,4 +65,5 @@ def instagram_button(bot, update):
     except:
         raise Exception("Instagram error")
     send_image(query, path, filename+"-"+filter_name, extension)
-    print (datetime.datetime.now(), ">>>", "Sent instagram photo", ">>>", query.message.from_user.username)
+    print(current_time, ">", "/instagram", ">", user)
+    log_command(update, current_time, "instagram")

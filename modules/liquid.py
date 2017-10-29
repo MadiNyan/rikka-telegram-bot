@@ -3,9 +3,10 @@
 from modules.utils import caption_filter, get_image, send_image, get_param
 from telegram.ext import CommandHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
+from modules.logging import log_command
 from telegram import ChatAction
+from datetime import datetime
 import subprocess
-import datetime
 
 
 def module_init(gd):
@@ -19,7 +20,8 @@ def module_init(gd):
 
 @run_async
 def liquid(bot, update):
-    filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     power = get_param(update, 50, 1, 100)
     if power is None:
         return
@@ -44,4 +46,5 @@ def liquid(bot, update):
         subprocess.run(mp4fix, shell=True)
         name = name + "_mp4"
     send_image(update, path, name, extension)
-    print(datetime.datetime.now(), ">>>", "liquid", ">>>", update.message.from_user.username)
+    print(current_time, ">", "/liquid", ">", update.message.from_user.username)
+    log_command(update, current_time, "liquid")

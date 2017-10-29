@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 from telegram.ext import CommandHandler, MessageHandler
 from modules.utils import get_image, caption_filter
+from modules.logging import log_command
+from datetime import datetime
 from telegram import ChatAction
 from random import randint
 import subprocess
-import datetime
 
 
 def module_init(gd):
@@ -20,7 +21,8 @@ def module_init(gd):
 
 # get image, then glitch
 def glitch(bot, update):
-    filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     try:
         extension = get_image(bot, update, path, filename)
     except:
@@ -33,6 +35,8 @@ def glitch(bot, update):
     jpg = "convert " + path + filename + extension + " -resize 100% " + path + filename + ".jpg"
     subprocess.run(jpg, shell=True)
     process_img(update, filename)
+    print (current_time, ">", "/glitch", ">", update.message.from_user.username)
+    log_command(update, current_time, "glitch")
 
 
 # glitch processing; deleting lines in .jpg file
@@ -49,5 +53,3 @@ def process_img(update, filename):
             f.write(content)
     with open(path + filename + "-glitched" + ".jpg", "rb") as f:
         update.message.reply_photo(f)
-    print (datetime.datetime.now(), ">>>", "glitch", ">>>",
-           update.message.from_user.username)

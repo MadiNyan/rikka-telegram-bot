@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from telegram.ext import CommandHandler
+from modules.logging import log_command
 from random import random, seed
-import datetime
+from datetime import datetime
 
 
 def module_init(gd):
@@ -20,6 +21,7 @@ def ifint(number):
 
 
 def rate(bot, update, args):
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     if update.message.reply_to_message is not None:
         if update.message.reply_to_message.text is not None:
             args = update.message.reply_to_message.text.split(" ")
@@ -32,4 +34,5 @@ def rate(bot, update, args):
     rounded = round(rng * 2) / 2
     rating = str(ifint(rounded))
     update.message.reply_text("🤔 I rate this "+rating+"/10")
-    print(datetime.datetime.now(), ">>>", "Done rate", ">>>", update.message.from_user.username)
+    print(current_time, ">", "/rate", ">", update.message.from_user.username)
+    log_command(update, current_time, "rate")

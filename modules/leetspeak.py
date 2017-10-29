@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.logging import log_command
 from telegram.ext import CommandHandler
+from datetime import datetime
 from functools import reduce
-import datetime
 
 
 def module_init(gd):
@@ -14,6 +15,7 @@ def module_init(gd):
 
 
 def leet(bot, update, args):
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     if update.message.reply_to_message is not None:
         args = update.message.reply_to_message.text
         args = args.split(" ")
@@ -30,4 +32,5 @@ def leet(bot, update, args):
                 pass
     text_leet = reduce(lambda a, kv: a.replace(*kv), replace_dict, text_leet)
     update.message.reply_text(text_leet)
-    print(datetime.datetime.now(), ">>>", "Done leetspeak", ">>>", update.message.from_user.username)
+    print(current_time, ">", "/leetspeak", ">", update.message.from_user.username)
+    log_command(update, current_time, "leetspeak")

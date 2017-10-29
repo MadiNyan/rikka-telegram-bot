@@ -42,4 +42,4 @@ def toristats(bot, update, args):
               "\nWin Ratio: " + str(winratio)[:-2] + "%, " + str(elo)[:-4] + " elo" +
               "\nToricredits: " + str(tc)) + "\nLast Active: " + lastact
     update.message.reply_text(output)
-    print(datetime.datetime.now(), ">>>", "Done /toribash", ">>>", update.message.from_user.username)
+    print(datetime.datetime.now(), ">", "/toribash", ">", update.message.from_user.username)

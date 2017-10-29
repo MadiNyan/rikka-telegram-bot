@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 from modules.utils import caption_filter, get_image, send_image
 from telegram.ext import CommandHandler, MessageHandler
+from modules.logging import log_command
 from telegram import ChatAction
+from datetime import datetime
 import subprocess
-import datetime
 import os
 
 
@@ -20,7 +21,8 @@ def module_init(gd):
 
 # get image, pass parameter
 def kek(bot, update):
-    filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     if update.message.reply_to_message is not None:
         kek_param = "".join(update.message.text[5:7])
     elif update.message.caption is not None:
@@ -39,7 +41,8 @@ def kek(bot, update):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     result = kekify(update, kek_param, filename, extension)
     send_image(update, path, result, extension)
-    print(datetime.datetime.now(), ">>>", "kek", ">>>", update.message.from_user.username)
+    print(current_time, ">", "/kek", ">", update.message.from_user.username)
+    log_command(update, current_time, "kek")
 
 
 # kek process + send

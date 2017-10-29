@@ -3,11 +3,12 @@
 from modules.utils import caption_filter, get_image, send_image, get_param
 from telegram.ext import CommandHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
+from modules.logging import log_command
 from sklearn.cluster import KMeans
 from telegram import ChatAction
+from datetime import datetime
 from PIL import Image
 import numpy as np
-import datetime
 import cv2
 
 
@@ -23,7 +24,8 @@ def module_init(gd):
 
 @run_async
 def palette(bot, update):
-    filename = datetime.datetime.now().strftime("%d%m%y-%H%M%S%f")
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     name = filename + "-palette"
     colors = get_param(update, 4, 1, 10)
     if colors is None:
@@ -36,7 +38,8 @@ def palette(bot, update):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     start_computing(path, filename, extension, colors, "flat")
     send_image(update, path, name, extension)
-    print(datetime.datetime.now(), ">>>", "palette", ">>>", update.message.from_user.username)
+    print(current_time, ">", "/palette", ">", update.message.from_user.username)
+    log_command(update, current_time, "palette")
 
 
 def start_computing(path, filename, extension, colors, mode):

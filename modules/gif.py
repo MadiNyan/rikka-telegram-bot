@@ -3,8 +3,9 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
 from telegram.ext import CommandHandler, CallbackQueryHandler
 from telegram.ext.dispatcher import run_async
+from modules.logging import log_command
+from datetime import datetime
 from random import randint
-import datetime
 import os
 
 
@@ -19,6 +20,7 @@ def module_init(gd):
 
 @run_async
 def gif(bot, update, args):
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     folders = os.walk(path)
     args = "gif_" + str(args)[2:-2]
     avail_folders = next(folders)[1]
@@ -28,15 +30,23 @@ def gif(bot, update, args):
     elif args in avail_folders:
         update.message.chat.send_action(ChatAction.UPLOAD_DOCUMENT)
         gifs_dir = path + args
-        getgifs(update, gifs_dir)
+        result = getgifs(update, gifs_dir)
+        with open(gifs_dir + "/" + str(result), "rb") as f:
+            update.message.reply_document(f)
+        log_command(update, current_time, "gif")
     elif args == "gif_":
         gifs_dir = path
-        getgifs(update, gifs_dir)
+        result = getgifs(update, gifs_dir)
+        with open(gifs_dir + "/" + str(result), "rb") as f:
+            update.message.reply_document(f)
+        log_command(update, current_time, "gif")
     else:
         update.message.reply_text("No such folder, try /gif help")
+    print(current_time, "> /gif >", update.message.from_user.username, ">", args)
 
 
 def gif_button(bot, update):
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     query = update.callback_query
     user = query.from_user.username
     display_data = str(query.data)[4:]
@@ -49,15 +59,11 @@ def gif_button(bot, update):
         gifs_dir = path
     else:
         gifs_dir = path + query.data
-    gifs = [f for f in os.listdir(gifs_dir)
-            if os.path.isfile(os.path.join(gifs_dir, f))
-            and f.endswith((".mp4", ".gif"))]
-    filecount = len(gifs)
-    rand = randint(0, filecount - 1)
-    result = list(gifs)[rand]
+    result = getgifs(update, gifs_dir)
     with open(gifs_dir + "/" + str(result), "rb") as f:
         bot.sendDocument(query.message.chat_id, f)
-    print(datetime.datetime.now(), ">>> Sent gif >>>", query.message.from_user.username, ">", result)
+    print(current_time, "> /gif >", query.message.from_user.username, ">", display_data)
+    log_command(update, current_time, "gif")
 
 
 def make_keyboard(folders):
@@ -81,6 +87,4 @@ def getgifs(update, gifs_dir):
     filecount = len(gifs)
     rand = randint(0, filecount - 1)
     result = list(gifs)[rand]
-    with open(gifs_dir + "/" + str(result), "rb") as f:
-        update.message.reply_document(f)
-    print(datetime.datetime.now(), ">>> Sent gif >>>", update.message.from_user.username, ">", result)
+    return result
