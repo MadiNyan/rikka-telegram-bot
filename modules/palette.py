@@ -13,7 +13,7 @@ import cv2
 
 
 def module_init(gd):
-    global path
+    global path, extensions
     path = gd.config["path"]
     commands = gd.config["commands"]
     extensions = gd.config["extensions"]
@@ -34,6 +34,9 @@ def palette(bot, update):
         extension = get_image(bot, update, path, filename)
     except:
         update.message.reply_text("I can't get the image! :(")
+        return
+    if extension not in extensions:
+        update.message.reply_text("Unsupported file, onii-chan!")
         return
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     start_computing(path, filename, extension, colors, "flat")

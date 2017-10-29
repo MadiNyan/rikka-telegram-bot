@@ -22,7 +22,7 @@ def module_init(gd):
 def liquid(bot, update):
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
-    power = get_param(update, 50, 1, 100)
+    power = get_param(update, 60, 1, 100)
     if power is None:
         return
     try:

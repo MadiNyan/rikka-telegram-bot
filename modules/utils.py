@@ -82,7 +82,7 @@ def send_image(update, filepath, name, extension):
         return True
 
 
-def get_param(update, defaultvalue, min, max):
+def get_param(update, defaultvalue, min_value, max_value):
     if update.message.reply_to_message is not None:
         parts = update.message.text.split(" ", 1)
     elif update.message.caption is not None:
@@ -97,11 +97,12 @@ def get_param(update, defaultvalue, min, max):
         except:
             update.message.reply_text("Paremeter needs to be a number!")
             return None
-        if  parameter < min or parameter > max:
-            errtext = "Baka, make it from " + str(min) + " to " + str(max) + "!"
+        if  parameter < min_value or parameter > max_value:
+            errtext = "Baka, make it from " + str(min_value) + " to " + str(max_value) + "!"
             update.message.reply_text(errtext)
             return None
     return parameter
+
 
 # custom filters for message handler
 # photo with caption

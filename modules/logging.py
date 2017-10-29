@@ -8,10 +8,8 @@ import sqlite3
 def module_init(gd):
     global c, conn
     path = gd.config["path"]
-    commands = gd.config["commands"]
     conn  = sqlite3.connect(path+"rikka.db", check_same_thread=False) 
     c = conn.cursor()
-    #c.execute("DROP TABLE IF EXISTS chats")
     gd.dp.add_handler(MessageHandler(Filters.all, get_chats), group=1)
 
 
@@ -20,7 +18,6 @@ def create_table(name, columns):
 
 
 def data_entry(table, entry_columns, values):
-    columns = str(values).strip('[]')
     values_count = ("?, "*len(values))[:-2]
     c.execute("INSERT INTO "+table+" ("+entry_columns+") VALUES ("+values_count+")", (values))
     conn.commit()
