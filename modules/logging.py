@@ -26,19 +26,24 @@ def data_entry(table, entry_columns, values):
     conn.commit()
 
 
-def check_entry(chat_id, table, date):
-    span = timedelta(days=0, seconds=10)
+def check_entry(chat_id, table):
     c.execute("SELECT chat_id FROM "+table)
     for row in c.fetchall():
         if chat_id in row:
-            c.execute("SELECT date FROM "+table+" WHERE chat_id = %s" %(chat_id))
-            old_date = c.fetchone()[0]
-            old_date_time = datetime.strptime(old_date, "%d.%m.%Y %H:%M:%S")
-            if date - old_date_time > span:
-                c.execute("DELETE FROM "+table+" WHERE chat_id = %s" %(chat_id))
-                return False
-            else:
-                return True
+            return True
+        else:
+            return False
+
+
+def delete_old(table, date):
+    span = timedelta(days=7)
+    c.execute("SELECT chat_id FROM "+table)
+    for row in c.fetchall():
+        c.execute("SELECT date FROM "+table+" WHERE chat_id = %s" %(row))
+        old_date = c.fetchone()[0]
+        old_date_time = datetime.strptime(old_date, "%d.%m.%Y %H:%M:%S")
+        if date - old_date_time > span:
+            c.execute("DELETE FROM "+table+" WHERE chat_id = %s" %(row))
 
 
 def get_chats(bot, update):
@@ -48,9 +53,10 @@ def get_chats(bot, update):
     creation_columns = "date TEXT, chat_id INTEGER, chat_type TEXT, chat_title TEXT, chat_username TEXT, chat_desc TEXT, chat_members INTEGER, owner TEXT"
     entry_columns = "date, chat_id, chat_type, chat_title, chat_username, chat_desc, chat_members, owner" 
     create_table(table_name, creation_columns)
+    delete_old(table_name, current_time_obj)
 
     chat_id = update.effective_message.chat_id
-    if check_entry(chat_id, table_name, current_time_obj):
+    if check_entry(chat_id, table_name):
         return
     chat = bot.getChat(chat_id)
     chat_type = chat.type
