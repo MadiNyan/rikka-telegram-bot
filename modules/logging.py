@@ -24,12 +24,12 @@ def data_entry(table, entry_columns, values):
 
 
 def check_entry(chat_id, table):
-    c.execute("SELECT chat_id FROM "+table)
-    for row in c.fetchall():
-        if chat_id in row:
-            return True
-        else:
-            return False
+    c.execute("SELECT chat_id FROM "+table+" WHERE chat_id = %s" %(chat_id))
+    if c.fetchone() is not None:
+        return True
+    else:
+        return False
+
 
 
 def delete_old(table, date):
