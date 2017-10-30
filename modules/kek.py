@@ -89,8 +89,8 @@ def kekify(update, kek_param, filename, extension):
         subprocess.run(mirror, shell=True)
         append = "convert " + order + " " + append + path + result + extension
         subprocess.run(append, shell=True)
-        os.remove(path+"result-0.jpg")
-        os.remove(path+"result-1.jpg")
+        os.remove(path+"result-0"+extension)
+        os.remove(path+"result-1"+extension)
         return result
     except:
         update.message.reply_text("Unknown kek parameter.\nUse -l, -r, -t, -b or -m")

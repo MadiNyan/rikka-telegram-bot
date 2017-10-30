@@ -47,7 +47,7 @@ def filt_Gotham(path, filename, extension):
     subprocess.run(primary_filter, shell=True)
     border(path, filename, extension, "black")
     finish(path, extension, filename+"-gotham")
-    remove_temp(path)
+    remove_temp(path, extension)
 
 
 def filt_Grayscale(path, filename, extension):
@@ -55,7 +55,7 @@ def filt_Grayscale(path, filename, extension):
     primary_filter = "convert  " + path + "temp" + extension + " -colorspace Gray " + path + "temp" + extension
     subprocess.run(primary_filter, shell=True)
     finish(path, extension, filename+"-grayscale")
-    remove_temp(path)
+    remove_temp(path, extension)
 
 
 def filt_Kelvin(path, filename, extension):
@@ -66,7 +66,7 @@ def filt_Kelvin(path, filename, extension):
     subprocess.run(primary_filter, shell=True)
     frame(path, filename, extension, "kelvin")
     finish(path, extension, filename+"-kelvin")
-    remove_temp(path)
+    remove_temp(path, extension)
 
 
 def filt_Lomo(path, filename, extension):
@@ -76,7 +76,7 @@ def filt_Lomo(path, filename, extension):
     subprocess.run(primary_filter, shell=True)
     vignette(path, filename, extension, "none", "black")
     finish(path, extension, filename+"-lomo")
-    remove_temp(path)
+    remove_temp(path, extension)
 
 
 def filt_Nashville(path, filename, extension):
@@ -94,7 +94,7 @@ def filt_Nashville(path, filename, extension):
     subprocess.run(color_overlay2, shell=True)
     frame(path, filename, extension, "nashville")
     finish(path, extension, filename+"-nashville")
-    remove_temp(path)
+    remove_temp(path, extension)
 
 
 def filt_Toaster(path, filename, extension):
@@ -109,7 +109,7 @@ def filt_Toaster(path, filename, extension):
     vignette(path, filename, extension, "#ff9966", "none")
     border(path, filename, extension, "white")
     finish(path, extension, filename+"-toaster")
-    remove_temp(path)
+    remove_temp(path, extension)
 
 
 def filt_VHS(path, filename, extension):
@@ -124,12 +124,12 @@ def filt_VHS(path, filename, extension):
     subprocess.run(combine, shell=True)
     frame(path, filename, extension, "scan")
     finish(path, extension, filename+"-VHS")
-    remove_temp(path, rgb=True)
+    remove_temp(path, extension, rgb=True)
     
 
-def remove_temp(path, rgb=False):
-    os.remove(path+"temp.jpg")
+def remove_temp(path, ext, rgb=False):
+    os.remove(path+"temp"+ext)
     if rgb is True:
-        os.remove(path+"temp_r.jpg")
-        os.remove(path+"temp_g.jpg")
-        os.remove(path+"temp_b.jpg")
+        os.remove(path+"temp_r"+ext)
+        os.remove(path+"temp_g"+ext)
+        os.remove(path+"temp_b"+ext)
