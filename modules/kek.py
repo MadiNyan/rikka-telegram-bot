@@ -47,48 +47,20 @@ def kek(bot, update):
 
 # kek process + send
 def kekify(update, kek_param, filename, extension):
+    if kek_param == "-m":
+        result = multikek(update, filename, extension)
+        return result
     try:
-        if kek_param == "-l" or kek_param == "":
-            crop = "50%x100% "
-            piece_one = "result-0" + extension
-            piece_two = "result-1" + extension
-            flip = "-flop "
-            order = path + piece_one + " " + path + piece_two
-            append = "+append "
-            result = filename+"-kek-left"
-        elif kek_param == "-r":
-            crop = "50%x100% "
-            piece_one = "result-1" + extension
-            piece_two = "result-0" + extension
-            flip = "-flop "
-            order = path + piece_two + " " + path + piece_one
-            append = "+append "
-            result = filename+"-kek-right"
-        elif kek_param == "-t":
-            crop = "100%x50% "
-            piece_one = "result-0" + extension
-            piece_two = "result-1" + extension
-            flip = "-flip "
-            order = path + piece_one + " " + path + piece_two
-            append = "-append "
-            result = filename+"-kek-top"
-        elif kek_param == "-b":
-            crop = "100%x50% "
-            piece_one = "result-1" + extension
-            piece_two = "result-0" + extension
-            flip = "-flip "
-            order = path + piece_two + " " + path + piece_one
-            append = "-append "
-            result = filename+"-kek-bot"
-        elif kek_param == "-m":
-            result = multikek(update, filename, extension)
-            return result
-        cut = "convert " + path + filename + extension + " -crop " + crop + path + "result" + extension
+        kek_dict = get_values(kek_param, path, filename, extension)
+        cut = "convert " + path + filename + extension + " -crop " + kek_dict[0] + " " + path + "result" + extension
         subprocess.run(cut, shell=True)
-        mirror = "convert " + path + piece_one + " " + flip + " " + path + piece_two
+        mirror = "convert " + kek_dict[1] + " " + kek_dict[4] + " " + kek_dict[2]
         subprocess.run(mirror, shell=True)
-        append = "convert " + order + " " + append + path + result + extension
+        if kek_dict[3] == "r":
+            kek_dict[1], kek_dict[2] = kek_dict[2], kek_dict[1]
+        append = "convert " + kek_dict[1] + " " + kek_dict[2] + " " + kek_dict[5] + " " + path + kek_dict[6] + extension
         subprocess.run(append, shell=True)
+        result = kek_dict[6]
         os.remove(path+"result-0"+extension)
         os.remove(path+"result-1"+extension)
         return result
@@ -116,3 +88,16 @@ def multikek(update, filename, extension):
     os.remove(path+filename+"-kek-lr-temp"+extension)
     os.remove(path+filename+"-kek-tb-temp"+extension)
     return result
+
+
+def get_values(kek_param, path, filename, extension):
+    res1 = path + "result-0" + extension
+    res2 = path + "result-1" + extension
+    parameters = {
+        "":   ["50%x100%", res1, res2, "s", "-flop", "+append", filename+"-kek-left"],
+        "-l": ["50%x100%", res1, res2, "s", "-flop", "+append", filename+"-kek-left"],
+        "-r": ["50%x100%", res2, res1, "r", "-flop", "+append", filename+"-kek-right"],
+        "-t": ["100%x50%", res1, res2, "s", "-flip", "-append", filename+"-kek-top"],
+        "-b": ["100%x50%", res2, res1, "r", "-flip", "-append", filename+"-kek-bot"]
+        }
+    return parameters[kek_param]
