@@ -96,7 +96,7 @@ def get_settings(graph_mode, chat_mode, update):
             c.execute("SELECT command, COUNT(*) FROM commands GROUP BY command")
             title_chat = "all chats"
     else:
-        return
+        return None, None
     r = c.fetchall()
     items = []
     counts = []
