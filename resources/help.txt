@@ -11,5 +11,6 @@
 /rate - rate stuff
 /roll - fortune tell; /roll *[1] or [2]* - choose one option randomly; /roll *[X-Y]* - returns random number between X and Y
 /say *something* - Text-to-Speech
+/stats *user/command* *local/all* - bot usage graph
 
 Made by @Madi\_Nyan

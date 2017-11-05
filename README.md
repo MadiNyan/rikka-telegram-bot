@@ -71,6 +71,7 @@ features:
 + /roll [1] or [2] - choose one option randomly
 + /roll [X-Y] - returns random number between X and Y
 + /say - Text-to-Speech
++ /server - show server cpu, ram, hdd load and uptime
 + /start - start a bot or view welcome message
-+ /status - show server cpu, ram, hdd load and uptime
++ /stats [user/command] [local, all] - bot usage graph
 + /toribash [username] - show Toribash stats

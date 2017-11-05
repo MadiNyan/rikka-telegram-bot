@@ -29,6 +29,14 @@ features:
         google_dev_key: =====key=====
         google_cse_id: =====key=====
 
+    graphs:
+        enabled: true
+        commands:
+         - stats
+        db_path: userdata/
+        path: userdata/graphs/
+        graph_logo: resources/graph_logo.jpg
+        
     instagram:
         enabled: true
         commands: 
@@ -82,6 +90,10 @@ features:
             - liq
         path: userdata/liquid/
 
+    logging:
+        enabled: true
+        path: userdata/
+        
     meme:
         enabled: true
         commands: 
