@@ -74,7 +74,7 @@ def get_chats(bot, update):
     entry_columns = "date, chat_id, chat_type, chat_title, chat_username, chat_desc, chat_members, owner" 
     create_table(table_name, creation_columns)
     delete_old(table_name, current_time_obj)
-    chat_id, chat_type, chat_title, chat_username, chat_desc, chat_members, owner, _, user = get_chat_info(bot, update)
+    chat_id, chat_type, chat_title, chat_username, chat_desc, chat_members, owner, _, _ = get_chat_info(bot, update)
     if check_entry(chat_id, table_name):
         return
     values = [current_time, chat_id, chat_type, chat_title, chat_username, chat_desc, chat_members, owner]

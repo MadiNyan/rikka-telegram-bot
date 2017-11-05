@@ -47,7 +47,7 @@ def graph(bot, update, args):
                 graph_mode = k
             else:
                 graph_mode = "user"
-    labels, counts, graph_title = get_values(graph_mode, chat_mode, update)
+    labels, counts, graph_title = get_settings(graph_mode, chat_mode, update)
     _, ax = plt.subplots(figsize=(1000/my_dpi, 1000/my_dpi))
     pie, _, _ = ax.pie(counts, radius=1.6, labels=labels, autopct="%1.0f%%", pctdistance=0.8, labeldistance=1.05, shadow=False, colors=cs)
     plt.setp(pie, edgecolor='w', zorder=1)
@@ -73,7 +73,7 @@ def graph(bot, update, args):
     print(current_time, ">", "/graph", ">", update.message.from_user.username)
 
 
-def get_values(graph_mode, chat_mode, update):
+def get_settings(graph_mode, chat_mode, update):
     chat_id = update.message.chat.id
     if update.message.chat.title is not None:
         chat_title = update.message.chat.title
