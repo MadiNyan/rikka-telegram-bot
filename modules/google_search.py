@@ -37,7 +37,7 @@ def g_search(bot, update, args):
     msg_text = "[link](%s)" % final_img
     update.message.reply_text(msg_text, parse_mode="Markdown")
     print (current_time, ">", "/img", ">", query, ">", update.message.from_user.username)
-    log_command(update, current_time, "img")
+    log_command(bot, update, current_time, "img")
 
 
 def get_image(query):

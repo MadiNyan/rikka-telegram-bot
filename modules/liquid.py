@@ -47,4 +47,4 @@ def liquid(bot, update):
         name = name + "_mp4"
     send_image(update, path, name, extension)
     print(current_time, ">", "/liquid", ">", update.message.from_user.username)
-    log_command(update, current_time, "liquid")
+    log_command(bot, update, current_time, "liquid")

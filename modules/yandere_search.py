@@ -52,4 +52,4 @@ def yandere_search(bot, update, args):
         with open(path + filename + ".jpg", "rb") as f:
             update.message.reply_photo(f, caption="Nothing found, here's one random pic:\n" + cap)
         print (current_time,"> /yandere not found:", input_query, ", sent random", ">", update.message.from_user.username)
-    log_command(update, current_time, "yandere")
+    log_command(bot, update, current_time, "yandere")

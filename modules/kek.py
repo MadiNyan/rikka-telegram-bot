@@ -42,7 +42,7 @@ def kek(bot, update):
     result = kekify(update, kek_param, filename, extension)
     send_image(update, path, result, extension)
     print(current_time, ">", "/kek", ">", update.message.from_user.username)
-    log_command(update, current_time, "kek")
+    log_command(bot, update, current_time, "kek")
 
 
 # kek process + send

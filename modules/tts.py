@@ -41,4 +41,4 @@ def tts(bot, update, args):
     with open(path + filename + ".mp3", "rb") as speech:
         update.message.reply_voice(speech, quote=False)
     print(current_time, ">", "/say", ">", update.message.from_user.username)
-    log_command(update, current_time, "say")
+    log_command(bot, update, current_time, "say")

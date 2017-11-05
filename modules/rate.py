@@ -35,4 +35,4 @@ def rate(bot, update, args):
     rating = str(ifint(rounded))
     update.message.reply_text("🤔 I rate this "+rating+"/10")
     print(current_time, ">", "/rate", ">", update.message.from_user.username)
-    log_command(update, current_time, "rate")
+    log_command(bot, update, current_time, "rate")

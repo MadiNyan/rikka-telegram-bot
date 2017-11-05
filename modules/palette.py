@@ -42,7 +42,7 @@ def palette(bot, update):
     start_computing(path, filename, extension, colors, "flat")
     send_image(update, path, name, extension)
     print(current_time, ">", "/palette", ">", update.message.from_user.username)
-    log_command(update, current_time, "palette")
+    log_command(bot, update, current_time, "palette")
 
 
 def start_computing(path, filename, extension, colors, mode):

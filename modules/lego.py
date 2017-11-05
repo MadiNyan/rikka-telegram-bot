@@ -44,4 +44,4 @@ def lego(bot, update):
                 size=size, palette_mode=None, dither=False)
     send_image(update, path, filename+"-lego", extension)
     print(current_time, ">", "/lego", ">", update.message.from_user.username)
-    log_command(update, current_time, "lego")
+    log_command(bot, update, current_time, "lego")

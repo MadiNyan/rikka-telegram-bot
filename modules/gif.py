@@ -33,13 +33,13 @@ def gif(bot, update, args):
         result = getgifs(update, gifs_dir)
         with open(gifs_dir + "/" + str(result), "rb") as f:
             update.message.reply_document(f)
-        log_command(update, current_time, "gif")
+        log_command(bot, update, current_time, "gif")
     elif args == "gif_":
         gifs_dir = path
         result = getgifs(update, gifs_dir)
         with open(gifs_dir + "/" + str(result), "rb") as f:
             update.message.reply_document(f)
-        log_command(update, current_time, "gif")
+        log_command(bot, update, current_time, "gif")
     else:
         update.message.reply_text("No such folder, try /gif help")
     print(current_time, "> /gif >", update.message.from_user.username, ">", args)
@@ -63,7 +63,7 @@ def gif_button(bot, update):
     with open(gifs_dir + "/" + str(result), "rb") as f:
         bot.sendDocument(query.message.chat_id, f)
     print(current_time, "> /gif >", query.message.from_user.username, ">", display_data)
-    log_command(update, current_time, "gif")
+    log_command(bot, update, current_time, "gif")
 
 
 def make_keyboard(folders):

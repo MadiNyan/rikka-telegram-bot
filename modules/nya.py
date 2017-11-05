@@ -29,4 +29,4 @@ def nya(bot, update):
     with open(path+"/"+str(result), "rb") as f:
         update.message.reply_photo(f)
     print(current_time, ">", "/nya", ">", update.message.from_user.username)
-    log_command(update, current_time, "nya")
+    log_command(bot, update, current_time, "nya")

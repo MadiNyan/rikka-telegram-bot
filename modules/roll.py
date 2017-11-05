@@ -88,4 +88,4 @@ def roll(bot, update, args):
     else:
         mysteryball(update, full_text)
     print(current_time, ">", "/roll", ">", update.message.from_user.username)
-    log_command(update, current_time, "roll")
+    log_command(bot, update, current_time, "roll")

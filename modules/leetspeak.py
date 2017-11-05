@@ -33,4 +33,4 @@ def leet(bot, update, args):
     text_leet = reduce(lambda a, kv: a.replace(*kv), replace_dict, text_leet)
     update.message.reply_text(text_leet)
     print(current_time, ">", "/leetspeak", ">", update.message.from_user.username)
-    log_command(update, current_time, "leetspeak")
+    log_command(bot, update, current_time, "leetspeak")

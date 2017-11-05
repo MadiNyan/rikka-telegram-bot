@@ -36,7 +36,7 @@ def glitch(bot, update):
     subprocess.run(jpg, shell=True)
     process_img(update, filename)
     print (current_time, ">", "/glitch", ">", update.message.from_user.username)
-    log_command(update, current_time, "glitch")
+    log_command(bot, update, current_time, "glitch")
 
 
 # glitch processing; deleting lines in .jpg file

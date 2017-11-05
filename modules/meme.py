@@ -48,4 +48,4 @@ def meme(bot, update):
         make_meme("  ", split_text[0], filename, extension, path, meme_font)
     send_image(update, path, filename+"-meme", extension)
     print (current_time, ">", "/meme", ">", update.message.from_user.username)
-    log_command(update, current_time, "meme")
+    log_command(bot, update, current_time, "meme")

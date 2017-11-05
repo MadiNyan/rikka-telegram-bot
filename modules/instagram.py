@@ -66,4 +66,4 @@ def instagram_button(bot, update):
         raise Exception("Instagram error")
     send_image(query, path, filename+"-"+filter_name, extension)
     print(current_time, ">", "/instagram", ">", user)
-    log_command(update, current_time, "instagram")
+    log_command(bot, update, current_time, "instagram")
