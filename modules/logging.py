@@ -11,7 +11,6 @@ def module_init(gd):
     conn  = sqlite3.connect(path+"rikka.db", check_same_thread=False) 
     c = conn.cursor()
     gd.dp.add_handler(MessageHandler(Filters.all, get_chats), group=1)
-    #gd.dp.add_handler(MessageHandler(Filters.all, get_chat_info), group=2)
 
 
 def create_table(name, columns):
@@ -66,7 +65,6 @@ def get_chat_info(bot, update):
 
 
 def get_chats(bot, update):
-    get_message(bot, update)
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     current_time_obj = datetime.strptime(current_time, "%d.%m.%Y %H:%M:%S")
     table_name = "chats"
@@ -89,21 +87,4 @@ def log_command(bot, update, date, command):
     ci = get_chat_info(bot, update)
     chat_id, chat_title, user_id, user = ci[0], ci[2], ci[7], ci[8]
     values = [date, user_id, user, command, chat_id, chat_title]
-    data_entry(table_name, entry_columns, values)
-
-
-def get_message(bot, update):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
-    table_name = "messages"
-    creation_columns = "date TEXT, chat_id INTEGER, chat_type TEXT, chat_title TEXT, user_id INTEGER, user TEXT, message TEXT, photo BLOB"
-    entry_columns = "date, chat_id, chat_type, chat_title, user_id, user, message, photo" 
-    create_table(table_name, creation_columns)
-    ci = get_chat_info(bot, update)
-    chat_id, chat_type, chat_title, user_id, user = ci[0], ci[1], ci[2], ci[7], ci[8]
-    message = update.message.text
-    try:
-        img = bot.getFile(update.message.photo[-1].file_id)["file_path"]
-    except:
-        img = None
-    values = [current_time, chat_id, chat_type, chat_title, user_id, user, message, img]
     data_entry(table_name, entry_columns, values)
