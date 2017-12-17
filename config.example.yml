@@ -31,8 +31,10 @@ features:
 
     graphs:
         enabled: true
-        commands:
-         - stats
+        commands_activity:
+         - activity
+        commands_usage:
+         - usage
         db_path: userdata/
         path: userdata/graphs/
         graph_logo: resources/graph_logo.jpg

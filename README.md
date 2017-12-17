@@ -55,6 +55,7 @@ features:
 
 ## Available functions:
 + /a [tag] - get pic from yande.re
++ /activity - most active bot users
 + /colors [from 1 to 10] - generate image palette with given number of colors
 + /gif - get random gif, "/gif help" to see folders
 + /glitch - glitch an image
@@ -73,5 +74,5 @@ features:
 + /say - Text-to-Speech
 + /server - show server cpu, ram, hdd load and uptime
 + /start - start a bot or view welcome message
-+ /stats [user/command] [local, all] - bot usage graph
 + /toribash [username] - show Toribash stats
++ /usage [all|local] - bot usage graph
