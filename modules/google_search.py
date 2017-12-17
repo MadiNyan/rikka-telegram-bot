@@ -34,15 +34,21 @@ def g_search(bot, update, args):
     except HttpError:
         update.message.reply_text("Sorry, my daily limit for search exceeded. Check back tomorrow!")
         return
+    if final_img is None:
+        update.message.reply_text("Nothing found!")
+        return
     msg_text = "[link](%s)" % final_img
     update.message.reply_text(msg_text, parse_mode="Markdown")
-    print (current_time, ">", "/img", ">", query, ">", update.message.from_user.username)
+    print (current_time, ">", "/img", query, ">", update.message.from_user.username)
     log_command(bot, update, current_time, "img")
 
 
 def get_image(query):
     service = build("customsearch", "v1", developerKey=dev_key, cache_discovery=False)
     result = service.cse().list(q=query, cx=cse_id, searchType="image").execute()
+    total_results = int(result["queries"]["request"][0]["totalResults"])
+    if total_results < 1:
+        return None
     random_item = randint(0, len(result["items"]))
     final_img = result["items"][random_item]["link"]
     return final_img
