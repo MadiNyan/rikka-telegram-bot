@@ -175,3 +175,8 @@ features:
         commands: 
             - a
         path: userdata/
+
+    zalgo:
+        enabled: true
+        commands:
+            - zalgo

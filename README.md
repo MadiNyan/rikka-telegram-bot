@@ -76,3 +76,4 @@ features:
 + /start - start a bot or view welcome message
 + /toribash [username] - show Toribash stats
 + /usage [all|local] - bot usage graph
++ /zalgo - z̡͛a͖̅l̡ͨg̦͊o͍͛ text generator
