@@ -9,10 +9,10 @@ from zalgo_text import zalgo
 def module_init(gd):
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(CommandHandler(command, zalgo, pass_args=True))
+        gd.dp.add_handler(CommandHandler(command, zalgo_txt, pass_args=True))
 
 
-def zalgo(bot, update, args):
+def zalgo_txt(bot, update, args):
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     if update.message.reply_to_message is not None:
         args = update.message.reply_to_message.text

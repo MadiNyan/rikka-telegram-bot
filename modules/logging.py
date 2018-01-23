@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from telegram.ext import MessageHandler, Filters
+from telegram.ext.dispatcher import run_async
 from datetime import datetime, timedelta
 import sqlite3
 
@@ -54,6 +55,7 @@ def get_chat_info(bot, update):
         chat_id = update.effective_message.chat_id
         user_id = update.effective_message.from_user.id
     chat = bot.getChat(chat_id)
+    owner = None
     if chat.type == "private":
         owner = user_name
     else:
@@ -64,6 +66,7 @@ def get_chat_info(bot, update):
     return chat_id, chat.type, chat.title, chat.username, chat.description, chat.get_members_count(), owner, user_id, user_name
 
 
+@run_async
 def get_chats(bot, update):
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     current_time_obj = datetime.strptime(current_time, "%d.%m.%Y %H:%M:%S")
@@ -79,6 +82,7 @@ def get_chats(bot, update):
     data_entry(table_name, entry_columns, values)
 
 
+@run_async
 def log_command(bot, update, date, command):
     table_name = "commands"
     creation_columns = "date TEXT, user_id INTEGER, user TEXT, command TEXT, chat_id INTEGER, chat_title TEXT"
