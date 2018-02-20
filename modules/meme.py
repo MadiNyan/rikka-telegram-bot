@@ -22,7 +22,7 @@ def module_init(gd):
         gd.dp.add_handler(CommandHandler(commands, meme))
 
 
-def text_format(split_text):
+def text_format(update, split_text):
     if len(split_text) == 1 and split_text[0] == "":
         update.message.reply_text("Type in some text!")
         return
@@ -53,12 +53,24 @@ def text_format(split_text):
 def meme(bot, update):
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
-
-    if update.message.reply_to_message is not None:
-        args = update.message.text.split(" ")
-    else:
+    
+    if len(update.message.photo) > 0:
         args = update.message.caption.split(" ")
+    elif update.message.reply_to_message is not None:
+        if len(update.message.reply_to_message.photo) > 0:
+            args = update.message.text.split(" ")
+        else:
+            update.message.reply_text("You need an image for this!")
+            return
+    else:
+        update.message.reply_text("You need an image for this!")
+        return
+        
     args = args[1:]
+
+    if len(args) < 1:
+        update.message.reply_text("Type in some text!")
+        return
 
     font = fonts_dict["impact"]
     for i in fonts_dict:
@@ -66,6 +78,10 @@ def meme(bot, update):
             font = fonts_dict[i]
             args = args[1:]
             break
+            
+    if len(args) < 1:
+        update.message.reply_text("Type in some text!")
+        return
 
     initial_text = " ".join(args)
     split_text = initial_text.split("@", maxsplit=1)
@@ -80,7 +96,7 @@ def meme(bot, update):
         update.message.reply_text("Unsupported file, onii-chan!")
         return
 
-    top_text, bottom_text = text_format(split_text)
+    top_text, bottom_text = text_format(update, split_text)
     make_meme(top_text, bottom_text, filename, extension, path, font)
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     send_image(update, path, filename+"-meme", extension)
