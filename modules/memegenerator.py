@@ -3,44 +3,79 @@
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
+import textwrap
 
 
 def make_meme(topString, bottomString, filename, extension, path, meme_font):
     img = Image.open(path + filename + extension)
     imageSize = img.size
+    wrapwidth = int(imageSize[1]/20)
+
+    # wrap input text strings
+    if bottomString is None:
+        bottomString = [" "]
+    else:
+        bottomString = textwrap.wrap(bottomString ,width=wrapwidth)
+    if topString is None:
+        topString = [" "]
+    else:
+        topString = textwrap.wrap(topString ,width=wrapwidth)
+    
+    # longest line to find font size
+    longestTopString = max(topString, key=len)
+    longestBottomString = max(bottomString, key=len)
 
     # find biggest font size that works
-    fontSize = int(imageSize[1]/6)
+    fontSize = int(imageSize[1]/5)
     font = ImageFont.truetype(meme_font, fontSize)
-    topTextSize = font.getsize(topString)
-    bottomTextSize = font.getsize(bottomString)
+    topTextSize = font.getsize(longestTopString)
+    bottomTextSize = font.getsize(longestBottomString)
     while topTextSize[0] > imageSize[0]-20 or bottomTextSize[0] > imageSize[0]-20:
         fontSize = fontSize - 1
         font = ImageFont.truetype(meme_font, fontSize)
-        topTextSize = font.getsize(topString)
-        bottomTextSize = font.getsize(bottomString)
-
+        topTextSize = font.getsize(longestTopString)
+        bottomTextSize = font.getsize(longestBottomString)
+        
     # find top centered position for top text
-    topTextPositionX = (imageSize[0]/2) - (topTextSize[0]/2)
-    topTextPositionY = 0
-    topTextPosition = (topTextPositionX, topTextPositionY)
+    topPositions = []
+    initialX = 0 - topTextSize[1]
+    for i in topString:
+        topTextLineSize = font.getsize(i)
+        topTextPositionX = (imageSize[0]/2) - (topTextLineSize[0]/2)
+        topTextPositionY = initialX + topTextSize[1]
+        initialX = topTextPositionY
+        topTextPosition = (topTextPositionX, topTextPositionY)
+        topPositions.append(topTextPosition)
 
     # find bottom centered position for bottom text
-    bottomTextPositionX = (imageSize[0]/2) - (bottomTextSize[0]/2)
-    bottomTextPositionY = imageSize[1] - bottomTextSize[1]-15
-    bottomTextPosition = (bottomTextPositionX, bottomTextPositionY)
+    bottomPositions = []
+    initialY = imageSize[1] - bottomTextSize[1]*len(bottomString)-15 - bottomTextSize[1]
+    for i in bottomString:
+        bottomTextLineSize = font.getsize(i)
+        bottomTextPositionX = (imageSize[0]/2) - (bottomTextLineSize[0]/2)
+        bottomTextPositionY = initialY + bottomTextSize[1]
+        initialY = bottomTextPositionY
+        bottomTextPosition = (bottomTextPositionX, bottomTextPositionY)
+        bottomPositions.append(bottomTextPosition)
 
     draw = ImageDraw.Draw(img)
 
     # draw outlines
-    # there may be a better way
-    outlineRange = int(fontSize/15)
+    outlineRange = 3
     for x in range(-outlineRange, outlineRange+1):
         for y in range(-outlineRange, outlineRange+1):
-            draw.text((topTextPosition[0]+x, topTextPosition[1]+y), topString, (0, 0, 0), font=font)
-            draw.text((bottomTextPosition[0]+x, bottomTextPosition[1]+y), bottomString, (0, 0, 0), font=font)
+            ct = 0
+            cb = 0
+            for i in topPositions:
+                draw.text((i[0]+x, i[1]+y), topString[ct], (0, 0, 0), font=font)
+                ct += 1
+            for i in bottomPositions:
+                draw.text((i[0]+x, i[1]+y), bottomString[cb], (0, 0, 0), font=font)
+                cb += 1
 
-    draw.text(topTextPosition, topString, (255, 255, 255), font=font)
-    draw.text(bottomTextPosition, bottomString, (255, 255, 255), font=font)
+    for i in range(len(topString)):
+        draw.text(topPositions[i], topString[i], (255, 255, 255), font=font)
+    for i in range(len(bottomString)):
+        draw.text(bottomPositions[i], bottomString[i], (255, 255, 255), font=font)
 
     img.save(path+filename+"-meme"+extension)
