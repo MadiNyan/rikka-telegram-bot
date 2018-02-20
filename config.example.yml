@@ -38,7 +38,7 @@ features:
         db_path: userdata/
         path: userdata/graphs/
         graph_logo: resources/graph_logo.jpg
-        
+
     instagram:
         enabled: true
         commands: 
@@ -95,13 +95,23 @@ features:
     logging:
         enabled: true
         path: userdata/
-        
+
     meme:
         enabled: true
         commands: 
             - meme
+            - memos
         path: userdata/meme/
-        fontpath: resources/impact.ttf
+        fonts:
+            impact:
+                name: impact
+                path: resources/impact.ttf
+            lobster:
+                name: lobster
+                path: resources/lobster.ttf
+            comic:
+                name: comic
+                path: resources/comic.ttf
         extensions:
             - .jpg
             - .jpeg
@@ -113,7 +123,7 @@ features:
         commands: 
             - nya
         path: userdata/nya/
-
+        
     palette:
         enabled: true
         commands:
@@ -159,7 +169,7 @@ features:
         enabled: true
         commands: 
             - say
-        path: userdata/
+        path: userdata/tts/
 
     vk:
         enabled: true
@@ -174,8 +184,9 @@ features:
         enabled: true
         commands: 
             - a
-        path: userdata/
-
+            - yandere
+        path: userdata/yandere/
+        
     zalgo:
         enabled: true
         commands:

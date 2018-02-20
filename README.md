@@ -65,7 +65,7 @@ features:
 + /leet - convert text to 1337 5P34K
 + /lego [from 1 to 100] - legofy image
 + /liq [from 1 to 100] - liquid rescale image
-+ /meme [top text] @ [bottom text] - make a meme from image
++ /meme [-c, -i, -l] [top text] @ [bottom text] - make a meme from image
 + /nya - get random asian girl pic
 + /rate - rate stuff
 + /roll - fortune tell
