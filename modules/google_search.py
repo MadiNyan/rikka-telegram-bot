@@ -49,6 +49,6 @@ def get_image(query):
     total_results = int(result["queries"]["request"][0]["totalResults"])
     if total_results < 1:
         return None
-    random_item = randint(0, len(result["items"]))
+    random_item = randint(0, len(result["items"])-1)
     final_img = result["items"][random_item]["link"]
     return final_img
