@@ -17,8 +17,7 @@ def module_init(gd):
 
 
 def create_table(name, columns):
-    if not db_lock.acquire(timeout=5):
-        raise Exception("Database Timeout")
+    db_lock.acquire()
     c.execute("CREATE TABLE IF NOT EXISTS "+name+"("+columns+")")
     conn.commit()
     db_lock.release()
@@ -26,9 +25,10 @@ def create_table(name, columns):
 
 def data_entry(table, entry_columns, values):
     values_count = ("?, "*len(values))[:-2]
-    with db_lock:
-        c.execute("INSERT INTO "+table+" ("+entry_columns+") VALUES ("+values_count+")", (values))
-        conn.commit()
+    db_lock.acquire()
+    c.execute("INSERT INTO "+table+" ("+entry_columns+") VALUES ("+values_count+")", (values))
+    conn.commit()
+    db_lock.release()
 
 
 def check_entry(chat_id, table):
