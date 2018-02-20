@@ -56,15 +56,8 @@ def meme(bot, update):
     
     if len(update.message.photo) > 0:
         args = update.message.caption.split(" ")
-    elif update.message.reply_to_message is not None:
-        if len(update.message.reply_to_message.photo) > 0:
-            args = update.message.text.split(" ")
-        else:
-            update.message.reply_text("You need an image for this!")
-            return
     else:
-        update.message.reply_text("You need an image for this!")
-        return
+        args = update.message.text.split(" ")
         
     args = args[1:]
 
