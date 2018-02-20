@@ -4,24 +4,15 @@ from telegram.ext import Updater, CommandHandler
 from random import randint
 import importlib
 import datetime
-import logging
 import yaml
 import os
 import re
-
-
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-logger = logging.getLogger(__name__)
-logging.getLogger("telegram.utils.promise").propagate = False
 
 class Globals:
     def __init__(self, updater, dp, config):
         self.updater = updater
         self.dp = dp
         self.config = config
-        
-
 
 # Import logo from a text file
 with open("resources/logo.txt", "r", encoding="UTF-8") as logo_file:
@@ -46,7 +37,6 @@ for feature in config["features"]:
         global_data = gd = Globals(updater, dp, module_config)
         module = importlib.import_module("modules." + feature).module_init(gd)
         print(feature)
-
 
 # Import /help from a text file
 with open("resources/help.txt", "r", encoding="UTF-8") as helpfile:
@@ -73,13 +63,8 @@ def help(bot, update):
     print(datetime.datetime.now(), ">>>", "Done /help", ">>>", update.message.from_user.username)
 dp.add_handler(CommandHandler("help", help))
 
-
-def error(bot, update, error):
-    logger.warning('Update "%s" caused error "%s"', update, error)
-dp.add_error_handler(error)
-
 # Starting bot
-updater.start_polling(clean=True, bootstrap_retries=4, read_latency=2.0)
+updater.start_polling(clean=True, bootstrap_retries=0, read_latency=1.0)
 # Run the bot until you presses Ctrl+C
 print("=====================\nUp and running!\n")
 #Idle
