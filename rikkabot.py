@@ -22,7 +22,6 @@ with open("resources/logo.txt", "r", encoding="UTF-8") as logo_file:
 # Load configs & create folders
 with open("config.yml", "r") as f:
     config = yaml.load(f)
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 key = config["keys"]["telegram_token"]
 updater = Updater(token=key)
 dp = updater.dispatcher
