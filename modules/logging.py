@@ -1,28 +1,34 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from telegram.ext import MessageHandler, Filters
-from telegram.ext.dispatcher import run_async
 from datetime import datetime, timedelta
+import threading
 import sqlite3
 
 
 def module_init(gd):
-    global c, conn
+    global c, conn, db_lock
+    db_lock = threading.Lock()
     path = gd.config["path"]
     conn  = sqlite3.connect(path+"rikka.db", check_same_thread=False) 
     c = conn.cursor()
+    c.execute('PRAGMA journal_mode=wal')
     gd.dp.add_handler(MessageHandler(Filters.all, get_chats), group=1)
 
 
 def create_table(name, columns):
+    if not db_lock.acquire(timeout=5):
+        raise Exception("Database Timeout")
     c.execute("CREATE TABLE IF NOT EXISTS "+name+"("+columns+")")
     conn.commit()
+    db_lock.release()
 
 
 def data_entry(table, entry_columns, values):
     values_count = ("?, "*len(values))[:-2]
-    c.execute("INSERT INTO "+table+" ("+entry_columns+") VALUES ("+values_count+")", (values))
-    conn.commit()
+    with db_lock:
+        c.execute("INSERT INTO "+table+" ("+entry_columns+") VALUES ("+values_count+")", (values))
+        conn.commit()
 
 
 def check_entry(chat_id, table):
@@ -41,8 +47,9 @@ def delete_old(table, date):
         old_date = c.fetchone()[0]
         old_date_time = datetime.strptime(old_date, "%d.%m.%Y %H:%M:%S")
         if date - old_date_time > span:
-            c.execute("DELETE FROM "+table+" WHERE chat_id = %s" %(row))
-            conn.commit()
+            with db_lock:
+                c.execute("DELETE FROM "+table+" WHERE chat_id = %s" %(row))
+                conn.commit()
 
 
 def get_chat_info(bot, update):
@@ -66,7 +73,6 @@ def get_chat_info(bot, update):
     return chat_id, chat.type, chat.title, chat.username, chat.description, chat.get_members_count(), owner, user_id, user_name
 
 
-@run_async
 def get_chats(bot, update):
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     current_time_obj = datetime.strptime(current_time, "%d.%m.%Y %H:%M:%S")
@@ -82,7 +88,6 @@ def get_chats(bot, update):
     data_entry(table_name, entry_columns, values)
 
 
-@run_async
 def log_command(bot, update, date, command):
     table_name = "commands"
     creation_columns = "date TEXT, user_id INTEGER, user TEXT, command TEXT, chat_id INTEGER, chat_title TEXT"
