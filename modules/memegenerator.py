@@ -9,7 +9,7 @@ import textwrap
 def make_meme(topString, bottomString, filename, extension, path, meme_font):
     img = Image.open(path + filename + extension)
     imageSize = img.size
-    wrapwidth = int(imageSize[1]/20)
+    wrapwidth = int(imageSize[0]/20)
 
     # wrap input text strings
     if bottomString is None:
@@ -26,7 +26,7 @@ def make_meme(topString, bottomString, filename, extension, path, meme_font):
     longestBottomString = max(bottomString, key=len)
 
     # find biggest font size that works
-    fontSize = int(imageSize[1]/5)
+    fontSize = int(imageSize[1]/6)
     font = ImageFont.truetype(meme_font, fontSize)
     topTextSize = font.getsize(longestTopString)
     bottomTextSize = font.getsize(longestBottomString)
@@ -61,7 +61,7 @@ def make_meme(topString, bottomString, filename, extension, path, meme_font):
     draw = ImageDraw.Draw(img)
 
     # draw outlines
-    outlineRange = 3
+    outlineRange = int(fontSize/25)+1
     for x in range(-outlineRange, outlineRange+1):
         for y in range(-outlineRange, outlineRange+1):
             ct = 0
