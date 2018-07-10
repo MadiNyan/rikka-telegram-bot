@@ -108,3 +108,4 @@ def plot(update, labels, counts, graph_title):
     plt.savefig(graph_filename, format="png", bbox_inches="tight", pad_inches=0.2, dpi=my_dpi, facecolor="w")
     with open(graph_filename, "rb") as f:
         update.message.reply_photo(f)
+    os.remove(path+graph_filename)

@@ -35,6 +35,8 @@ def glitch(bot, update):
     jpg = "convert " + path + filename + extension + " -resize 100% " + path + filename + ".jpg"
     subprocess.run(jpg, shell=True)
     process_img(update, filename)
+    os.remove(path+filename+extension)
+    os.remove(path+filename+"-glitched.jpg")
     print (current_time, ">", "/glitch", ">", update.message.from_user.username)
     log_command(bot, update, current_time, "glitch")
 

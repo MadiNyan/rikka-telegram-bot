@@ -41,6 +41,8 @@ def palette(bot, update):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     start_computing(path, filename, extension, colors, "flat")
     send_image(update, path, name, extension)
+    os.remove(path+filename+extension)
+    os.remove(path+name+extension)
     print(current_time, ">", "/palette", ">", update.message.from_user.username)
     log_command(bot, update, current_time, "palette")
 

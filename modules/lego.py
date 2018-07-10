@@ -43,5 +43,7 @@ def lego(bot, update):
                 output_path=path + filename + "-lego" + extension,
                 size=size, palette_mode=None, dither=False)
     send_image(update, path, filename+"-lego", extension)
+    os.remove(path+filename+extension)
+    os.remove(path+filename+"-lego"+extension)
     print(current_time, ">", "/lego", ">", update.message.from_user.username)
     log_command(bot, update, current_time, "lego")

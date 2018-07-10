@@ -46,5 +46,7 @@ def liquid(bot, update):
         subprocess.run(mp4fix, shell=True)
         name = name + "_mp4"
     send_image(update, path, name, extension)
+    os.remove(path+filename+extension)
+    os.remove(path+name+extension)
     print(current_time, ">", "/liquid", ">", update.message.from_user.username)
     log_command(bot, update, current_time, "liquid")

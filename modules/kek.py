@@ -41,6 +41,8 @@ def kek(bot, update):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     result = kekify(update, kek_param, filename, extension)
     send_image(update, path, result, extension)
+    os.remove(path+result+extension)
+    os.remove(path+filename+extension)
     print(current_time, ">", "/kek", ">", update.message.from_user.username)
     log_command(bot, update, current_time, "kek")
 

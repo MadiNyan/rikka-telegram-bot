@@ -2,9 +2,12 @@
 .vscode/
 /userdata/
 impact.ttf
+comic.ttf
+lobster.ttf
 config.yml
 *.ini
 *.db
+test.py
 
 
 # Byte-compiled / optimized / DLL files

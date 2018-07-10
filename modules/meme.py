@@ -93,5 +93,7 @@ def meme(bot, update):
     make_meme(top_text, bottom_text, filename, extension, path, font)
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     send_image(update, path, filename+"-meme", extension)
+    os.remove(path+filename+extension)
+    os.remove(path+filename+"-meme"+extension)
     print (current_time, ">", "/meme", ">", update.message.from_user.username)
     log_command(bot, update, current_time, "meme")
