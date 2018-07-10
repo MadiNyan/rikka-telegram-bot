@@ -1,9 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from telegram.ext import CommandHandler
+from modules.logging import vk, vk_add
 from telegram import InputMediaPhoto
 import requests
 import yaml
+import time
 
 owner = "-98881019"
 count = "1"
@@ -19,23 +21,20 @@ def module_init(gd):
     for command in commands:
         gd.dp.add_handler(CommandHandler(command, sonyan_post))
     jobQueue = gd.updater.job_queue
-    jobQueue.run_repeating(callback=sonyan_post, interval=60, first=0, context="@"+channel, name='RepeatingJob')
-
+    jobQueue.run_repeating(callback=sonyan_post, interval=60, first=5, context="@"+channel, name='RepeatingJob')
 
 
 def sonyan_post(bot, update):
-    with open(database, "r") as datefile:
-        date_old = yaml.load(datefile)["date"]
-    date = check_post(owner, offset, count, token)
-    if date > date_old:
+    unixtime, post_id = check_post(owner, offset, count, token)
+    current_time, unixtime_old = vk(bot, update)
+    if unixtime > unixtime_old:
         print("New post!")
         post_link, images = dlpic(owner, offset, count, token)
     else:
         return
     bot.send_media_group(chat_id="@"+channel, media=images)
-    data = {"date" : date}
-    with open(database, "w") as datefile:
-        yaml.dump(data, datefile)
+    vk_add(bot, update, current_time, unixtime, post_id)
+    time.sleep(10)
 
 
 def check_post(owner, offset, count, token):
@@ -48,7 +47,8 @@ def check_post(owner, offset, count, token):
                              "&v=5.60")
     serverjson = wallposts.json()
     date = serverjson["response"]["items"][0]["date"]
-    return date
+    post_id = serverjson["response"]["items"][0]["id"]
+    return date, post_id
 
 
 def dlpic(owner, offset, count, token):

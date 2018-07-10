@@ -97,3 +97,29 @@ def log_command(bot, update, date, command):
     chat_id, chat_title, user_id, user = ci[0], ci[2], ci[7], ci[8]
     values = [date, user_id, user, command, chat_id, chat_title]
     data_entry(table_name, entry_columns, values)
+
+
+def vk(bot, update):
+    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+    table_name = "vk"
+    creation_columns = "date TEXT, unixtime INTEGER, post_id INTEGER"
+    entry_columns = "date, unixtime, post_id"
+    values = [0, 0, 0]
+    create_table(table_name, creation_columns)
+    db_lock.acquire()
+    c.execute("SELECT unixtime FROM vk ORDER BY rowid DESC LIMIT 1")
+    fetch = c.fetchone()
+    conn.commit()
+    db_lock.release()
+    if fetch is not None:
+        old_date = int(fetch[0])
+        return current_time, old_date
+    else:
+        data_entry(table_name, entry_columns, values)
+        return current_time, 0
+
+def vk_add(bot, update, date, unixtime, post_id):
+    table_name = "vk"
+    entry_columns = "date, unixtime, post_id"
+    values = [date, unixtime, post_id]
+    data_entry(table_name, entry_columns, values)
