@@ -5,6 +5,7 @@ from modules.logging import log_command
 from telegram import ChatAction
 from datetime import datetime
 from gtts import gTTS
+import os
 
 
 def module_init(gd):
@@ -41,4 +42,5 @@ def tts(bot, update, args):
     with open(path + filename + ".mp3", "rb") as speech:
         update.message.reply_voice(speech, quote=False)
     print(current_time, ">", "/say", ">", update.message.from_user.username)
+    os.remove(path+filename+".mp3")
     log_command(bot, update, current_time, "say")
