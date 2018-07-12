@@ -12,15 +12,7 @@ def module_init(gd):
     path = gd.config["path"]
     conn  = sqlite3.connect(path+"rikka.db", check_same_thread=False) 
     c = conn.cursor()
-    c.execute('PRAGMA journal_mode=wal')
     gd.dp.add_handler(MessageHandler(Filters.all, get_chats), group=1)
-
-
-def create_table(name, columns):
-    db_lock.acquire()
-    c.execute("CREATE TABLE IF NOT EXISTS "+name+"("+columns+")")
-    conn.commit()
-    db_lock.release()
 
 
 def data_entry(table, entry_columns, values):
@@ -47,9 +39,10 @@ def delete_old(table, date):
         old_date = c.fetchone()[0]
         old_date_time = datetime.strptime(old_date, "%d.%m.%Y %H:%M:%S")
         if date - old_date_time > span:
-            with db_lock:
-                c.execute("DELETE FROM "+table+" WHERE chat_id = %s" %(row))
-                conn.commit()
+            db_lock.acquire()
+            c.execute("DELETE FROM "+table+" WHERE chat_id = %s" %(row))
+            conn.commit()
+            db_lock.release()
 
 
 def get_chat_info(bot, update):
@@ -77,9 +70,7 @@ def get_chats(bot, update):
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     current_time_obj = datetime.strptime(current_time, "%d.%m.%Y %H:%M:%S")
     table_name = "chats"
-    creation_columns = "date TEXT, chat_id INTEGER, chat_type TEXT, chat_title TEXT, chat_username TEXT, chat_desc TEXT, chat_members INTEGER, owner TEXT"
     entry_columns = "date, chat_id, chat_type, chat_title, chat_username, chat_desc, chat_members, owner" 
-    create_table(table_name, creation_columns)
     delete_old(table_name, current_time_obj)
     chat_id, chat_type, chat_title, chat_username, chat_desc, chat_members, owner, _, _ = get_chat_info(bot, update)
     if check_entry(chat_id, table_name):
@@ -90,9 +81,7 @@ def get_chats(bot, update):
 
 def log_command(bot, update, date, command):
     table_name = "commands"
-    creation_columns = "date TEXT, user_id INTEGER, user TEXT, command TEXT, chat_id INTEGER, chat_title TEXT"
     entry_columns = "date, user_id, user, command, chat_id, chat_title" 
-    create_table(table_name, creation_columns)
     ci = get_chat_info(bot, update)
     chat_id, chat_title, user_id, user = ci[0], ci[2], ci[7], ci[8]
     values = [date, user_id, user, command, chat_id, chat_title]
@@ -102,15 +91,10 @@ def log_command(bot, update, date, command):
 def vk(bot, update):
     current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     table_name = "vk"
-    creation_columns = "date TEXT, unixtime INTEGER, post_id INTEGER"
     entry_columns = "date, unixtime, post_id"
     values = [0, 0, 0]
-    create_table(table_name, creation_columns)
-    db_lock.acquire()
     c.execute("SELECT unixtime FROM vk ORDER BY rowid DESC LIMIT 1")
     fetch = c.fetchone()
-    conn.commit()
-    db_lock.release()
     if fetch is not None:
         old_date = int(fetch[0])
         return current_time, old_date
