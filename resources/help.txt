@@ -3,6 +3,7 @@
 /gif - get random gif
 /img - Google image search
 /instagram - add filter to an image
+/jpeg *1-10* - compress image
 /kek *-l, -r, -t, -b, -m* - mirror one side of an image to another
 /lego *1-100* - legofy image
 /liq *1-100* - liquid rescale image

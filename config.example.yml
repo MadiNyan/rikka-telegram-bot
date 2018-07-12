@@ -55,6 +55,18 @@ features:
             - .mp4
             - .gif
 
+    jpeg:
+        enabled: true
+        commands:
+            - jpeg
+        path: userdata/jpeg/
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+            - .bmp
+            - .webp
+
     kek:
         enabled: true
         commands: 

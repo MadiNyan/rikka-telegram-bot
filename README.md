@@ -61,6 +61,7 @@ features:
 + /glitch - glitch an image
 + /img - Google image search
 + /instagram or /ig - add filter to an image
++ /jpeg [from 1 to 10] - compress image
 + /kek [-l, -r, -t, -b] - mirror one side of an image to another
 + /leet - convert text to 1337 5P34K
 + /lego [from 1 to 100] - legofy image
