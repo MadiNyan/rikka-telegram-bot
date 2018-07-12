@@ -24,6 +24,8 @@ def tts(bot, update, args):
         text = "".join(args)
     elif reply.text is not None:
         text = reply.text
+    else:
+        return
     if len(text) == 0:
         update.message.reply_text("Type in some text ^^")
         return
