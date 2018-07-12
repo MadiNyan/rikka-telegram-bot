@@ -7,6 +7,7 @@ from datetime import datetime
 from telegram import ChatAction
 from random import randint
 import subprocess
+import os
 
 
 def module_init(gd):

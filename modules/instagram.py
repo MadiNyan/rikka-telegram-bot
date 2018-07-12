@@ -7,6 +7,7 @@ from modules.logging import log_command
 import modules.instagram_filters
 from datetime import datetime
 import inspect
+import os
 
 
 def module_init(gd):

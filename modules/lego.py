@@ -8,6 +8,7 @@ from telegram import ChatAction
 from datetime import datetime
 import subprocess
 import legofy
+import os
 
 
 def module_init(gd):
