@@ -95,6 +95,8 @@ def plot_colors(hist, centroids, width, height, number_of_colors, mode):
             endX = startX + (width/number_of_colors)
         elif mode == "percentage":
             endX = startX + (percent * width)
+        else:
+            return None
         cv2.rectangle(bar, (int(startX), 0), (int(endX), bar_height), color.astype("uint8").tolist(), -1)
         startX = endX
     return bar

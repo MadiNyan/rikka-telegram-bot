@@ -12,11 +12,10 @@ offset = 0
 
 
 def module_init(gd):
-    global channel, token, database
+    global channel, token
     channel = gd.config["channel"]
     token = gd.config["vk_token"]
     commands = gd.config["commands"]
-    database = gd.config["database"]
     for command in commands:
         gd.dp.add_handler(CommandHandler(command, sonyan_post))
     jobQueue = gd.updater.job_queue

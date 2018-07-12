@@ -73,6 +73,8 @@ def usage_settings(chat_mode, update, func_name):
         title_mode = "active bot users"
         c.execute("SELECT user, COUNT(*) FROM commands  WHERE chat_id = %s GROUP BY user" % (chat_id))
         title_chat = chat_title
+    else:
+        return None, None, None
     r = c.fetchall()
     items = []
     counts = []
