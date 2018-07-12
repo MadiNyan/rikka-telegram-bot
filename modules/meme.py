@@ -7,6 +7,7 @@ from modules.memegenerator import make_meme
 from modules.logging import log_command
 from telegram import ChatAction
 from datetime import datetime
+import os
 
 
 def module_init(gd):
