@@ -4,7 +4,6 @@ from telegram.ext import CommandHandler
 from modules.logging import vk, vk_add
 from telegram import InputMediaPhoto
 import requests
-import yaml
 import time
 
 owner = "-98881019"
@@ -29,7 +28,7 @@ def sonyan_post(bot, update):
     current_time, unixtime_old = vk(bot, update)
     if unixtime > unixtime_old:
         print("New post!")
-        post_link, images = dlpic(owner, offset, count, token)
+        images = dlpic(owner, offset, count, token)
     else:
         return
     bot.send_media_group(chat_id="@"+channel, media=images)
@@ -60,18 +59,16 @@ def dlpic(owner, offset, count, token):
                              "&access_token="+token+
                              "&v=5.60")
     serverjson = wallposts.json()
-    vk_id = serverjson["response"]["items"][0]["id"]
-    post_link = "https://vk.com/wall-98881019_"+str(vk_id)
     try:
         attachments = serverjson["response"]["items"][0]["attachments"]
     except:
-        return None, None, None, None
+        return None, None
     media_list = []
-    for i in serverjson["response"]["items"][0]["attachments"]:
+    for i in attachments:
         if "photo" not in i:
             continue
         photo = i["photo"]
         link = photo[max((x for x in photo if x.startswith("photo_")), key=lambda x: int(x.split("_")[1]))]
         media = InputMediaPhoto(media=link)
         media_list.append(media)
-    return post_link, media_list
+    return media_list

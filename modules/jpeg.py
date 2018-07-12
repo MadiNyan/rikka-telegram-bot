@@ -3,9 +3,9 @@
 from modules.utils import caption_filter, get_image, send_image, get_param
 from telegram.ext import CommandHandler, MessageHandler
 from modules.logging import log_command
-from PIL import Image, ImageDraw
 from telegram import ChatAction
 from datetime import datetime
+from PIL import Image
 import os
 
 
