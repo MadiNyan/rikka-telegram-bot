@@ -26,10 +26,10 @@ def module_init(gd):
 def text_format(update, split_text):
     if len(split_text) == 1 and split_text[0] == "":
         update.message.reply_text("Type in some text!")
-        return
+        return None, None
     elif len(split_text) > 1 and split_text[0] == "" and split_text[1] == "":
         update.message.reply_text("Type in some text!")
-        return
+        return None, None
     elif len(split_text) == 1:
         top_text = None
         bottom_text = split_text[0]
