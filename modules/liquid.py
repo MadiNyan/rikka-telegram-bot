@@ -7,6 +7,7 @@ from modules.logging import log_command
 from telegram import ChatAction
 from datetime import datetime
 import subprocess
+import os
 
 
 def module_init(gd):
@@ -44,6 +45,7 @@ def liquid(bot, update):
                   -pix_fmt yuv420p -c:v libx264 -profile:v high -level:v 2.0 " \
                   + path + name + "_mp4" + extension + " -y"
         subprocess.run(mp4fix, shell=True)
+        os.remove(path+name+extension)
         name = name + "_mp4"
     send_image(update, path, name, extension)
     os.remove(path+filename+extension)
