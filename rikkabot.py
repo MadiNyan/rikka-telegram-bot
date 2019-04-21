@@ -70,7 +70,7 @@ def help(bot, update):
 dp.add_handler(CommandHandler("help", help))
 
 # Starting bot
-updater.start_polling(clean=True, bootstrap_retries=0, read_latency=1.0)
+updater.start_polling(clean=True, timeout=25, bootstrap_retries=-1, poll_interval=0.5, read_latency=2.0)
 # Run the bot until you presses Ctrl+C
 print("=====================\nUp and running!\n")
 #Idle
