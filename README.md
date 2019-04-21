@@ -12,12 +12,7 @@
 + ImageMagick
 
 ### Libraries:
-+ [python-telegram-bot](https://github.com/python-telegram-bot)
-+ [google-api-python-client](https://github.com/google/google-api-python-client)
-+ [legofy](https://github.com/JuanPotato/Legofy)
-+ [PyBooru](https://github.com/LuqueDaniel/pybooru)
-+ psutil
-+ uptime
+See requirements.txt
 
 ## How to
 Run `update_deps.bat` to automatically install `requirements.txt` libraries

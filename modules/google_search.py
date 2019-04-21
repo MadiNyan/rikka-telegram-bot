@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from google_images_download import google_images_download
 from telegram.ext.dispatcher import run_async
 from googleapiclient.errors import HttpError
 from googleapiclient.discovery import build
@@ -9,13 +10,13 @@ from datetime import datetime
 from telegram import ChatAction
 from random import randint
 import logging
+import sys
+import re
+import io
 
 
 def module_init(gd):
-    global dev_key, cse_id
-    dev_key = gd.config["google_dev_key"]
-    cse_id = gd.config["google_cse_id"]
-    commands = gd.config["commands_image"]
+    commands = gd.config["commands"]
     for command in commands:
         gd.dp.add_handler(CommandHandler(command, g_search, pass_args=True))
     logging.getLogger('googleapiclient.discovery').setLevel(logging.ERROR)
@@ -31,8 +32,8 @@ def g_search(bot, update, args):
     query = " ".join(args)
     try:
         final_img = get_image(query)
-    except HttpError:
-        update.message.reply_text("Sorry, my daily limit for search exceeded. Check back tomorrow!")
+    except:
+        update.message.reply_text("Sorry, something gone wrong!")
         return
     if final_img is None:
         update.message.reply_text("Nothing found!")
@@ -44,11 +45,13 @@ def g_search(bot, update, args):
 
 
 def get_image(query):
-    service = build("customsearch", "v1", developerKey=dev_key, cache_discovery=False)
-    result = service.cse().list(q=query, cx=cse_id, searchType="image").execute()
-    total_results = int(result["queries"]["request"][0]["totalResults"])
-    if total_results < 1:
-        return None
-    random_item = randint(0, len(result["items"])-1)
-    final_img = result["items"][random_item]["link"]
-    return final_img
+    sys.stdout = io.StringIO()
+    response = google_images_download.googleimagesdownload()
+    arguments = {"keywords":query, "limit":30, "print_urls":True, "no_download":True}
+    response.download(arguments)
+    result = sys.stdout.getvalue()
+    sys.stdout.close()
+    sys.stdout = sys.__stdout__
+    urls = re.findall(r'(https?://\S+)', result)
+    image_to_send = urls[randint(0, 29)]
+    return image_to_send

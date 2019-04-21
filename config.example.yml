@@ -22,12 +22,8 @@ features:
 
     google_search:
         enabled: true
-        commands_image: 
+        commands: 
             - img
-        commands_video: 
-            - vid
-        google_dev_key: =====key=====
-        google_cse_id: =====key=====
 
     graphs:
         enabled: true
