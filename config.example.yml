@@ -2,6 +2,12 @@ keys:
      telegram_token: =====key=====
 
 features:
+    gelbooru_search:
+        enabled: true
+        commands:
+            - gelbooru
+            - gel
+
     gif:
         enabled: true
         commands: 
@@ -193,7 +199,6 @@ features:
         commands: 
             - a
             - yandere
-        path: userdata/yandere/
         
     zalgo:
         enabled: true

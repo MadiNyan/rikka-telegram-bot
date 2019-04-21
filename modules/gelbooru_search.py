@@ -1,7 +1,6 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from telegram.ext import CommandHandler
+#by Linaname
 from telegram import ChatAction
+from telegram.ext import CommandHandler
 import requests
 import random
 
@@ -9,10 +8,10 @@ import random
 def module_init(gd):
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(CommandHandler(command, yandere_search, pass_args=True))
+        gd.dp.add_handler(CommandHandler(command, gelbooru_search, pass_args=True))
 
 
-def yandere_search(bot, update, args):
+def gelbooru_search(bot, update, args):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     query = " ".join(args)
     try:
@@ -26,15 +25,21 @@ def yandere_search(bot, update, args):
     msg_text = "[Image]({})".format(direct_link) + "\n" + "[View post]({})".format(page_link)
     update.message.reply_text(msg_text, parse_mode="Markdown")
 
-    
+
 def get_image(query):
-    params = {"tags": query}
-    response = requests.get("https://yande.re/post.json?", params=params)
-    result_list = response.json()
+    params = {
+        "page": "dapi",
+        "s": "post",
+        "q": "index",
+        "json": "1",
+        "tags": query,
+    }
+    response = requests.get("https://gelbooru.com/index.php", params=params)
     if not response.text:
         return None, None
+    result_list = response.json()
     if not result_list:
         return None, None
     post = random.choice(result_list)
-    direct_link, page_link = post.get("file_url"), "https://yande.re/post/show/"+str(post.get("id"))
+    direct_link, page_link = post.get("file_url"), "https://gelbooru.com/index.php?page=post&s=view&id="+str(post.get("id"))
     return direct_link, page_link
