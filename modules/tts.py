@@ -1,10 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from pythoncom import CoInitialize, CoUninitialize
 from telegram.ext import CommandHandler
 from modules.logging import log_command
 from telegram import ChatAction
 from datetime import datetime
-from gtts import gTTS
+import comtypes.client
 import os
 
 
@@ -30,19 +31,16 @@ def tts(bot, update, args):
         update.message.reply_text("Type in some text ^^")
         return
     update.message.chat.send_action(ChatAction.RECORD_AUDIO)
-    lang="en"
-    tts = gTTS(text, lang)
-    tts.save(path + filename + ".mp3")
-    with open(path + filename + ".mp3", "rb") as f:
-        linelist = list(f)
-        linecount = len(linelist)
-    if linecount == 1:
-        update.message.chat.send_action(ChatAction.RECORD_AUDIO)
-        lang = "ru"
-        tts = gTTS(text, lang)
-        tts.save(path + filename + ".mp3")
-    with open(path + filename + ".mp3", "rb") as speech:
+    CoInitialize()
+    speak = comtypes.client.CreateObject("SAPI.SpVoice")
+    filestream = comtypes.client.CreateObject("SAPI.spFileStream")
+    filestream.open(path+filename+".ogg", 3, False)
+    speak.AudioOutputStream = filestream 
+    speak.Speak(text)
+    filestream.close()
+    CoUninitialize()
+    with open(path + filename + ".ogg", "rb") as speech:
         update.message.reply_voice(speech, quote=False)
     print(current_time, ">", "/say", ">", update.message.from_user.username)
-    os.remove(path+filename+".mp3")
+    os.remove(path+filename+".ogg")
     log_command(bot, update, current_time, "say")
