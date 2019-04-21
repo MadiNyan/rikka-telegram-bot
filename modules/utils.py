@@ -87,6 +87,8 @@ def get_param(update, defaultvalue, min_value, max_value):
         parts = update.message.text.split(" ", 1)
     elif update.message.caption is not None:
         parts = update.message.caption.split(" ", 1)
+    elif update.message.text is not None:
+        parts = update.message.text.split(" ", 2)
     else:
         return defaultvalue
     if len(parts) == 1:
@@ -95,8 +97,8 @@ def get_param(update, defaultvalue, min_value, max_value):
         try:
             parameter = int(parts[1])
         except:
-            update.message.reply_text("Paremeter needs to be a number!")
-            return None
+            #update.message.reply_text("Paremeter needs to be a number!")
+            return defaultvalue
         if  parameter < min_value or parameter > max_value:
             errtext = "Baka, make it from " + str(min_value) + " to " + str(max_value) + "!"
             update.message.reply_text(errtext)

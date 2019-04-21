@@ -15,10 +15,11 @@ logger = logging.getLogger(__name__)
 logging.getLogger("telegram.utils.promise").propagate = False
 
 class Globals:
-    def __init__(self, updater, dp, config):
+    def __init__(self, updater, dp, config, full_config):
         self.updater = updater
         self.dp = dp
         self.config = config
+        self.full_config = full_config
 
 # Import logo from a text file
 with open("resources/logo.txt", "r", encoding="UTF-8") as logo_file:
@@ -39,7 +40,7 @@ for feature in config["features"]:
             os.makedirs(path)
     if config["features"][feature]["enabled"] is True:
         module_config = config["features"][feature]
-        global_data = gd = Globals(updater, dp, module_config)
+        global_data = gd = Globals(updater, dp, module_config, config)
         module = importlib.import_module("modules." + feature).module_init(gd)
         print(feature)
 
