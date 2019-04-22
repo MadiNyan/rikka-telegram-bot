@@ -1,5 +1,6 @@
-/a *tag* - get pic from yande.re
+/a *tags* - get pic from yande.re
 /colors *1-10* - generate image palette
+/gel *tags* - get pic from gelbooru
 /gif - get random gif
 /img - Google image search
 /instagram - add filter to an image
