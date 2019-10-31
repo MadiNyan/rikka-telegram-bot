@@ -11,7 +11,7 @@ psutil==5.4.3
 comtypes==1.1.7
 numpy==1.15.4
 Pybooru==4.1.0
-Pillow==6.0.0
+Pillow==6.2.0
 google_api_python_client==1.7.8
 scikit_learn==0.20.3
 telegram==0.0.1
