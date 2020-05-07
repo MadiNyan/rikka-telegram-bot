@@ -185,14 +185,6 @@ features:
             - say
         path: userdata/tts/
 
-    vk:
-        enabled: true
-        commands: 
-            - vk
-        path: userdata/vk/
-        channel: your_channel
-        vk_token: =====key=====
-        database: resources/whatever
 
     yandere_search:
         enabled: true
