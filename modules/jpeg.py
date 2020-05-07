@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.utils import caption_filter, get_image, send_image, get_param
+from modules.logging import logging_decorator
 from telegram.ext import CommandHandler, MessageHandler
-from modules.logging import log_command
 from telegram import ChatAction
 from datetime import datetime
 from PIL import Image
@@ -19,8 +19,8 @@ def module_init(gd):
         gd.dp.add_handler(CommandHandler(command, jpeg))
 
 
+@logging_decorator("jpeg")
 def jpeg(bot, update):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     compress = get_param(update, 6, 1, 10)
     if compress is None:
@@ -52,5 +52,3 @@ def jpeg(bot, update):
         os.remove(path+"compressed.jpg")
     send_image(update, path, filename, extension)
     os.remove(path+filename+extension)
-    print (current_time, ">", "/jpeg", ">", update.message.from_user.username)
-    log_command(bot, update, current_time, "jpeg")

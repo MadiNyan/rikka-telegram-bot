@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.utils import caption_filter, get_image, send_image
+from modules.logging import logging_decorator
 from telegram.ext import CommandHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
 from modules.memegenerator import make_meme
-from modules.logging import log_command
 from telegram import ChatAction
 from datetime import datetime
 import os
@@ -51,8 +51,8 @@ def text_format(update, split_text):
 
 
 @run_async
+@logging_decorator("meme")
 def meme(bot, update):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     
     if len(update.message.photo) > 0:
@@ -96,5 +96,3 @@ def meme(bot, update):
     send_image(update, path, filename+"-meme", extension)
     os.remove(path+filename+extension)
     os.remove(path+filename+"-meme"+extension)
-    print (current_time, ">", "/meme", ">", update.message.from_user.username)
-    log_command(bot, update, current_time, "meme")

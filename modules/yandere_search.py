@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.logging import logging_decorator
 from telegram.ext import CommandHandler
 from telegram import ChatAction
 import requests
@@ -12,6 +13,7 @@ def module_init(gd):
         gd.dp.add_handler(CommandHandler(command, yandere_search, pass_args=True))
 
 
+@logging_decorator("yandere")
 def yandere_search(bot, update, args):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     query = " ".join(args)
@@ -25,6 +27,7 @@ def yandere_search(bot, update, args):
         return
     msg_text = "[Image]({})".format(direct_link) + "\n" + "[View post]({})".format(page_link)
     update.message.reply_text(msg_text, parse_mode="Markdown")
+    return query
 
     
 def get_image(query):

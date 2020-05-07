@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.logging import logging_decorator
 from telegram.ext import CommandHandler
-from modules.logging import log_command
 from random import random, seed
 from datetime import datetime
 
@@ -20,8 +20,8 @@ def ifint(number):
         return number
 
 
+@logging_decorator("rate")
 def rate(bot, update, args):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     if update.message.reply_to_message is not None:
         if update.message.reply_to_message.text is not None:
             args = update.message.reply_to_message.text.split(" ")
@@ -34,5 +34,3 @@ def rate(bot, update, args):
     rounded = round(rng * 2) / 2
     rating = str(ifint(rounded))
     update.message.reply_text("🤔 I rate this "+rating+"/10")
-    print(current_time, ">", "/rate", ">", update.message.from_user.username)
-    log_command(bot, update, current_time, "rate")

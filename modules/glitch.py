@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.logging import logging_decorator
 from telegram.ext import CommandHandler, MessageHandler
 from modules.utils import get_image, caption_filter
-from modules.logging import log_command
 from datetime import datetime
 from telegram import ChatAction
 from random import randint
@@ -20,9 +20,8 @@ def module_init(gd):
         gd.dp.add_handler(CommandHandler(command, glitch))
 
 
-# get image, then glitch
+@logging_decorator("glitch")
 def glitch(bot, update):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     try:
         extension = get_image(bot, update, path, filename)
@@ -38,11 +37,8 @@ def glitch(bot, update):
     process_img(update, filename)
     os.remove(path+filename+extension)
     os.remove(path+filename+"-glitched.jpg")
-    print (current_time, ">", "/glitch", ">", update.message.from_user.username)
-    log_command(bot, update, current_time, "glitch")
 
 
-# glitch processing; deleting lines in .jpg file
 def process_img(update, filename):
     with open(path + filename + ".jpg", "rb") as f:
         linelist = list(f)

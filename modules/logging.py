@@ -1,15 +1,38 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from datetime import datetime, timedelta
+from telegram.ext import CommandHandler
+from datetime import datetime
 import threading
 import sqlite3
 
 
+def logging_decorator(command_name):
+    def decorator(func):
+        def wrapper(bot, update, *args, **kwargs):
+            current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
+            data = func(bot, update, *args, **kwargs)
+            print(
+                "{} > /{} > {} > {} > {}".format(
+                    current_time,
+                    command_name,
+                    update.message.from_user.username,
+                    update.message.from_user.id,
+                    data
+                )
+            )
+            log_command(bot, update, current_time, command_name)
+        return wrapper
+    return decorator
+
+
 def module_init(gd):
-    global c, conn, db_lock
+    global c, conn, db_lock, owner
     db_lock = threading.Lock()
     path = gd.config["path"]
-    conn  = sqlite3.connect(path+"rikka.db", check_same_thread=False) 
+    owner = gd.config["owner"]
+    gd.dp.add_handler(CommandHandler("ban", ban_user, pass_args=True))
+    gd.dp.add_handler(CommandHandler("unban", unban_user, pass_args=True))
+    conn  = sqlite3.connect(path+"rikka.db", check_same_thread=False)
     c = conn.cursor()
 
 
@@ -47,26 +70,4 @@ def log_command(bot, update, date, command):
     entry_columns = "date, user_id, user, command, chat_id, chat_title" 
     chat_id, chat_title, user_id, user = get_chat_info(bot, update)
     values = [date, user_id, user, command, chat_id, chat_title]
-    data_entry(table_name, entry_columns, values)
-
-
-def vk(bot, update):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
-    table_name = "vk"
-    entry_columns = "date, unixtime, post_id"
-    values = [0, 0, 0]
-    c.execute("SELECT unixtime FROM vk ORDER BY rowid DESC LIMIT 1")
-    fetch = c.fetchone()
-    if fetch is not None:
-        old_date = int(fetch[0])
-        return current_time, old_date
-    else:
-        data_entry(table_name, entry_columns, values)
-        return current_time, 0
-
-
-def vk_add(bot, update, date, unixtime, post_id):
-    table_name = "vk"
-    entry_columns = "date, unixtime, post_id"
-    values = [date, unixtime, post_id]
     data_entry(table_name, entry_columns, values)

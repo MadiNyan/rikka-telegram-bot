@@ -1,10 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.logging import logging_decorator, access_decorator
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
 from telegram.ext import CommandHandler, CallbackQueryHandler
 from telegram.ext.dispatcher import run_async
-from modules.logging import log_command
-from datetime import datetime
 from random import randint
 import os
 
@@ -19,8 +18,8 @@ def module_init(gd):
 
 
 @run_async
+@logging_decorator("gif")
 def gif(bot, update, args):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     folders = os.walk(path)
     args = "gif_" + str(args)[2:-2]
     avail_folders = next(folders)[1]
@@ -33,20 +32,17 @@ def gif(bot, update, args):
         result = getgifs(update, gifs_dir)
         with open(gifs_dir + "/" + str(result), "rb") as f:
             update.message.reply_document(f)
-        log_command(bot, update, current_time, "gif")
     elif args == "gif_":
         gifs_dir = path
         result = getgifs(update, gifs_dir)
         with open(gifs_dir + "/" + str(result), "rb") as f:
             update.message.reply_document(f)
-        log_command(bot, update, current_time, "gif")
     else:
         update.message.reply_text("No such folder, try /gif help")
-    print(current_time, "> /gif >", update.message.from_user.username, ">", args)
+    return args
 
 
 def gif_button(bot, update):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     query = update.callback_query
     user = query.from_user.username
     display_data = str(query.data)[4:]
@@ -62,8 +58,7 @@ def gif_button(bot, update):
     result = getgifs(update, gifs_dir)
     with open(gifs_dir + "/" + str(result), "rb") as f:
         bot.sendDocument(query.message.chat_id, f)
-    print(current_time, "> /gif >", query.message.from_user.username, ">", display_data)
-    log_command(bot, update, current_time, "gif")
+    return display_data
 
 
 def make_keyboard(folders):

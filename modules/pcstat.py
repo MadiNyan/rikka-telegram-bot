@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.logging import logging_decorator
 from telegram.ext import CommandHandler
 from telegram import ChatAction
 from uptime import uptime
@@ -21,6 +22,7 @@ def seconds_to_str(seconds):
     return "{} day(s) {:02}:{:02}:{:02}".format(days, hours, minutes, seconds)
 
 
+@logging_decorator("server")
 def status(bot, update):
     update.message.chat.send_action(ChatAction.TYPING)
 
@@ -68,4 +70,3 @@ def status(bot, update):
     # combine everything
     server_status = "💻 \nOS: " + OS + "\n" + cpu_cores + "\n" + cpu_text + "\n" + ram_text + "\n" + hdd_text + "\n" + uptime_text
     update.message.reply_text(server_status)
-    print(datetime.datetime.now(), ">", "/status", ">", update.message.from_user.username)

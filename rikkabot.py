@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.logging import logging_decorator
 from telegram.ext import Updater, CommandHandler
 from random import randint
 import importlib
@@ -51,6 +52,7 @@ with open("resources/help.txt", "r", encoding="UTF-8") as helpfile:
 
 
 # Start feature
+@logging_decorator("start")
 def start(bot, update):
     if update.message.chat.type != "private":
         return
@@ -59,14 +61,13 @@ def start(bot, update):
     personname = update.message.from_user.first_name
     update.message.reply_text("Konnichiwa, " + personname + "! \nMy name is Takanashi Rikka desu! \
                               \nUse /help to see what I can do! :3", quote=False)
-    print(datetime.datetime.now(), ">>>", "Done /start", ">>>", update.message.from_user.username)
 dp.add_handler(CommandHandler("start", start))
 
 
 # Show help
+@logging_decorator("help")
 def help(bot, update):
     bot.send_message(update.message.chat_id, help_text, parse_mode="Markdown")
-    print(datetime.datetime.now(), ">>>", "Done /help", ">>>", update.message.from_user.username)
 dp.add_handler(CommandHandler("help", help))
 
 # Starting bot

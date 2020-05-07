@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.utils import caption_filter, get_image, send_image, get_param
+from modules.logging import logging_decorator
 from telegram.ext import CommandHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
-from modules.logging import log_command
 from sklearn.cluster import KMeans
 from telegram import ChatAction
 from datetime import datetime
@@ -24,8 +24,8 @@ def module_init(gd):
 
 
 @run_async
+@logging_decorator("palette")
 def palette(bot, update):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     name = filename + "-palette"
     colors = get_param(update, 4, 1, 10)
@@ -44,8 +44,7 @@ def palette(bot, update):
     send_image(update, path, name, extension)
     os.remove(path+filename+extension)
     os.remove(path+name+extension)
-    print(current_time, ">", "/palette", ">", update.message.from_user.username)
-    log_command(bot, update, current_time, "palette")
+    return colors
 
 
 def start_computing(path, filename, extension, colors, mode):

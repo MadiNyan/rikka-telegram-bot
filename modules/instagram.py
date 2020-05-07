@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.logging import logging_decorator
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
 from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler
 from modules.utils import caption_filter, get_image, send_image
-from modules.logging import log_command
 import modules.instagram_filters
 from datetime import datetime
 import inspect
@@ -50,8 +50,8 @@ def instagram(bot, update):
     update.message.reply_text("Available filters are:", reply_markup=instagram_reply_markup)
 
 
+@logging_decorator("instagram")
 def instagram_button(bot, update):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     query = update.callback_query
     chosen_filter, extension = update.callback_query.data.split(",")
     filter_name = str(chosen_filter)[5:]
@@ -68,5 +68,3 @@ def instagram_button(bot, update):
     send_image(query, path, filename+"-"+filter_name, extension)
     os.remove(path+filename+extension)
     os.remove(path+filename+"-"+filter_name+extension)
-    print(current_time, ">", "/instagram", ">", user)
-    log_command(bot, update, current_time, "instagram")

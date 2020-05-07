@@ -1,6 +1,7 @@
 #by Linaname
-from telegram import ChatAction
+from modules.logging import logging_decorator
 from telegram.ext import CommandHandler
+from telegram import ChatAction
 import requests
 import random
 
@@ -11,6 +12,7 @@ def module_init(gd):
         gd.dp.add_handler(CommandHandler(command, gelbooru_search, pass_args=True))
 
 
+@logging_decorator("gelbooru")
 def gelbooru_search(bot, update, args):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     query = " ".join(args)
@@ -24,6 +26,7 @@ def gelbooru_search(bot, update, args):
         return
     msg_text = "[Image]({})".format(direct_link) + "\n" + "[View post]({})".format(page_link)
     update.message.reply_text(msg_text, parse_mode="Markdown")
+    return(query)
 
 
 def get_image(query):

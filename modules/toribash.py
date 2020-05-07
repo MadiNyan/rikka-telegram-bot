@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.logging import logging_decorator
 from telegram.ext.dispatcher import run_async
 from telegram.ext import CommandHandler
 from telegram import ChatAction
@@ -13,7 +14,7 @@ def module_init(gd):
         gd.dp.add_handler(CommandHandler(command, toristats, pass_args=True))
 
 
-@run_async
+@logging_decorator("toribash")
 def toristats(bot, update, args):
     update.message.chat.send_action(ChatAction.TYPING)
     user = args[0]
@@ -42,4 +43,4 @@ def toristats(bot, update, args):
               "\nWin Ratio: " + str(winratio)[:-2] + "%, " + str(elo)[:-4] + " elo" +
               "\nToricredits: " + str(tc)) + "\nLast Active: " + lastact
     update.message.reply_text(output)
-    print(datetime.datetime.now(), ">", "/toribash", ">", update.message.from_user.username)
+    return user

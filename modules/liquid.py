@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.utils import caption_filter, get_image, send_image, get_param
+from modules.logging import logging_decorator
 from telegram.ext import CommandHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
-from modules.logging import log_command
 from telegram import ChatAction
 from datetime import datetime
 import subprocess
@@ -20,8 +20,8 @@ def module_init(gd):
 
 
 @run_async
+@logging_decorator("liq")
 def liquid(bot, update):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     power = get_param(update, 60, 1, 100)
     if power is None:
@@ -50,5 +50,3 @@ def liquid(bot, update):
     send_image(update, path, name, extension)
     os.remove(path+filename+extension)
     os.remove(path+name+extension)
-    print(current_time, ">", "/liquid", ">", update.message.from_user.username)
-    log_command(bot, update, current_time, "liquid")

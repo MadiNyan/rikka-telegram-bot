@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.logging import logging_decorator
 from telegram.ext.dispatcher import run_async
 from telegram import ChatAction, InputMediaPhoto
 from telegram.ext import CommandHandler
-from modules.logging import log_command
 from modules.utils import get_param
 from datetime import datetime
 import time
@@ -24,9 +24,8 @@ def module_init(gd):
     files = os.listdir(path)
 
 
-#@run_async
+@logging_decorator("nya")
 def nya(bot, update):
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     amount = get_param(update, 1, 1, 10)
     photos = []
@@ -37,5 +36,4 @@ def nya(bot, update):
         photos.append({"type": "photo", "media": "attach://" + attach_name})
         upload_files.append((attach_name, (random_image, open(path+random_image, "rb"))))
     requests.post("https://api.telegram.org/bot"+token+"/sendMediaGroup", params={"chat_id": update.message.chat.id, "media": json.dumps(photos)}, files=upload_files)
-    print(current_time, ">", "/nya", ">", amount, ">", update.message.from_user.username)
-    log_command(bot, update, current_time, "nya")
+    return amount

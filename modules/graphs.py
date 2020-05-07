@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from modules.logging import logging_decorator, access_decorator
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.patches import PathPatch
 from telegram.ext import CommandHandler
@@ -34,25 +35,23 @@ def module_init(gd):
     c = conn.cursor()
 
 
+@logging_decorator("usage")
 def usage(bot, update, args):
     func_name = "usage"
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     if "all" in "".join(args):
         chat_mode = "all"
     else:
         chat_mode = "local"
     labels, counts, graph_title = usage_settings(chat_mode, update, func_name)
     plot(update, labels, counts, graph_title)
-    print(current_time, ">", "/usage", ">", update.message.from_user.username)
 
 
+@logging_decorator("activity")
 def activity(bot, update, args):
     func_name = "activity"
-    current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
     chat_mode = "local"
     labels, counts, graph_title = usage_settings(chat_mode, update, func_name)
     plot(update, labels, counts, graph_title)
-    print(current_time, ">", "/activity", ">", update.message.from_user.username)
 
 
 def usage_settings(chat_mode, update, func_name):
