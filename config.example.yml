@@ -41,21 +41,6 @@ features:
         path: userdata/graphs/
         graph_logo: resources/graph_logo.jpg
 
-    instagram:
-        enabled: true
-        commands: 
-            - instagram
-            - ig
-        path: userdata/instagram/
-        extensions:
-            - .jpg
-            - .jpeg
-            - .png
-            - .bmp 
-            - .webp
-            - .svg
-            - .mp4
-            - .gif
 
     jpeg:
         enabled: true
