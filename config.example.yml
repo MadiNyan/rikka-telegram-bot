@@ -168,12 +168,6 @@ features:
         commands:
             - roll
 
-    sticker_reply:
-        enabled: true
-        sticker_path: resources/kappa.webp
-        keywords:
-            - Kappa
-
 
     tts:
         enabled: true

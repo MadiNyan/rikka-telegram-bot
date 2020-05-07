@@ -26,12 +26,9 @@ def logging_decorator(command_name):
 
 
 def module_init(gd):
-    global c, conn, db_lock, owner
+    global c, conn, db_lock
     db_lock = threading.Lock()
     path = gd.config["path"]
-    owner = gd.config["owner"]
-    gd.dp.add_handler(CommandHandler("ban", ban_user, pass_args=True))
-    gd.dp.add_handler(CommandHandler("unban", unban_user, pass_args=True))
     conn  = sqlite3.connect(path+"rikka.db", check_same_thread=False)
     c = conn.cursor()
 
