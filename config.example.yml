@@ -174,10 +174,6 @@ features:
         keywords:
             - Kappa
 
-    toribash:
-        enabled: true
-        commands: 
-            - toribash
 
     tts:
         enabled: true
