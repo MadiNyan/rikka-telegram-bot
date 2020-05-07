@@ -1,15 +1,19 @@
-![Rikka Bot Logo](http://madi.so/rikka-bot.png)
+![Rikka Bot Logo](https://madi.cat/trash/rikka-bot.png)
 
 *My personal multipurpose chat bot with completely random features*  
 *Can be found at [@Rikka_Bot](https://telegram.me/Rikka_Bot)*
 
-![Python ver](http://img.shields.io/badge/Python-3.6-yellow.svg) [![Build Status](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/build.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/?branch=master) [![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) [![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan) 
+![Python ver](http://img.shields.io/badge/Python-3.6-yellow.svg) 
+[![Build Status](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/build.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/build-status/master) 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/?branch=master) 
+[![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) 
+[![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan) 
 
 ----------
 
 ## Requirements:
 + Python 3.6+
-+ ImageMagick
++ ImageMagick 7.0.10+
 
 ### Libraries:
 See requirements.txt
@@ -55,7 +59,6 @@ features:
 + /gif - get random gif, "/gif help" to see folders
 + /glitch - glitch an image
 + /img - Google image search
-+ /instagram or /ig - add filter to an image
 + /jpeg [from 1 to 10] - compress image
 + /kek [-l, -r, -t, -b] - mirror one side of an image to another
 + /leet - convert text to 1337 5P34K
@@ -70,6 +73,5 @@ features:
 + /say - Text-to-Speech
 + /server - show server cpu, ram, hdd load and uptime
 + /start - start a bot or view welcome message
-+ /toribash [username] - show Toribash stats
 + /usage [all|local] - bot usage graph
 + /zalgo - z̡͛a͖̅l̡ͨg̦͊o͍͛ text generator
