@@ -1,18 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.utils import caption_filter, get_image, send_image
+from modules.utils import caption_filter, get_image_new, send_image_new
 from modules.logging import logging_decorator
 from telegram.ext import CommandHandler, MessageHandler
 from telegram import ChatAction
-from datetime import datetime
-import subprocess
-import os
+from wand.image import Image
+import io
 
 
 def module_init(gd):
-    global path, extensions
-    path = gd.config["path"]
-    extensions = gd.config["extensions"]
+    global img_mimetypes
+    img_mimetypes = gd.config["types"]
     commands = gd.config["commands"]
     for command in commands:
         gd.dp.add_handler(MessageHandler(caption_filter("/"+command), kek))
@@ -21,7 +19,6 @@ def module_init(gd):
 
 @logging_decorator("kek")
 def kek(bot, update):
-    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     if update.message.reply_to_message is not None:
         kek_param = "".join(update.message.text[5:7])
     elif update.message.caption is not None:
@@ -30,72 +27,69 @@ def kek(bot, update):
         update.message.reply_text("You need an image for that!")
         return
     try:
-        extension = get_image(bot, update, path, filename)
+        myfile, img_mimetype = get_image_new(bot, update)
     except:
-        update.message.reply_text("Can't get the image! :(")
+        update.message.reply_text("Can't get the image")
         return
-    if extension not in extensions:
-        update.message.reply_text("Unsupported file, onii-chan!")
+    if img_mimetype not in img_mimetypes:
+        update.message.reply_text("Unsupported file")
         return False
+    else:
+        blob_format = img_mimetypes[img_mimetype]
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    result = kekify(update, kek_param, filename, extension)
-    send_image(update, path, result, extension)
-    os.remove(path+result+extension)
-    os.remove(path+filename+extension)
+    w, h, result = kekify(kek_param, myfile)
+    result = result.make_blob(blob_format)
+    result = io.BytesIO(result)
+    send_image_new(update, result, img_mimetype)
+    result.close()
 
 
-def kekify(update, kek_param, filename, extension):
+def kekify(kek_param, myfile):
     if kek_param == "-m":
-        result = multikek(update, filename, extension)
-        return result
-    try:
-        kek_dict = get_values(kek_param, path, filename, extension)
-        cut = "convert " + path + filename + extension + " -crop " + kek_dict[0] + " " + path + "result" + extension
-        subprocess.run(cut, shell=True)
-        mirror = "convert " + kek_dict[1] + " " + kek_dict[4] + " " + kek_dict[2]
-        subprocess.run(mirror, shell=True)
-        if kek_dict[3] == "r":
-            kek_dict[1], kek_dict[2] = kek_dict[2], kek_dict[1]
-        append = "convert " + kek_dict[1] + " " + kek_dict[2] + " " + kek_dict[5] + " " + path + kek_dict[6] + extension
-        subprocess.run(append, shell=True)
-        result = kek_dict[6]
-        os.remove(path+"result-0"+extension)
-        os.remove(path+"result-1"+extension)
-        return result
-    except:
-        update.message.reply_text("Unknown kek parameter.\nUse -l, -r, -t, -b or -m")
-        return
+        result = multikek(myfile)
+        return None, None, result
+    with Image(blob=myfile) as source:
+        w = source.width; h = source.height
+        c, p1, p2, f = get_values(kek_param, w, h)
+        with source.clone() as part1:
+            part1.crop(c[0], c[1], c[2], c[3])
+            with part1.clone() as part2:    
+                getattr(part2, f)()
+                new_canvas = Image()
+                new_canvas.blank(w, h)
+                new_canvas.composite(part1, p1[0], p1[1])
+                new_canvas.composite(part2, p2[0], p2[1])
+    return w, h, new_canvas
 
 
-def multikek(update, filename, extension):
-    kekify(update, "-l", filename, extension)
-    kekify(update, "-r", filename, extension)
-    kekify(update, "-t", filename, extension)
-    kekify(update, "-b", filename, extension)
-    append_lr = "convert " + path + filename+ "-kek-left" + extension + " " + path + filename + "-kek-right" + extension + " +append " + path +  filename + "-kek-lr-temp" + extension
-    subprocess.run(append_lr, shell=True)
-    append_tb = "convert " + path + filename + "-kek-top" + extension + " " + path + filename + "-kek-bot" + extension + " +append " + path + filename + "-kek-tb-temp" + extension
-    subprocess.run(append_tb, shell=True)
-    append_all = "convert " + path + filename + "-kek-lr-temp" + extension + " " + path + filename + "-kek-tb-temp" + extension + " -append " + path + filename + "-multikek" + extension
-    subprocess.run(append_all, shell=True)
-    result = filename + "-multikek"
-    os.remove(path+filename+"-kek-left"+extension)
-    os.remove(path+filename+"-kek-right"+extension)
-    os.remove(path+filename+"-kek-top"+extension)
-    os.remove(path+filename+"-kek-bot"+extension)
-    os.remove(path+filename+"-kek-lr-temp"+extension)
-    os.remove(path+filename+"-kek-tb-temp"+extension)
-    return result
+def multikek(image):
+    w, h, canvasL = kekify("-l", image)
+    w, h, canvasR = kekify("-r", image)
+    w, h, canvasT = kekify("-t", image)
+    w, h, canvasB = kekify("-b", image)
+    big_canvas = Image()
+    big_canvas.blank(w*2, h*2)
+    big_canvas.composite(canvasL, 0, 0)
+    big_canvas.composite(canvasR, w, 0)
+    big_canvas.composite(canvasT, 0, h)
+    big_canvas.composite(canvasB, w, h)
+    canvasL.close()
+    canvasR.close()
+    canvasT.close()
+    canvasB.close()
+    return big_canvas
 
 
-def get_values(kek_param, path, filename, extension):
-    res1 = path + "result-0" + extension
-    res2 = path + "result-1" + extension
+def get_values(kek_param, w, h):
     parameters = {
-        "":   ["50%x100%", res1, res2, "s", "-flop", "+append", filename+"-kek-left"],
-        "-l": ["50%x100%", res1, res2, "s", "-flop", "+append", filename+"-kek-left"],
-        "-r": ["50%x100%", res2, res1, "r", "-flop", "+append", filename+"-kek-right"],
-        "-t": ["100%x50%", res1, res2, "s", "-flip", "-append", filename+"-kek-top"],
-        "-b": ["100%x50%", res2, res1, "r", "-flip", "-append", filename+"-kek-bot"]
+        "":   [[0, 0, w//2, h], [0, 0], [w//2, 0], "flop"],
+        "-l": [[0, 0, w//2, h], [0, 0], [w//2, 0], "flop"],
+        "-r": [[w//2, 0, w, h], [w//2, 0], [0, 0], "flop"],
+        "-t": [[0, 0, w, h//2], [0, 0], [0, h//2], "flip"],
+        "-b": [[0, h//2, w, h], [0, h//2], [0, 0], "flip"],
         }
-    return parameters[kek_param]
+    try:
+        params = parameters[kek_param]
+    except KeyError:
+        params = parameters[""]
+    return params
