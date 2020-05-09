@@ -19,6 +19,7 @@ def extract_url(entity, text):
 
 
 def is_image(path):
+    ext = None
     image_extensions = (".jpg", ".jpeg", ".png", ".gif", ".svg", ".tif", ".bmp", ".mp4")
     if path is None:
         return False
@@ -26,6 +27,9 @@ def is_image(path):
         if path.casefold().endswith(i):
             ext = i
             return ext
+    if ext == None:
+        ext = ".mp4"
+        return ext
     return False
 
 
@@ -124,7 +128,7 @@ def get_image_new(bot, update):
 
 def send_image_new(update, file, mimetype):
     photo_mimetypes = ["image/jpeg"]
-    doc_extensions = ["image/png", "image/svg", "image/tif", "image/bmp"]
+    doc_extensions = ["image/png", "image/svg", "image/tif", "image/bmp", "video/mp4"]
     sticker_mimetypes = "image/x-webp"
     for i in photo_mimetypes:
         if mimetype.startswith(i):
