@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.logging import logging_decorator, access_decorator
+from modules.logging import logging_decorator
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.patches import PathPatch
 from telegram.ext import CommandHandler
