@@ -1,4 +1,4 @@
-![Rikka Bot Logo](https://madi.cat/trash/rikka-bot.png)
+![Rikka Bot Logo](http://madi.cat/trash/rikka-bot.png)
 
 *My personal multipurpose chat bot with completely random features*  
 *Can be found at [@Rikka_Bot](https://telegram.me/Rikka_Bot)*
