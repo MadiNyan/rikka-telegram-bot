@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.utils import caption_filter, get_image, send_image, get_param
+from modules.utils import caption_filter, get_param, get_image, send_image
 from modules.logging import logging_decorator
 from telegram.ext import CommandHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
 from telegram import ChatAction
 from datetime import datetime
-import subprocess
+from wand.image import Image
 import os
 
 
@@ -17,13 +17,13 @@ def module_init(gd):
     for command in commands:
         gd.dp.add_handler(MessageHandler(caption_filter("/"+command), liquid))
         gd.dp.add_handler(CommandHandler(command, liquid))
-
+        
 
 @run_async
 @logging_decorator("liq")
 def liquid(bot, update):
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
-    power = get_param(update, 60, 1, 100)
+    power = get_param(update, 60, -100, 100)
     if power is None:
         return
     try:
@@ -31,22 +31,18 @@ def liquid(bot, update):
     except:
         update.message.reply_text("I can't get the image! :(")
         return
+    power = (100 - (power / 1.3)) / 100
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    identify = subprocess.Popen("identify " + path + filename + extension, stdout=subprocess.PIPE).communicate()[0]
-    res = str(identify.split()[2])[2:-1]
-    size = str(100 - (power / 1.3))
-    name = filename + "-liquid"
-    x = "convert " + path + filename + extension + " -liquid-rescale " + \
-         size + "%x" + size + "% -resize " + res + "! " + path + name + extension
-    subprocess.run(x, shell=True)
-    if extension == ".mp4":
-        mp4fix = "ffmpeg -loglevel panic -i " + path + name + extension + \
-                  " -an -vf scale=trunc(iw/2)*2:trunc(ih/2)*2 \
-                  -pix_fmt yuv420p -c:v libx264 -profile:v high -level:v 2.0 " \
-                  + path + name + "_mp4" + extension + " -y"
-        subprocess.run(mp4fix, shell=True)
-        os.remove(path+name+extension)
-        name = name + "_mp4"
-    send_image(update, path, name, extension)
-    os.remove(path+filename+extension)
-    os.remove(path+name+extension)
+    with Image(filename=path+filename+extension) as original:
+        w, h = original.size
+        new = Image()
+        for i in range(len(original.sequence)):
+            with original.sequence[i] as frame: 
+                img = Image(image=frame)
+            img.liquid_rescale(int(w*power), int(h*power), delta_x =1)
+            img.resize(w, h)
+            new.sequence.append(img)
+        new.save(filename=path+filename+extension)
+        send_image(update, path, filename, extension)
+        new.close()
+        os.remove(path+filename+extension)
