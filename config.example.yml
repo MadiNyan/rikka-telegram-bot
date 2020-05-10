@@ -2,11 +2,15 @@ keys:
      telegram_token: =====key=====
 
 features:
-    gelbooru_search:
+    anime_search:
         enabled: true
-        commands:
+        commands_gelbooru:
+            - a
             - gelbooru
             - gel
+        commands_yandere:
+            - yandere
+            - yan
 
     gif:
         enabled: true
@@ -40,7 +44,6 @@ features:
         db_path: userdata/
         path: userdata/graphs/
         graph_logo: resources/graph_logo.jpg
-
 
     jpeg:
         enabled: true
@@ -155,19 +158,11 @@ features:
         commands:
             - roll
 
-
     tts:
         enabled: true
         commands: 
             - say
         path: userdata/tts/
-
-
-    yandere_search:
-        enabled: true
-        commands: 
-            - a
-            - yandere
         
     zalgo:
         enabled: true
