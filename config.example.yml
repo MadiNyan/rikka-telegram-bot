@@ -58,11 +58,15 @@ features:
         enabled: true
         commands: 
             - kek
-        types:
-            image/jpeg: jpg
-            image/x-webp: webp
-            image/png: png
-            image/tiff: tif
+        path: userdata/kek/
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+            - .bmp 
+            - .webp
+            - .gif
+            - .mp4
 
     leetspeak:
         enabled: true
