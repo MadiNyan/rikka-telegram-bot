@@ -1,20 +1,18 @@
 /a *tags* - get pic from yande.re
 /colors *1-10* - generate image palette
 /gel *tags* - get pic from gelbooru
-/gif - get random gif
+/gif - gif search
 /img - Google image search
 /jpeg *1-10* - compress image
 /kek *-l, -r, -t, -b, -m* - mirror one side of an image to another
 /lego *1-100* - legofy image
-/liq *1-100* - liquid rescale image
+/liq *-100-100* - liquid rescale image
 /meme *top text @ bottom text* - make a meme from image
 /nya - get random girl pic
 /rate - rate stuff
 /roll - fortune tell; /roll *[1] or [2]* - choose one option randomly; /roll *[X-Y]* - returns random number between X and Y
 /say *something* - Text-to-Speech
-/usage *all|local* - bot usage graph
 /zalgo - z̡͛a͖̅l̡ͨg̦͊o͍͛ text generator
-/activity - most active bot users
 
 Made by @Madi\_Nyan
 Also follow @So\_Nyan

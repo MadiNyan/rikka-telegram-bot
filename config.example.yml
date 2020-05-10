@@ -5,18 +5,12 @@ features:
     anime_search:
         enabled: true
         commands_gelbooru:
-            - a
             - gelbooru
             - gel
         commands_yandere:
+            - a
             - yandere
             - yan
-
-    gif:
-        enabled: true
-        commands: 
-            - gif
-        path: userdata/mp4/
 
     glitch:
         enabled: true
@@ -32,8 +26,12 @@ features:
 
     google_search:
         enabled: true
-        commands: 
+        commands_image:
+            - google
             - img
+        commands_gif:
+            - gif
+            - gifs
 
     graphs:
         enabled: true

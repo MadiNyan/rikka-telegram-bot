@@ -80,66 +80,11 @@ def send_image(update, filepath, name, extension):
     for i in doc_extensions:
         if extension.endswith(i):
             with open(filepath + name + extension, "rb") as f:
-                update.message.reply_document(f)
+                update.message.reply_document(f, timeout=90)
             return True
     if extension.endswith(sticker_extension):
         with open(filepath + name + extension, "rb") as f:
             update.message.reply_sticker(f)
-        return True
-
-
-def get_image_new(bot, update):
-    reply = update.message.reply_to_message
-    if reply is None:
-        file = bot.getFile(update.message.photo[-1].file_id).download_as_bytearray()
-        mimetype = Image(blob=bytes(file)).mimetype
-        file = bytes(file)
-        return file, mimetype
-    # Entities; url, text_link
-    if reply.entities is not None:
-        urls = (extract_url(x, reply.text) for x in reply.entities)
-        images = [x for x in urls if is_image(x)]
-        if len(images) > 0:
-            extension = is_image(images[0])
-            r = requests.get(images[0])  # use only first image url
-            with open(output+extension, "wb") as f:
-                f.write(r.content)
-            return extension
-    # Document
-    if reply.document is not None and is_image(reply.document.file_name):
-        file = bot.getFile(reply.document.file_id).download_as_bytearray()
-        mimetype = Image(blob=bytes(file)).mimetype
-        file = bytes(file)
-        return file, mimetype
-    # Sticker
-    if reply.sticker is not None:
-        file = bot.getFile(reply.sticker.file_id).download_as_bytearray()
-        mimetype = Image(blob=bytes(file)).mimetype
-        file = bytes(file)
-        return file, mimetype
-    # Photo in reply
-    if reply.photo is not None:
-        file = bot.getFile(reply.photo[-1].file_id).download_as_bytearray()
-        mimetype = Image(blob=bytes(file)).mimetype
-        file = bytes(file)
-        return file, mimetype
-    return False
-
-
-def send_image_new(update, file, mimetype):
-    photo_mimetypes = ["image/jpeg"]
-    doc_extensions = ["image/png", "image/svg", "image/tif", "image/bmp", "video/mp4"]
-    sticker_mimetypes = "image/x-webp"
-    for i in photo_mimetypes:
-        if mimetype.startswith(i):
-            update.message.reply_photo(file, timeout=60)
-            return True
-    for i in doc_extensions:
-        if mimetype.startswith(i):
-            update.message.reply_document(file, timeout=60)
-            return True
-    if mimetype.startswith(sticker_mimetypes):
-        update.message.reply_sticker(file, timeout=60)
         return True
 
 
