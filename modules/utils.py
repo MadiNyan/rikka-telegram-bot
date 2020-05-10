@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # get_image func courtesy of Slko
 from wand.image import Image
+import subprocess
 import requests
 import os.path
 import io
@@ -110,6 +111,16 @@ def get_param(update, defaultvalue, min_value, max_value):
             update.message.reply_text(errtext)
             return None
     return parameter
+    
+def mp4_fix(path, filename):
+    args = "ffmpeg -loglevel panic -i " + path + filename + ".mp4" + \
+            " -an -vf scale=trunc(iw/2)*2:trunc(ih/2)*2 \
+            -pix_fmt yuv420p -c:v libx264 -profile:v high -level:v 2.0 " \
+            + path + filename + "fixed.mp4 -y"
+    subprocess.run(args, shell=True)
+    os.remove(path+filename+".mp4")
+    fixed_file_name = filename + "fixed"
+    return fixed_file_name
 
 
 # custom filters for message handler

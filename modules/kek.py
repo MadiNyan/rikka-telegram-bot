@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.utils import caption_filter, get_image, send_image
+from modules.utils import caption_filter, get_image, send_image, mp4_fix
 from modules.logging import logging_decorator
 from telegram.ext import CommandHandler, MessageHandler
+from telegram.ext.dispatcher import run_async
 from telegram import ChatAction
 from wand.image import Image
 from datetime import datetime
@@ -19,6 +20,7 @@ def module_init(gd):
         gd.dp.add_handler(CommandHandler(command, kek))
 
 
+@run_async
 @logging_decorator("kek")
 def kek(bot, update):
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
@@ -48,6 +50,8 @@ def kek(bot, update):
         _, _, result = kekify(kek_param, filename, extension, None)
     result.save(filename=path+filename+extension)
     result.close()
+    if extension == ".mp4":
+        filename = mp4_fix(path, filename)
     send_image(update, path, filename, extension)
     os.remove(path+filename+extension)
 

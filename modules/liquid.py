@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.utils import caption_filter, get_param, get_image, send_image
+from modules.utils import caption_filter, get_param, get_image, send_image, mp4_fix
 from modules.logging import logging_decorator
 from telegram.ext import CommandHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
@@ -43,6 +43,8 @@ def liquid(bot, update):
             img.resize(w, h)
             new.sequence.append(img)
         new.save(filename=path+filename+extension)
+        if extension == ".mp4":
+            filename = mp4_fix(path, filename)
         send_image(update, path, filename, extension)
         new.close()
         os.remove(path+filename+extension)
