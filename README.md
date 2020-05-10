@@ -4,10 +4,11 @@
 *Can be found at [@Rikka_Bot](https://telegram.me/Rikka_Bot)*
 
 ![Python ver](http://img.shields.io/badge/Python-3.6-yellow.svg) 
+[![IM](https://img.shields.io/badge/ImageMagick-7.0.10-blue)](https://imagemagick.org/)
 [![Build Status](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/build.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/build-status/master) 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MadiNyan/rikka-telegram-bot/?branch=master) 
 [![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) 
-[![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan) 
+[![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan)
 
 ----------
 
