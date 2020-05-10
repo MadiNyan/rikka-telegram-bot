@@ -4,25 +4,31 @@ from telegram.ext import CommandHandler
 from datetime import datetime
 import threading
 import sqlite3
+import time
 
 
 def logging_decorator(command_name):
     def decorator(func):
         def wrapper(bot, update, *args, **kwargs):
+            time1 = time.time()
             current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
             data = func(bot, update, *args, **kwargs)
+            time2 = time.time()
             print(
-                "{} > /{} > {} > {} > {}".format(
+                "{} > /{} > {} > {} > {} > {:.0f} ms".format(
                     current_time,
                     command_name,
                     update.message.from_user.username,
                     update.message.from_user.id,
-                    data
+                    data,
+                    (time2-time1)*1000
                 )
             )
             log_command(bot, update, current_time, command_name)
         return wrapper
     return decorator
+    
+
 
 
 def module_init(gd):

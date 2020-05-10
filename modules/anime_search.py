@@ -20,14 +20,16 @@ def module_init(gd):
 def yandere_search(bot, update, args):
     request_link = "https://yande.re/post.json?"
     image_link = "https://yande.re/post/show/"
-    search(bot, update, args, request_link, image_link)
+    query = search(bot, update, args, request_link, image_link)
+    return query
 
 
 @logging_decorator("gelbooru")
 def gelbooru_search(bot, update, args):
     request_link = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1"
     image_link = "https://gelbooru.com/index.php?page=post&s=view&id="
-    search(bot, update, args, request_link, image_link)
+    query = search(bot, update, args, request_link, image_link)
+    return query
 
 
 def search(bot, update, args, request_link, image_link):
@@ -43,6 +45,7 @@ def search(bot, update, args, request_link, image_link):
         return
     msg_text = "[Image]({})".format(direct_link) + "\n" + "[View post]({})".format(page_link)
     update.message.reply_text(msg_text, parse_mode="Markdown")
+    return query
 
 
 def get_image(query, request_link, image_link):
