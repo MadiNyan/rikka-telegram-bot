@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.logging import logging_decorator
+from telegram.ext.dispatcher import run_async
 from telegram.ext import CommandHandler
 from telegram import ChatAction
 import requests
@@ -16,6 +17,7 @@ def module_init(gd):
         gd.dp.add_handler(CommandHandler(command, yandere_search, pass_args=True))
 
 
+@run_async
 @logging_decorator("yandere")
 def yandere_search(bot, update, args):
     request_link = "https://yande.re/post.json?"
@@ -24,6 +26,7 @@ def yandere_search(bot, update, args):
     return query
 
 
+@run_async
 @logging_decorator("gelbooru")
 def gelbooru_search(bot, update, args):
     request_link = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1"

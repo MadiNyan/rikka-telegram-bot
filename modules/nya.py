@@ -24,6 +24,7 @@ def module_init(gd):
     files = os.listdir(path)
 
 
+@run_async
 @logging_decorator("nya")
 def nya(bot, update):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)

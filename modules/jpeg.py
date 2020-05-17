@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.utils import caption_filter, get_image, send_image, get_param
+from telegram.ext.dispatcher import run_async
 from modules.logging import logging_decorator
 from telegram.ext import CommandHandler, MessageHandler
 from telegram import ChatAction
@@ -19,6 +20,7 @@ def module_init(gd):
         gd.dp.add_handler(CommandHandler(command, jpeg))
 
 
+@run_async
 @logging_decorator("jpeg")
 def jpeg(bot, update):
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
