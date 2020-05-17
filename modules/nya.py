@@ -35,5 +35,5 @@ def nya(bot, update):
         attach_name = "".join(random.choice("abcdef1234567890") for x in range(16))
         photos.append({"type": "photo", "media": "attach://" + attach_name})
         upload_files.append((attach_name, (random_image, open(path+random_image, "rb"))))
-    requests.post("https://api.telegram.org/bot"+token+"/sendMediaGroup", params={"chat_id": update.message.chat.id, "media": json.dumps(photos)}, files=upload_files)
+    requests.post("https://api.telegram.org/bot"+token+"/sendMediaGroup", params={"chat_id": update.message.chat.id, "media": json.dumps(photos)}, files=upload_files, timeout=120)
     return amount
