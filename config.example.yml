@@ -141,11 +141,6 @@ features:
             - .bmp
             - .gif
 
-    pcstat:
-        enabled: true
-        commands: 
-            - status
-
     rate:
         enabled: true
         commands:
@@ -155,7 +150,11 @@ features:
         enabled: true
         commands:
             - roll
-
+            
+    system:
+        enabled: true
+        commands: 
+            - system
     tts:
         enabled: true
         commands: 

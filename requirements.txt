@@ -16,3 +16,4 @@ scikit_learn==0.22.2.post1
 telegram==0.0.1
 PyYAML==5.3.1
 wand==0.5.9
+py-cpuinfo==5.0.0
