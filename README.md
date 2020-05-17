@@ -10,6 +10,8 @@
 [![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) 
 [![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan)
 
+Official website: [RikkaBot.site](https://rikkabot.site/)
+
 ----------
 
 ## Requirements:
