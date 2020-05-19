@@ -47,23 +47,12 @@ def data_entry(table, entry_columns, values):
     db_lock.release()
 
 
-def check_entry(chat_id, table):
-    c.execute("SELECT chat_id FROM "+table+" WHERE chat_id = %s" %(chat_id))
-    if c.fetchone() is not None:
-        return True
-    else:
-        return False
-
-
 def get_chat_info(bot, update):
-    if update.callback_query is not None:
-        user_name = update.callback_query.message.chat.username
-        chat_id = update.callback_query.message.chat_id
-        user_id = update.callback_query.from_user.id
-    else:
-        user_name = update.effective_message.from_user.name[1:]
-        chat_id = update.effective_message.chat_id
-        user_id = update.effective_message.from_user.id
+    user_name = update.effective_message.from_user.name
+    if user_name.startswith("@"):
+        user_name = user_name[1:]
+    chat_id = update.effective_message.chat_id
+    user_id = update.effective_message.from_user.id
     chat = bot.getChat(chat_id)
     return chat_id, chat.title, user_id, user_name
 
