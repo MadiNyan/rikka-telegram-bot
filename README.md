@@ -70,5 +70,4 @@ features:
 + /roll [1] or [2] - choose one option randomly
 + /roll [X-Y] - returns random number between X and Y
 + /say - Text-to-Speech
-+ /usage [all|local] - bot usage graph
 + /zalgo - z̡͛a͖̅l̡ͨg̦͊o͍͛ text generator

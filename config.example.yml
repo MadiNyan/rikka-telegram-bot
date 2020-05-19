@@ -35,12 +35,10 @@ features:
 
     graphs:
         enabled: true
-        commands_activity:
+        commands:
          - activity
-        commands_usage:
-         - usage
         db_path: userdata/
-        path: userdata/graphs/
+        path: userdata/
         graph_logo: resources/graph_logo.jpg
 
     jpeg:

@@ -25,71 +25,67 @@ def module_init(gd):
     path = gd.config["path"]
     db_path = gd.config["db_path"]
     graph_logo = gd.config["graph_logo"]
-    commands_activity = gd.config["commands_activity"]
-    commands_usage = gd.config["commands_usage"]
-    for command in commands_activity:
+    commands = gd.config["commands"]
+    for command in commands:
         gd.dp.add_handler(CommandHandler(command, activity, pass_args=True))
-    for command in commands_usage:
-        gd.dp.add_handler(CommandHandler(command, usage, pass_args=True))
     conn = sqlite3.connect(db_path+"rikka.db", check_same_thread=False)
     c = conn.cursor()
 
 
-@logging_decorator("usage")
-def usage(bot, update, args):
-    func_name = "usage"
-    if "all" in "".join(args):
-        chat_mode = "all"
-    else:
-        chat_mode = "local"
-    labels, counts, graph_title = usage_settings(chat_mode, update, func_name)
-    plot(update, labels, counts, graph_title)
-
-
 @logging_decorator("activity")
 def activity(bot, update, args):
-    func_name = "activity"
-    chat_mode = "local"
-    labels, counts, graph_title = usage_settings(chat_mode, update, func_name)
-    plot(update, labels, counts, graph_title)
+    names, amount, graph_title = usage_settings(bot, update)
+    plot(update, names, amount, graph_title)
 
 
-def usage_settings(chat_mode, update, func_name):
+def usage_settings(bot, update):
     chat_id = update.message.chat.id
     if update.message.chat.title is not None:
-        chat_title = update.message.chat.title
+        title_chat = update.message.chat.title
     else:
-        chat_title = "this chat"
-    if func_name is "usage":
-        title_mode = "used commands"
-        if chat_mode == "local":
-            c.execute("SELECT command, COUNT(*) FROM commands WHERE chat_id = %s GROUP BY command" % (chat_id))
-            title_chat = chat_title
-        elif chat_mode == "all":
-            c.execute("SELECT command, COUNT(*) FROM commands GROUP BY command")
-            title_chat = "all chats"
-    elif func_name is "activity":
-        title_mode = "active bot users"
-        c.execute("SELECT user, COUNT(*) FROM commands  WHERE chat_id = %s GROUP BY user" % (chat_id))
-        title_chat = chat_title
-    else:
-        return None, None, None
+        title_chat = "this chat"
+    c.execute("SELECT user, COUNT(*) FROM commands  WHERE chat_id = %s GROUP BY user" % (chat_id))
     r = c.fetchall()
-    items = []
-    counts = []
+    if r == []:
+        update.message.reply_text("No commands used yet")
+        return
+    names, amount = get_values(bot, r)
+    graph_title = "Most active bot users in "+title_chat
+    return names, amount, graph_title
+
+
+def get_values(bot, r):
+    countsforsum = []
     for i in r:
-        items.append(i[0])
-        counts.append(i[1])
-    graph_title = "Most "+title_mode+" in "+title_chat
-    return items, counts, graph_title
+        countsforsum.append(i[1])
+    total = sum(countsforsum)
+    below = []
+    above = []
+    for i in r: 
+        if i[1] < total*0.05:
+            below.append(i)
+        else:
+            above.append(i)
+    otherstotal= []
+    for i in below:
+        otherstotal.append(i[1])
+    others = sum(otherstotal)
+    names, amount = map(list, zip(*above))    
+    if others > 0:
+        names.append("Others")
+        amount.append(others)
+    return names, amount
 
 
-def plot(update, labels, counts, graph_title):
+def plot(update, names, amount, graph_title):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     chat_id = update.message.chat.id
     _, ax = plt.subplots(figsize=(1000/my_dpi, 1000/my_dpi))
-    pie, _, _ = ax.pie(counts, radius=1.6, labels=labels, autopct="%1.0f%%", pctdistance=0.8, labeldistance=1.05, shadow=False, colors=cs)
-    plt.setp(pie, edgecolor='w', zorder=1)
+    plt.rcParams['savefig.facecolor']="#303030"
+    pie, texts, autotexts = ax.pie(amount, radius=1.6, labels=names, autopct="%1.0f%%", pctdistance=0.8, labeldistance=1.05, shadow=False, colors=cs)
+    for text in texts:
+        text.set_color("#eeeeee")
+    plt.setp(pie, edgecolor="#303030", linewidth=5, zorder=1)
     pie_logo = ax.pie(["1"], radius=1)
     plt.setp(pie_logo, zorder=-10)
     wedge = pie_logo[0][0]
@@ -97,16 +93,16 @@ def plot(update, labels, counts, graph_title):
     image_file = cbook.get_sample_data(logo_path, asfileobj=False)
     image = plt.imread(image_file)
     wedge_path = wedge.get_path()
-    patch = PathPatch(wedge_path, facecolor="w")
+    patch = PathPatch(wedge_path)
     ax.add_patch(patch)
     imagebox = OffsetImage(image, zoom=0.73, interpolation="lanczos", clip_path=patch, zorder=-10)
     ab = AnnotationBbox(imagebox, (0, 0), xycoords="data", pad=0, frameon=False)
     ax.add_artist(ab)
     ax.axis("equal")
-    plt.title(graph_title)
+    plt.title(graph_title, color="#eeeeee")
     plt.tight_layout()
-    graph_filename = path + str(chat_id) + "-graph.png"
-    plt.savefig(graph_filename, format="png", bbox_inches="tight", pad_inches=0.2, dpi=my_dpi, facecolor="w")
+    graph_filename = path + str(chat_id) + "-graph.jpg"
+    plt.savefig(graph_filename, format="jpg", bbox_inches="tight", pad_inches=0.2, dpi=my_dpi)
     with open(graph_filename, "rb") as f:
         update.message.reply_photo(f)
     os.remove(graph_filename)
