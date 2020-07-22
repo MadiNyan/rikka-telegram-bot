@@ -16,10 +16,15 @@ def module_init(gd):
 
 @logging_decorator("leet")
 def leet(update, context):
+    args = " ".join(context.args)
     if update.message.reply_to_message is not None:
         args = update.message.reply_to_message.text
-        args = args.split(" ")
-    text_leet = " ".join(args).lower()
+        if len(update.message.reply_to_message.photo) > 0:
+            args = update.message.reply_to_message.caption            
+    if args == None:
+        update.message.reply_text("Type in some text!")
+        return
+    text_leet = args.lower()
     if text_leet == "":
         return
     replace_dict = []

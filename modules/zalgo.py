@@ -14,10 +14,15 @@ def module_init(gd):
 
 @logging_decorator("zalgo")
 def zalgo_txt(update, context):
+    args = " ".join(context.args)
     if update.message.reply_to_message is not None:
         args = update.message.reply_to_message.text
-        args = args.split(" ")
-    input_text = " ".join(context.args).lower()
+        if len(update.message.reply_to_message.photo) > 0:
+            args = update.message.reply_to_message.caption            
+    if args == None:
+        update.message.reply_text("Type in some text!")
+        return
+    input_text = args
     if input_text == "":
         update.message.reply_text("Type in some text!")
         return
