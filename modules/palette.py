@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.utils import caption_filter, get_image, send_image, get_param
+from modules.utils import Caption_Filter, get_image, send_image, get_param
 from modules.logging import logging_decorator
-from telegram.ext import CommandHandler, MessageHandler
+from telegram.ext import PrefixHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
 from sklearn.cluster import KMeans
 from telegram import ChatAction
@@ -19,20 +19,21 @@ def module_init(gd):
     commands = gd.config["commands"]
     extensions = gd.config["extensions"]
     for command in commands:
-        gd.dp.add_handler(MessageHandler(caption_filter("/"+command), palette))
-        gd.dp.add_handler(CommandHandler(command, palette))
+        caption_filter = Caption_Filter("/"+command)
+        gd.dp.add_handler(MessageHandler(caption_filter, palette))
+        gd.dp.add_handler(PrefixHandler("/", command, palette))
 
 
 @run_async
 @logging_decorator("palette")
-def palette(bot, update):
+def palette(update, context):
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     name = filename + "-palette"
     colors = get_param(update, 4, 1, 10)
     if colors is None:
         return
     try:
-        extension = get_image(bot, update, path, filename)
+        extension = get_image(update, context, path, filename)
     except:
         update.message.reply_text("I can't get the image! :(")
         return

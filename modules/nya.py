@@ -3,7 +3,7 @@
 from modules.logging import logging_decorator
 from telegram.ext.dispatcher import run_async
 from telegram import ChatAction, InputMediaPhoto
-from telegram.ext import CommandHandler
+from telegram.ext import PrefixHandler
 from modules.utils import get_param
 from datetime import datetime
 import time
@@ -20,13 +20,13 @@ def module_init(gd):
     commands = gd.config["commands"]
     token = gd.full_config["keys"]["telegram_token"]
     for command in commands:
-        gd.dp.add_handler(CommandHandler(command, nya))
+        gd.dp.add_handler(PrefixHandler("/", command, nya))
     files = os.listdir(path)
 
 
 @run_async
 @logging_decorator("nya")
-def nya(bot, update):
+def nya(update, context):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     amount = get_param(update, 1, 1, 10)
     photos = []

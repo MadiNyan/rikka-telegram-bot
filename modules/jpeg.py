@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.utils import caption_filter, get_image, send_image, get_param
+from modules.utils import Caption_Filter, get_image, send_image, get_param
 from telegram.ext.dispatcher import run_async
 from modules.logging import logging_decorator
-from telegram.ext import CommandHandler, MessageHandler
+from telegram.ext import PrefixHandler, MessageHandler
 from telegram import ChatAction
 from datetime import datetime
 from PIL import Image
@@ -16,13 +16,14 @@ def module_init(gd):
     extensions = gd.config["extensions"]
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(MessageHandler(caption_filter("/"+command), jpeg))
-        gd.dp.add_handler(CommandHandler(command, jpeg))
+        caption_filter = Caption_Filter("/"+command)
+        gd.dp.add_handler(MessageHandler(caption_filter, jpeg))
+        gd.dp.add_handler(PrefixHandler("/", command, jpeg))
 
 
 @run_async
 @logging_decorator("jpeg")
-def jpeg(bot, update):
+def jpeg(update, context):
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     compress = get_param(update, 6, 1, 10)
     if compress is None:
@@ -30,7 +31,7 @@ def jpeg(bot, update):
     else:
         compress = 11 - compress
     try:
-        extension = get_image(bot, update, path, filename)
+        extension = get_image(update, context, path, filename)
     except:
         update.message.reply_text("I can't get the image! :(")
         return

@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.utils import caption_filter, get_image, send_image, get_param
+from modules.utils import Caption_Filter, get_image, send_image, get_param
 from modules.logging import logging_decorator
-from telegram.ext import CommandHandler, MessageHandler
+from telegram.ext import PrefixHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
 from telegram import ChatAction
 from datetime import datetime
@@ -17,19 +17,20 @@ def module_init(gd):
     extensions = gd.config["extensions"]
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(MessageHandler(caption_filter("/"+command), lego))
-        gd.dp.add_handler(CommandHandler(command, lego))
+        caption_filter = Caption_Filter("/"+command)
+        gd.dp.add_handler(MessageHandler(caption_filter, lego))
+        gd.dp.add_handler(PrefixHandler("/", command, lego))
 
 
 @run_async
 @logging_decorator("lego")
-def lego(bot, update):
+def lego(update, context):
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     size = get_param(update, 50, 1, 100)
     if size is None:
         return
     try:
-        extension = get_image(bot, update, path, filename)
+        extension = get_image(update, context, path, filename)
     except:
         update.message.reply_text("Can't get the image! :(")
         return

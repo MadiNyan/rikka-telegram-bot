@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.utils import caption_filter, get_param, get_image, send_image, mp4_fix
+from modules.utils import Caption_Filter, get_param, get_image, send_image, mp4_fix
 from modules.logging import logging_decorator
-from telegram.ext import CommandHandler, MessageHandler
+from telegram.ext import PrefixHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
 from telegram import ChatAction
 from datetime import datetime
@@ -15,19 +15,20 @@ def module_init(gd):
     path = gd.config["path"]
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(MessageHandler(caption_filter("/"+command), liquid))
-        gd.dp.add_handler(CommandHandler(command, liquid))
+        caption_filter = Caption_Filter("/"+command)
+        gd.dp.add_handler(MessageHandler(caption_filter, liquid))
+        gd.dp.add_handler(PrefixHandler("/", command, liquid))
         
 
 @run_async
 @logging_decorator("liq")
-def liquid(bot, update):
+def liquid(update, context):
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     power = get_param(update, 60, -100, 100)
     if power is None:
         return
     try:
-        extension = get_image(bot, update, path, filename)
+        extension = get_image(update, context, path, filename)
     except:
         update.message.reply_text("I can't get the image! :(")
         return

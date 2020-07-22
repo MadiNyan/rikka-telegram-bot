@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from modules.logging import logging_decorator
 from telegram.ext.dispatcher import run_async
-from telegram.ext import CommandHandler
+from telegram.ext import PrefixHandler
 from telegram import ChatAction
 import requests
 import random
@@ -12,32 +12,32 @@ def module_init(gd):
     commands_gelbooru = gd.config["commands_gelbooru"]
     commands_yandere = gd.config["commands_yandere"]
     for command in commands_gelbooru:
-        gd.dp.add_handler(CommandHandler(command, gelbooru_search, pass_args=True))
+        gd.dp.add_handler(PrefixHandler("/", command, gelbooru_search))
     for command in commands_yandere:
-        gd.dp.add_handler(CommandHandler(command, yandere_search, pass_args=True))
+        gd.dp.add_handler(PrefixHandler("/", command, yandere_search))
 
 
 @run_async
 @logging_decorator("yandere")
-def yandere_search(bot, update, args):
+def yandere_search(update, context):
     request_link = "https://yande.re/post.json?"
     image_link = "https://yande.re/post/show/"
-    query = search(bot, update, args, request_link, image_link)
+    query = search(update, context, request_link, image_link)
     return query
 
 
 @run_async
 @logging_decorator("gelbooru")
-def gelbooru_search(bot, update, args):
+def gelbooru_search(update, context):
     request_link = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1"
     image_link = "https://gelbooru.com/index.php?page=post&s=view&id="
-    query = search(bot, update, args, request_link, image_link)
+    query = search(update, context, request_link, image_link)
     return query
 
 
-def search(bot, update, args, request_link, image_link):
+def search(update, context, request_link, image_link):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    query = " ".join(args)
+    query = " ".join(context.args)
     try:
         direct_link, page_link = get_image(query, request_link, image_link)
     except:

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.logging import logging_decorator
-from telegram.ext import CommandHandler
+from telegram.ext import PrefixHandler
 from random import randint, seed
 from datetime import datetime
 
@@ -20,7 +20,7 @@ splitters = [" or ", " или "]
 def module_init(gd):
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(CommandHandler(command, roll, pass_args=True))
+        gd.dp.add_handler(PrefixHandler("/", command, roll))
 
 
 def mysteryball(update, string):
@@ -29,7 +29,7 @@ def mysteryball(update, string):
     update.message.reply_text("🎱 " + choices[answer])
 
 
-def splitter_check(update, text):
+def splitter_check(text):
     for splitter in splitters:
         if splitter in text:
             return splitter
@@ -44,7 +44,7 @@ def rolling_process(update, full_text, split_text):
     update.message.reply_text("⚖️ " + capitalized)
 
 
-def numbers_check(update, text):
+def numbers_check(text):
     try:
         rng_end = int(text)
         return 0, rng_end
@@ -74,14 +74,17 @@ def dice(update, number1, number2):
 
 
 @logging_decorator("roll")
-def roll(bot, update, args):
+def roll(update, context):
+    args = context.args
     if update.message.reply_to_message is not None:
         args = update.message.reply_to_message.text.split(" ")
+        if args[0].startswith("/"):
+            args.pop(0)
     full_text = ' '.join(args)
-    rng_start, rng_end = numbers_check(update, full_text)
+    rng_start, rng_end = numbers_check(full_text)
     if dice(update, rng_start, rng_end):
         return
-    splitter = splitter_check(update, full_text)
+    splitter = splitter_check(full_text)
     if splitter:
         split_text = full_text.split(splitter)
         rolling_process(update, full_text, split_text)

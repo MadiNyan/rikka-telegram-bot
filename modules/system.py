@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.logging import logging_decorator
-from telegram.ext import CommandHandler
+from telegram.ext import PrefixHandler
 from telegram import ChatAction
 from datetime import datetime
 from uptime import uptime
@@ -13,7 +13,7 @@ import psutil
 def module_init(gd):
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(CommandHandler(command, system))
+        gd.dp.add_handler(PrefixHandler("/", command, system))
 
 
 def get_size(bytes, suffix="B"):
@@ -32,7 +32,7 @@ def seconds_to_str(seconds):
 
 
 @logging_decorator("system")
-def system(bot, update):
+def system(update, context):
     update.message.chat.send_action(ChatAction.TYPING)
 
     # System information

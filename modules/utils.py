@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # get_image func courtesy of Slko
+from telegram.ext import BaseFilter
 from wand.image import Image
 import subprocess
 import requests
@@ -34,12 +35,12 @@ def is_image(path):
     return False
 
 
-def get_image(bot, update, dl_path, filename):
+def get_image(update, context, dl_path, filename):
     output = os.path.join(dl_path, filename)
     reply = update.message.reply_to_message
     if reply is None:
         extension = ".jpg"
-        bot.getFile(update.message.photo[-1].file_id).download(output + extension)
+        context.bot.getFile(update.message.photo[-1].file_id).download(output + extension)
         return extension
     # Entities; url, text_link
     if reply.entities is not None:
@@ -54,17 +55,17 @@ def get_image(bot, update, dl_path, filename):
     # Document
     if reply.document is not None and is_image(reply.document.file_name):
         extension = is_image(reply.document.file_name)
-        bot.getFile(reply.document.file_id).download(output + extension)
+        context.bot.getFile(reply.document.file_id).download(output + extension)
         return extension
     # Sticker
     if reply.sticker is not None:
         extension = ".webp"
-        bot.getFile(reply.sticker.file_id).download(output+extension)
+        context.bot.getFile(reply.sticker.file_id).download(output+extension)
         return extension
     # Photo in reply
     if reply.photo is not None:
         extension = ".jpg"
-        bot.getFile(reply.photo[-1].file_id).download(output + extension)
+        context.bot.getFile(reply.photo[-1].file_id).download(output + extension)
         return extension
     return False
 
@@ -125,10 +126,9 @@ def mp4_fix(path, filename):
 
 # custom filters for message handler
 # photo with caption
-def caption_filter(text):
-    return lambda msg: bool(msg.photo) and bool(msg.caption) and msg.caption.startswith(text)
-
-
-# text of choice
-def text_filter(text):
-    return lambda msg: bool(text in msg.text)
+class Caption_Filter(BaseFilter):
+    def __init__(self, command):
+        self.data=command
+    def filter(self, message):
+        if message.photo and message.caption and message.caption.startswith(self.data):
+            return True

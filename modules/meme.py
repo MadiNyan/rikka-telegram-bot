@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.utils import caption_filter, get_image, send_image
+from modules.utils import Caption_Filter, get_image, send_image
 from modules.logging import logging_decorator
-from telegram.ext import CommandHandler, MessageHandler
+from telegram.ext import PrefixHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
 from modules.memegenerator import make_meme
 from telegram import ChatAction
@@ -19,8 +19,9 @@ def module_init(gd):
     for i in gd.config["fonts"]:
         fonts_dict[gd.config["fonts"][i]["name"]] = gd.config["fonts"][i]["path"]
     for command in commands:
-        gd.dp.add_handler(MessageHandler(caption_filter("/"+command), meme))
-        gd.dp.add_handler(CommandHandler(commands, meme))
+        caption_filter = Caption_Filter("/"+command)
+        gd.dp.add_handler(MessageHandler(caption_filter, meme))
+        gd.dp.add_handler(PrefixHandler("/", commands, meme))
 
 
 def text_format(update, split_text):
@@ -52,7 +53,7 @@ def text_format(update, split_text):
 
 @run_async
 @logging_decorator("meme")
-def meme(bot, update):
+def meme(update, context):
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     
     if len(update.message.photo) > 0:
@@ -82,7 +83,7 @@ def meme(bot, update):
 
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     try:
-        extension = get_image(bot, update, path, filename)
+        extension = get_image(update, context, path, filename)
     except:
         update.message.reply_text("Can't get the image! :(")
         return

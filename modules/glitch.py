@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.logging import logging_decorator
-from telegram.ext import CommandHandler, MessageHandler
-from modules.utils import get_image, caption_filter
+from telegram.ext import MessageHandler, PrefixHandler
+from modules.utils import get_image, Caption_Filter
 from datetime import datetime
 from telegram import ChatAction
 from random import randint
@@ -16,15 +16,16 @@ def module_init(gd):
     extensions = gd.config["extensions"]
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(MessageHandler(caption_filter(command), glitch))
-        gd.dp.add_handler(CommandHandler(command, glitch))
+        caption_filter = Caption_Filter("/"+command)
+        gd.dp.add_handler(MessageHandler(caption_filter, glitch))
+        gd.dp.add_handler(PrefixHandler("/", command, glitch))
 
 
 @logging_decorator("glitch")
-def glitch(bot, update):
+def glitch(update, context):
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     try:
-        extension = get_image(bot, update, path, filename)
+        extension = get_image(update, context, path, filename)
     except:
         update.message.reply_text("I can't get the image! :(")
         return

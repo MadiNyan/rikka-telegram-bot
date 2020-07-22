@@ -1,15 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.logging import logging_decorator
-from telegram.ext import CommandHandler
+from telegram.ext import PrefixHandler
 from random import random, seed
-from datetime import datetime
 
 
 def module_init(gd):
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(CommandHandler(command, rate, pass_args=True))
+        gd.dp.add_handler(PrefixHandler("/", command, rate))
 
 
 def ifint(number):
@@ -21,11 +20,12 @@ def ifint(number):
 
 
 @logging_decorator("rate")
-def rate(bot, update, args):
+def rate(update, context):
     if update.message.reply_to_message is not None:
         if update.message.reply_to_message.text is not None:
             args = update.message.reply_to_message.text.split(" ")
-    string = " ".join(args).lower()
+    string = " ".join(context.args).lower()
+    print(string)
     if string == "":
         seed()
     else:

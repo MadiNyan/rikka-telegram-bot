@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.utils import caption_filter, get_image, send_image, mp4_fix
+from modules.utils import Caption_Filter, get_image, send_image, mp4_fix
 from modules.logging import logging_decorator
-from telegram.ext import CommandHandler, MessageHandler
+from telegram.ext import PrefixHandler, MessageHandler
 from telegram.ext.dispatcher import run_async
 from telegram import ChatAction
 from wand.image import Image
@@ -16,13 +16,14 @@ def module_init(gd):
     commands = gd.config["commands"]
     path = gd.config["path"]
     for command in commands:
-        gd.dp.add_handler(MessageHandler(caption_filter("/"+command), kek))
-        gd.dp.add_handler(CommandHandler(command, kek))
+        caption_filter = Caption_Filter("/"+command)
+        gd.dp.add_handler(MessageHandler(caption_filter, kek))
+        gd.dp.add_handler(PrefixHandler("/", command, kek))
 
 
 @run_async
 @logging_decorator("kek")
-def kek(bot, update):
+def kek(update, context):
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     if update.message.reply_to_message is not None:
         kek_param = "".join(update.message.text[5:7])
@@ -32,7 +33,7 @@ def kek(bot, update):
         update.message.reply_text("You need an image for that")
         return
     try:
-        extension = get_image(bot, update, path, filename)
+        extension = get_image(update, context, path, filename)
     except:
         update.message.reply_text("Can't get the image")
         return

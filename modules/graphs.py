@@ -3,7 +3,7 @@
 from modules.logging import logging_decorator
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.patches import PathPatch
-from telegram.ext import CommandHandler
+from telegram.ext import PrefixHandler
 import matplotlib.cbook as cbook
 from telegram import ChatAction
 import matplotlib.pyplot as plt
@@ -27,18 +27,18 @@ def module_init(gd):
     graph_logo = gd.config["graph_logo"]
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(CommandHandler(command, activity, pass_args=True))
+        gd.dp.add_handler(PrefixHandler("/", command, activity))
     conn = sqlite3.connect(db_path+"rikka.db", check_same_thread=False)
     c = conn.cursor()
 
 
 @logging_decorator("activity")
-def activity(bot, update, args):
-    names, amount, graph_title = usage_settings(bot, update)
+def activity(update, context):
+    names, amount, graph_title = usage_settings(update)
     plot(update, names, amount, graph_title)
 
 
-def usage_settings(bot, update):
+def usage_settings(update):
     chat_id = update.message.chat.id
     if update.message.chat.title is not None:
         title_chat = update.message.chat.title
@@ -49,12 +49,12 @@ def usage_settings(bot, update):
     if r == []:
         update.message.reply_text("No commands used yet")
         return
-    names, amount = get_values(bot, r)
+    names, amount = get_values(r)
     graph_title = "Most active bot users in "+title_chat
     return names, amount, graph_title
 
 
-def get_values(bot, r):
+def get_values(r):
     countsforsum = []
     for i in r:
         countsforsum.append(i[1])

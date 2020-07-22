@@ -10,7 +10,7 @@ import os
 import re
 
 import logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',	
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)	
 logger = logging.getLogger(__name__)	
 logging.getLogger("telegram.utils.promise").propagate = False
@@ -31,7 +31,7 @@ with open("resources/logo.txt", "r", encoding="UTF-8") as logo_file:
 with open("config.yml", "r") as f:
     config = yaml.load(f)
 key = config["keys"]["telegram_token"]
-updater = Updater(token=key)
+updater = Updater(token=key, use_context=True, workers=16)
 dp = updater.dispatcher
 
 for feature in config["features"]:
@@ -52,8 +52,8 @@ with open("resources/help.txt", "r", encoding="UTF-8") as helpfile:
 
 
 # Start feature
-@logging_decorator("start")
-def start(bot, update):
+# @logging_decorator("start")
+def start(update, context):
     if update.message.chat.type != "private":
         return
     with open("resources/hello.webp", "rb") as hello:
@@ -65,13 +65,13 @@ dp.add_handler(CommandHandler("start", start))
 
 
 # Show help
-@logging_decorator("help")
-def help(bot, update):
-    bot.send_message(update.message.chat_id, help_text, parse_mode="Markdown")
+# @logging_decorator("help")
+def help(update, context):
+    context.bot.send_message(update.message.chat_id, help_text, parse_mode="Markdown")
 dp.add_handler(CommandHandler("help", help))
 
 # Starting bot
-updater.start_polling(clean=True, timeout=25, bootstrap_retries=-1, poll_interval=0.5, read_latency=2.0)
+updater.start_polling(clean=True, timeout=10, bootstrap_retries=-1, poll_interval=0.5, read_latency=2.0)
 # Run the bot until you presses Ctrl+C
 print("=====================\nUp and running!\n")
 #Idle

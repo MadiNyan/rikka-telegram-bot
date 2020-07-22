@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.logging import logging_decorator
-from telegram.ext import CommandHandler
+from telegram.ext import PrefixHandler
 from datetime import datetime
 from functools import reduce
 
@@ -11,11 +11,11 @@ def module_init(gd):
     leet_dictionary = gd.config["leet_dictionary"]
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(CommandHandler(command, leet, pass_args=True))
+        gd.dp.add_handler(PrefixHandler("/", command, leet))
 
 
 @logging_decorator("leet")
-def leet(bot, update, args):
+def leet(update, context):
     if update.message.reply_to_message is not None:
         args = update.message.reply_to_message.text
         args = args.split(" ")

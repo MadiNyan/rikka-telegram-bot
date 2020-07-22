@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from telegram.ext import CommandHandler
 from datetime import datetime
 import threading
 import sqlite3
@@ -9,10 +8,10 @@ import time
 
 def logging_decorator(command_name):
     def decorator(func):
-        def wrapper(bot, update, *args, **kwargs):
+        def wrapper(update, context, *args, **kwargs):
             time1 = time.time()
             current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
-            data = func(bot, update, *args, **kwargs)
+            data = func(update, context, *args, **kwargs)
             time2 = time.time()
             print(
                 "{} > /{} > {} > {} > {} > {:.0f} ms".format(
@@ -24,11 +23,9 @@ def logging_decorator(command_name):
                     (time2-time1)*1000
                 )
             )
-            log_command(bot, update, current_time, command_name)
+            log_command(update, context, current_time, command_name)
         return wrapper
     return decorator
-    
-
 
 
 def module_init(gd):
@@ -47,19 +44,19 @@ def data_entry(table, entry_columns, values):
     db_lock.release()
 
 
-def get_chat_info(bot, update):
+def get_chat_info(update, context):
     user_name = update.effective_message.from_user.name
     if user_name.startswith("@"):
         user_name = user_name[1:]
     chat_id = update.effective_message.chat_id
     user_id = update.effective_message.from_user.id
-    chat = bot.getChat(chat_id)
+    chat = context.bot.getChat(chat_id)
     return chat_id, chat.title, user_id, user_name
 
 
-def log_command(bot, update, date, command):
+def log_command(update, context, date, command):
     table_name = "commands"
     entry_columns = "date, user_id, user, command, chat_id, chat_title" 
-    chat_id, chat_title, user_id, user = get_chat_info(bot, update)
+    chat_id, chat_title, user_id, user = get_chat_info(update, context)
     values = [date, user_id, user, command, chat_id, chat_title]
     data_entry(table_name, entry_columns, values)
