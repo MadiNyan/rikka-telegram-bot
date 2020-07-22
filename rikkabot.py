@@ -30,7 +30,14 @@ with open("resources/logo.txt", "r", encoding="UTF-8") as logo_file:
 with open("config.yml", "r") as f:
     config = yaml.load(f)
 key = config["keys"]["telegram_token"]
-updater = Updater(token=key, use_context=True, workers=16)
+clean = config["conn_params"]["clean"]
+workers = config["conn_params"]["updater_workers"]
+timeout = config["conn_params"]["timeout"]
+retries = config["conn_params"]["bootstrap_retries"]
+interval = config["conn_params"]["poll_interval"]
+latency = config["conn_params"]["read_latency"]
+
+updater = Updater(token=key, use_context=True, workers=workers)
 dp = updater.dispatcher
 
 for feature in config["features"]:
@@ -70,7 +77,7 @@ def help(update, context):
 dp.add_handler(PrefixHandler("/", "help", help))
 
 # Starting bot
-updater.start_polling(clean=True, timeout=10, bootstrap_retries=-1, poll_interval=0.5, read_latency=2.0)
+updater.start_polling(clean=clean, timeout=timeout, bootstrap_retries=retries, poll_interval=interval, read_latency=latency)
 # Run the bot until you presses Ctrl+C
 print("=====================\nUp and running!\n")
 #Idle
