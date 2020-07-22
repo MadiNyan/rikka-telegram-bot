@@ -1,19 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.logging import logging_decorator
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater, PrefixHandler
 from random import randint
 import importlib
-import datetime
 import yaml
 import os
-import re
-
 import logging
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)	
 logger = logging.getLogger(__name__)	
 logging.getLogger("telegram.utils.promise").propagate = False
+
 
 class Globals:
     def __init__(self, updater, dp, config, full_config):
@@ -52,7 +51,7 @@ with open("resources/help.txt", "r", encoding="UTF-8") as helpfile:
 
 
 # Start feature
-# @logging_decorator("start")
+@logging_decorator("start")
 def start(update, context):
     if update.message.chat.type != "private":
         return
@@ -61,14 +60,14 @@ def start(update, context):
     personname = update.message.from_user.first_name
     update.message.reply_text("Konnichiwa, " + personname + "! \nMy name is Takanashi Rikka desu! \
                               \nUse /help to see what I can do! :3", quote=False)
-dp.add_handler(CommandHandler("start", start))
+dp.add_handler(PrefixHandler("/", "start", start))
 
 
 # Show help
-# @logging_decorator("help")
+@logging_decorator("help")
 def help(update, context):
     context.bot.send_message(update.message.chat_id, help_text, parse_mode="Markdown")
-dp.add_handler(CommandHandler("help", help))
+dp.add_handler(PrefixHandler("/", "help", help))
 
 # Starting bot
 updater.start_polling(clean=True, timeout=10, bootstrap_retries=-1, poll_interval=0.5, read_latency=2.0)
