@@ -1,5 +1,12 @@
 keys:
-     telegram_token: =====key=====
+    telegram_token: =====key=====
+conn_params:
+    clean: true
+    updater_workers: 8
+    timeout: 10
+    bootstrap_retries: -1
+    poll_interval: 0.5
+    read_latency: 2.0
 
 features:
     anime_search:
@@ -16,7 +23,7 @@ features:
         enabled: true
         commands: 
             - glitch
-        path: userdata/glitch/
+        path: userdata/
         extensions:
             - .jpg
             - .jpeg
@@ -45,7 +52,7 @@ features:
         enabled: true
         commands:
             - jpeg
-        path: userdata/jpeg/
+        path: userdata/
         extensions:
             - .jpg
             - .jpeg
@@ -57,7 +64,7 @@ features:
         enabled: true
         commands: 
             - kek
-        path: userdata/kek/
+        path: userdata/
         extensions:
             - .jpg
             - .jpeg
@@ -77,7 +84,7 @@ features:
         enabled: true
         commands: 
             - lego
-        path: userdata/lego/
+        path: userdata/
         extensions:
             - .jpg
             - .jpeg
@@ -90,7 +97,7 @@ features:
         enabled: true
         commands: 
             - liq
-        path: userdata/liquid/
+        path: userdata/
 
     logging:
         enabled: true
@@ -101,7 +108,7 @@ features:
         commands: 
             - meme
             - memos
-        path: userdata/meme/
+        path: userdata/
         fonts:
             impact:
                 name: impact
@@ -130,7 +137,7 @@ features:
             - palette
             - colors
         path:
-            userdata/palette/
+            userdata/
         extensions:
             - .jpg
             - .jpeg
@@ -157,7 +164,7 @@ features:
         enabled: true
         commands: 
             - say
-        path: userdata/tts/
+        path: userdata/
         
     zalgo:
         enabled: true

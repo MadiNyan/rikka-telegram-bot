@@ -16,40 +16,11 @@ Official website: [RikkaBot.site](https://rikkabot.site/)
 
 ## Requirements:
 + Python 3.6+
++ python-telegram-bot
 + ImageMagick 7.0.10+
 
 ### Libraries:
 See requirements.txt
-
-## How to
-Configure your token, api keys, commands, extensions and paths for each module in config.yml:
-```
-keys:
-     telegram_token: =====key=====
-
-features:
-    anime_search:
-        enabled: true
-        commands_gelbooru:
-            - gelbooru
-            - gel
-        commands_yandere:
-            - a
-            - yandere
-            - yan
-
-    glitch:
-        enabled: false
-        commands: 
-            - glitch
-        path: userdata/glitch/
-        extensions:
-            - .jpg
-            - .jpeg
-            - .png
-            - .bmp 
-            - .webp
-```
 
 ## Available functions:
 + /a [tag] - get pic from yande.re
