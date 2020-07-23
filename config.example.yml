@@ -131,6 +131,28 @@ features:
             - nya
         path: userdata/nya/
         
+    nyameme:
+        enabled: true
+        commands: 
+            - nm
+            - nyameme
+        path: userdata/
+        nyapath: userdata/nya/
+        fonts:
+            impact:
+                name: impact
+                path: resources/impact.ttf
+            lobster:
+                name: lobster
+                path: resources/lobster.ttf
+            comic:
+                name: comic
+                path: resources/comic.ttf
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+        
     palette:
         enabled: true
         commands:
