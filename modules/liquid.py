@@ -43,6 +43,7 @@ def liquid(update, context):
             img.liquid_rescale(int(w*power), int(h*power), delta_x =1)
             img.resize(w, h)
             new.sequence.append(img)
+            img.close()
         new.save(filename=path+filename+extension)
         if extension == ".mp4":
             filename = mp4_fix(path, filename)
