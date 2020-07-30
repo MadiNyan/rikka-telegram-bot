@@ -133,21 +133,14 @@ features:
         
     nyameme:
         enabled: true
-        commands: 
+        commands_nyameme:
             - nm
             - nyameme
+        commands_animeme:
+            - am
+            - animeme
         path: userdata/
         nyapath: userdata/nya/
-        fonts:
-            impact:
-                name: impact
-                path: resources/impact.ttf
-            lobster:
-                name: lobster
-                path: resources/lobster.ttf
-            comic:
-                name: comic
-                path: resources/comic.ttf
         extensions:
             - .jpg
             - .jpeg

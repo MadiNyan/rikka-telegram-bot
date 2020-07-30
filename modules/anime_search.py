@@ -7,6 +7,11 @@ from telegram import ChatAction
 import requests
 import random
 
+yandere_request_link = "https://yande.re/post.json?limit=100"
+yandere_post_link = "https://yande.re/post/show/"
+gelbooru_request_link = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1"
+gelbooru_post_link = "https://gelbooru.com/index.php?page=post&s=view&id="
+
 
 def module_init(gd):      
     commands_gelbooru = gd.config["commands_gelbooru"]
@@ -20,18 +25,14 @@ def module_init(gd):
 @run_async
 @logging_decorator("yandere")
 def yandere_search(update, context):
-    request_link = "https://yande.re/post.json?"
-    image_link = "https://yande.re/post/show/"
-    query = search(update, context, request_link, image_link)
+    query = search(update, context, yandere_request_link, yandere_post_link)
     return query
 
 
 @run_async
 @logging_decorator("gelbooru")
 def gelbooru_search(update, context):
-    request_link = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1"
-    image_link = "https://gelbooru.com/index.php?page=post&s=view&id="
-    query = search(update, context, request_link, image_link)
+    query = search(update, context, gelbooru_request_link, gelbooru_post_link)
     return query
 
 
@@ -39,7 +40,7 @@ def search(update, context, request_link, image_link):
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     query = " ".join(context.args)
     try:
-        direct_link, page_link = get_image(query, request_link, image_link)
+        direct_link, page_link, sample_link = get_image(query, request_link, image_link)
     except:
         update.message.reply_text("Sorry, something went wrong!")
         return
@@ -60,5 +61,5 @@ def get_image(query, request_link, image_link):
     if not result_list:
         return None, None
     post = random.choice(result_list)
-    direct_link, page_link = post.get("file_url"), image_link+str(post.get("id"))
-    return direct_link, page_link
+    direct_link, page_link, sample_link = post.get("file_url"), image_link+str(post.get("id")), post.get("sample_url")
+    return direct_link, page_link, sample_link
