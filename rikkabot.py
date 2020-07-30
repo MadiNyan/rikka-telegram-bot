@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from modules.logging import logging_decorator
-from telegram.ext import Updater, PrefixHandler
+from telegram.ext import Updater, PrefixHandler, CommandHandler
 from random import randint
 import importlib
 import yaml
@@ -67,14 +67,14 @@ def start(update, context):
     personname = update.message.from_user.first_name
     update.message.reply_text("Konnichiwa, " + personname + "! \nMy name is Takanashi Rikka desu! \
                               \nUse /help to see what I can do! :3", quote=False)
-dp.add_handler(PrefixHandler("/", "start", start))
+dp.add_handler(CommandHandler("start", start))
 
 
 # Show help
 @logging_decorator("help")
 def help(update, context):
     context.bot.send_message(update.message.chat_id, help_text, parse_mode="Markdown")
-dp.add_handler(PrefixHandler("/", "help", help))
+dp.add_handler(CommandHandler("help", help))
 
 # Starting bot
 updater.start_polling(clean=clean, timeout=timeout, bootstrap_retries=retries, poll_interval=interval, read_latency=latency)
