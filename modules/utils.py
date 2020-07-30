@@ -73,18 +73,16 @@ def get_image(update, context, dl_path, filename):
 def send_image(update, filepath, name, extension):
     photo_extensions = (".jpg", ".jpeg")
     doc_extensions = (".png", ".svg", ".tif", ".bmp", ".gif", ".mp4")
-    sticker_extension = ".webp"
-    for i in photo_extensions:
-        if extension.endswith(i):
-            with open(filepath + name + extension, "rb") as f:
-                update.message.reply_photo(f)
-            return True  
-    for i in doc_extensions:
-        if extension.endswith(i):
-            with open(filepath + name + extension, "rb") as f:
-                update.message.reply_document(f, timeout=90)
-            return True
-    if extension.endswith(sticker_extension):
+    sticker_extensions = (".webp")
+    if extension in photo_extensions:
+        with open(filepath + name + extension, "rb") as f:
+            update.message.reply_photo(f)
+        return True  
+    if extension in doc_extensions:
+        with open(filepath + name + extension, "rb") as f:
+            update.message.reply_document(f, timeout=90)
+        return True
+    if extension in sticker_extensions:
         with open(filepath + name + extension, "rb") as f:
             update.message.reply_sticker(f)
         return True
