@@ -21,8 +21,7 @@ def module_init(gd):
     proxypassword = gd.config["proxy"]["password"]
     proxyserver = gd.config["proxy"]["server"]
     proxylink = "socks5://"+proxyuser+":"+proxypassword+"@"+proxyserver
-    proxies = {"https" : proxylink} 
-    print(proxies)
+    proxies = {"https" : proxylink}
     for command in commands_gelbooru:
         gd.dp.add_handler(PrefixHandler("/", command, gelbooru_search))
     for command in commands_yandere:
