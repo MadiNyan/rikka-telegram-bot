@@ -28,7 +28,7 @@ with open("resources/logo.txt", "r", encoding="UTF-8") as logo_file:
 
 # Load configs & create folders
 with open("config.yml", "r") as f:
-    config = yaml.load(f)
+    config = yaml.load(f, Loader=yaml.SafeLoader)
 key = config["keys"]["telegram_token"]
 clean = config["conn_params"]["clean"]
 workers = config["conn_params"]["updater_workers"]
