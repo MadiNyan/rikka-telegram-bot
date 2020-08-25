@@ -9,6 +9,8 @@ import time
 def logging_decorator(command_name):
     def decorator(func):
         def wrapper(update, context, *args, **kwargs):
+            if not update.message:
+                return
             time1 = time.time()
             current_time = datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")
             data = func(update, context, *args, **kwargs)
