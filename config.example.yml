@@ -18,6 +18,10 @@ features:
             - a
             - yandere
             - yan
+        proxy:
+            user: username
+            password: password
+            server: proxy.example.com:1080
 
     glitch:
         enabled: true

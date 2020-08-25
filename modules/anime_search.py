@@ -13,9 +13,16 @@ gelbooru_request_link = "https://gelbooru.com/index.php?page=dapi&s=post&q=index
 gelbooru_post_link = "https://gelbooru.com/index.php?page=post&s=view&id="
 
 
-def module_init(gd):      
+def module_init(gd):
+    global proxies
     commands_gelbooru = gd.config["commands_gelbooru"]
     commands_yandere = gd.config["commands_yandere"]
+    proxyuser = gd.config["proxy"]["user"]
+    proxypassword = gd.config["proxy"]["password"]
+    proxyserver = gd.config["proxy"]["server"]
+    proxylink = "socks5://"+proxyuser+":"+proxypassword+"@"+proxyserver
+    proxies = {"https" : proxylink} 
+    print(proxies)
     for command in commands_gelbooru:
         gd.dp.add_handler(PrefixHandler("/", command, gelbooru_search))
     for command in commands_yandere:
@@ -54,7 +61,7 @@ def search(update, context, request_link, image_link):
 
 def get_image(query, request_link, image_link):
     params = {"tags": query}
-    response = requests.get(request_link, params=params)
+    response = requests.get(request_link, params=params, proxies=proxies)
     result_list = response.json()
     if not response.text:
         return None, None
