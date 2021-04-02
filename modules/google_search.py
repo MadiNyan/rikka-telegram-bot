@@ -60,7 +60,7 @@ def get_image(query, gif=False):
         link = "https://www.google.ru/search?q={}&tbm=isch".format(query)
     req = requests.get(link, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.142 Safari/537.36"})
     html_output = req.text
-    googleregex = "AF_initDataCallback\({key: 'ds:1', isError:  false , hash: '2', data:(.*)}\);<\/script><script"
+    googleregex = "AF_initDataCallback\({key: 'ds:1', isError: {2}false , hash: '.', data:(.*), sideChannel: {}}\);<\/script><script"
     html_links = re.search(googleregex, html_output, re.M | re.I | re.S).group(1)
     full_json = json.loads(html_links)
     for a in full_json:
