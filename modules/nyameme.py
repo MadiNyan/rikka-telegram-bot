@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from modules.anime_search import get_image, yandere_request_link
+from modules.anime_search import get_image, proxies, yandere_request_link
 from modules.logging import logging_decorator
 from telegram.ext import PrefixHandler
 from telegram.ext.dispatcher import run_async
@@ -65,7 +65,7 @@ def animeme(update, context):
     if extension not in extensions:
         update.message.reply_text("Unexpected error")
         return
-    response = requests.get(sample_link)
+    response = requests.get(sample_link, proxies=proxies)
     with open(path+filename+extension, "wb") as img:
         img.write(response.content)
     update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
@@ -96,6 +96,8 @@ def get_text(update, args):
 
 
 def text_split(text_list):
+    if text_list == None:
+        return
     if len(text_list) == 1:
         top_text = None
         bottom_text = text_list[0]
