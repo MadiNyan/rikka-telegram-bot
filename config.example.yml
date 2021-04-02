@@ -44,14 +44,6 @@ features:
             - gif
             - gifs
 
-    graphs:
-        enabled: true
-        commands:
-         - activity
-        db_path: userdata/
-        path: userdata/
-        graph_logo: resources/graph_logo.jpg
-
     jpeg:
         enabled: true
         commands:
