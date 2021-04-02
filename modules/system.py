@@ -51,7 +51,7 @@ def system(update, context):
     # CPU information
     c = "="*15, " CPU ", "="*15
     cpu_header = "".join(c)
-    cpumodel = cpuinfo.get_cpu_info()['brand']
+    cpumodel = cpuinfo.get_cpu_info()['brand_raw']
     cpufreq = psutil.cpu_freq()
     cpu_info = "{}\n\n{}\nPhysical cores: {}\nTotal cores: {}\nMax Frequency: {:.2f} Mhz\nCurrent Frequency: {:.2f} Mhz\nCPU Usage: {}%\n".format(
                 cpu_header, cpumodel, psutil.cpu_count(logical=False), psutil.cpu_count(logical=True), cpufreq.max, cpufreq.current, psutil.cpu_percent(percpu=False, interval=1))
