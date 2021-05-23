@@ -21,6 +21,8 @@ def extract_url(entity, text):
 
 
 def is_image(path):
+    if path is None:
+        return False
     ext = None
     image_extensions = (".jpg", ".jpeg", ".png", ".gif", ".svg", ".tif", ".bmp", ".mp4")
     if path is None:
@@ -33,6 +35,17 @@ def is_image(path):
         ext = ".mp4"
         return ext
     return False
+
+def is_image_by_mime_type(mime_type):
+    if mime_type is None:
+        return False
+    mime_types = {
+        "image/png": ".png",
+        "image/gif": ".gif",
+        "image/jpeg": ".jpg",
+        "video/mp4": ".mp4",
+    }
+    return mime_types.get(mime_type.casefold(), False)
 
 
 def get_image(update, context, dl_path, filename):
@@ -52,9 +65,14 @@ def get_image(update, context, dl_path, filename):
             with open(output+extension, "wb") as f:
                 f.write(r.content)
             return extension
-    # Document
+    # Document with file name
     if reply.document is not None and is_image(reply.document.file_name):
         extension = is_image(reply.document.file_name)
+        context.bot.getFile(reply.document.file_id).download(output + extension)
+        return extension
+    # Document without file name
+    if reply.document is not None and is_image_by_mime_type(reply.document.mime_type):
+        extension = is_image_by_mime_type(reply.document.mime_type)
         context.bot.getFile(reply.document.file_id).download(output + extension)
         return extension
     # Sticker
