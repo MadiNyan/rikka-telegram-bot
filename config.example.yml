@@ -22,6 +22,18 @@ features:
             user: username
             password: password
             server: proxy.example.com:1080
+            
+    embed:
+        enabled: true
+        commands: 
+            - fap
+        path: userdata/
+        launchpad_path: resources/embed/launchpad.mp4
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+            - .webp
 
     glitch:
         enabled: true
