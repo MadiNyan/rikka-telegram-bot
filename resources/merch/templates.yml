@@ -1,0 +1,61 @@
+hoodie:
+    img: hoodie.png
+    mask: hoodie_mask.png 
+    offset: null
+
+zip_hoodie:
+    img: zip_hoodie.png
+    mask: zip_hoodie_mask.png 
+    offset: null
+
+pants:
+    img: pants.png
+    mask: pants_mask.png 
+    offset: null
+
+tshirt:
+    img: tshirt.png
+    mask: tshirt_mask.png 
+    offset: null
+
+skirt:
+    img: skirt.png
+    mask: skirt_mask.png 
+    offset: null
+
+soda:
+    img: soda.png
+    mask: soda_mask.png 
+    offset: null
+
+swimsuit:
+    img: swimsuit.png
+    mask: swimsuit_mask.png 
+    offset: null
+
+shorts:
+    img: shorts.png
+    mask: shorts_mask.png 
+    offset: null
+
+backpack:
+    img: backpack.png
+    mask: backpack_mask.png 
+    offset: null
+
+raccoon:
+    img: raccoon.png
+    mask: raccoon_mask.png 
+    offset:
+        - 153
+        - 331
+
+phone:
+    img: phone.png
+    mask: phone_mask.png 
+    offset: null
+
+pillow:
+    img: pillow.png
+    mask: pillow_mask.png 
+    offset: null

@@ -133,6 +133,18 @@ features:
             - .png
             - .webp
 
+    merch:
+        enabled: true
+        commands: 
+            - merch
+        path: userdata/
+        resources_path: resources/merch/
+        extensions:
+            - .jpg
+            - .jpeg
+            - .png
+            - .webp
+
     nya:
         enabled: true
         commands: 

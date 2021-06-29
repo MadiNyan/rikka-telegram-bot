@@ -35,6 +35,7 @@ See requirements.txt
 + /lego [from 1 to 100] - legofy image
 + /liq [from -100 to 100] - liquid rescale image (seam carving)
 + /meme [-c, -i, -l] [top text] @ [bottom text] - make a meme from image
++ /merch [from 1 to 10] - generate clothes designs from image
 + /nya - get random asian girl pic
 + /nyameme [text] - generate meme with random *nya* image, random font and user text
 + /rate - rate stuff
