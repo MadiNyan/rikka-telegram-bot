@@ -181,6 +181,15 @@ features:
             - .bmp
             - .gif
 
+    quote:
+        enabled: true
+        commands: 
+            - quote
+            - q
+        path: userdata/
+        resources_path: resources/quote/
+        font: resources/gothic.ttf
+
     rate:
         enabled: true
         commands:

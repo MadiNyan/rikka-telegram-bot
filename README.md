@@ -10,7 +10,7 @@
 [![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) 
 [![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan)
 
-Official website: [RikkaBot.site](https://rikkabot.site/)
+Official website: [rikkabot.madi.cat](https://rikkabot.madi.cat/)
 
 ----------
 
@@ -24,7 +24,7 @@ See requirements.txt
 
 ## Available functions:
 + /a [tag] - get pic from yande.re
-+ /activity - most active bot users
++ /animeme [text] - generate meme with random anime image, random font and user text
 + /colors [from 1 to 10] - generate image palette with given number of colors
 + /gif - gif search (Google)
 + /glitch - glitch an image
@@ -38,6 +38,7 @@ See requirements.txt
 + /merch [from 1 to 10] - generate clothes designs from image
 + /nya - get random asian girl pic
 + /nyameme [text] - generate meme with random *nya* image, random font and user text
++ /qoute [text] - generate image with quoted text and user profile picture
 + /rate - rate stuff
 + /roll - fortune tell
 + /roll [1] or [2] - choose one option randomly

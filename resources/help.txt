@@ -1,18 +1,17 @@
-/a *tags* - get pic from yande.re
+/anime - get anime pic from yande.re
 /colors - generate image palette
-/gif - gif search
 /img - Google image search
 /jpeg - compress image
 /kek - mirror one side of an image to another
-/lego - legofy image
 /liq - liquid rescale image
 /meme *top text @ bottom text* - make a meme from image
+/merch - merchandise with your image
 /nya - get random girl pic
+/quote - quote text into image
 /rate - rate stuff
 /roll - fortune tell
 /say - Text-to-Speech
 
-Full help & examples at [RikkaBot.site](rikkabot.site)
+Full help & examples at [rikkabot.madi.cat](https://rikkabot.madi.cat/)
 
 Made by @Madi\_Nyan
-Also follow @So\_Nyan
