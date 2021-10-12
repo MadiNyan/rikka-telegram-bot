@@ -5,7 +5,7 @@ matplotlib==2.1.1
 zalgo_text==0.6
 requests==2.21.0
 python_telegram_bot==12.8
-opencv_python==4.1.0.25
+opencv_python==4.1.1.26
 psutil==5.7.0
 comtypes==1.1.7
 numpy==1.15.4
