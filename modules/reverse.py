@@ -15,7 +15,6 @@ def module_init(gd):
     path = gd.config["path"]
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(MessageHandler(caption_filter, reverse))
         gd.dp.add_handler(PrefixHandler("/", command, reverse))
 
 
