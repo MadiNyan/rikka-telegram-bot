@@ -36,7 +36,6 @@ def reverse(update, context):
 
 def reverse_video(path, filename, extension):
     new_name = "reversed"
-    print(path + filename + extension)
     args = "ffmpeg -loglevel panic -i " + path + filename + extension + " -vf reverse -af areverse " + path + "reversed" + extension + " -y"
     subprocess.run(args, shell=True) 
     return new_name
