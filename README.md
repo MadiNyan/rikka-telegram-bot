@@ -40,6 +40,7 @@ See requirements.txt
 + /nyameme [text] - generate meme with random *nya* image, random font and user text
 + /qoute [text] - generate image with quoted text and user profile picture
 + /rate - rate stuff
++ /reverse - reverse a video or a gif
 + /roll - fortune tell
 + /roll [1] or [2] - choose one option randomly
 + /roll [X-Y] - returns random number between X and Y

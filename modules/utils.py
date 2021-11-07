@@ -80,6 +80,12 @@ def get_image(update, context, dl_path, filename):
         extension = ".webp"
         context.bot.getFile(reply.sticker.file_id).download(output+extension)
         return extension
+    # Video in reply
+    if reply.video is not None:
+        print("video")
+        extension = ".mp4"
+        context.bot.getFile(reply.video.file_id).download(output + extension)
+        return extension
     # Photo in reply
     if reply.photo is not None:
         extension = ".jpg"

@@ -1,6 +1,7 @@
 .git/
 .vscode/
 /userdata/
+/fonts/
 impact.ttf
 comic.ttf
 lobster.ttf
