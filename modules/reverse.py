@@ -27,7 +27,7 @@ def reverse(update, context):
     except:
         update.message.reply_text("Can't get the video")
         return
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    update.message.chat.send_action(ChatAction.UPLOAD_VIDEO)
     video = reverse_video(path, filename, extension)
     send_image(update, path, video, extension)
     os.remove(path+filename+extension)
