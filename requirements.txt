@@ -8,7 +8,7 @@ python_telegram_bot==12.8
 opencv_python==4.1.0.25
 psutil==5.7.0
 comtypes==1.1.7
-numpy==1.15.4
+numpy==1.22.0
 Pybooru==4.1.0
 PySocks==1.7.1
 Pillow==7.1.2
