@@ -12,6 +12,6 @@
 /roll - fortune tell
 /say - Text-to-Speech
 
-Full help & examples at [rikkabot.madi.cat](https://rikkabot.madi.cat/)
+Full help & examples at [rikkabot.madinyan.ru](https://rikkabot.madinyan.ru/)
 
 Made by @Madi\_Nyan

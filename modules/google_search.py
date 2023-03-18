@@ -4,7 +4,7 @@ from modules.logging import logging_decorator
 from telegram.ext.dispatcher import run_async
 from telegram.ext import PrefixHandler
 from urllib.parse import quote_plus
-from collections import Iterable
+from collections.abc import Iterable
 from telegram import ChatAction
 from random import randint
 import requests
