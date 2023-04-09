@@ -3,12 +3,11 @@ from datetime import datetime
 
 from telegram import Update
 from telegram.constants import ChatAction
-from telegram.ext import MessageHandler, PrefixHandler
+from telegram.ext import MessageHandler, PrefixHandler, filters
 from wand.image import Image
 
 from modules.logging import logging_decorator
-from modules.utils import (Caption_Filter, get_image, get_param, mp4_fix,
-                           send_image)
+from modules.utils import get_image, get_param, mp4_fix, send_image
 
 
 def module_init(gd):
@@ -16,8 +15,7 @@ def module_init(gd):
     path = gd.config["path"]
     commands = gd.config["commands"]
     for command in commands:
-        # caption_filter = Caption_Filter("/"+command)
-        # gd.application.add_handler(MessageHandler(caption_filter, liquid))
+        gd.application.add_handler(MessageHandler(filters.PHOTO & filters.CaptionRegex(r'/'+command+''), liquid))
         gd.application.add_handler(PrefixHandler("/", command, liquid))
         
 

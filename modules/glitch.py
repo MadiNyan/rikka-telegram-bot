@@ -5,10 +5,10 @@ from random import randint
 
 from telegram import Update
 from telegram.constants import ChatAction
-from telegram.ext import MessageHandler, PrefixHandler
+from telegram.ext import MessageHandler, PrefixHandler, filters
 
 from modules.logging import logging_decorator
-from modules.utils import Caption_Filter, get_image
+from modules.utils import get_image
 
 
 def module_init(gd):
@@ -17,8 +17,7 @@ def module_init(gd):
     extensions = gd.config["extensions"]
     commands = gd.config["commands"]
     for command in commands:
-        # caption_filter = Caption_Filter("/"+command)
-        # gd.application.add_handler(MessageHandler(caption_filter, glitch))
+        gd.application.add_handler(MessageHandler(filters.PHOTO & filters.CaptionRegex(r'/'+command+''), glitch))
         gd.application.add_handler(PrefixHandler("/", command, glitch))
 
 

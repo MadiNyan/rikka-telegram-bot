@@ -4,7 +4,7 @@ from datetime import datetime
 
 from telegram import Update
 from telegram.constants import ChatAction
-from telegram.ext import MessageHandler, PrefixHandler
+from telegram.ext import PrefixHandler
 
 from modules.logging import logging_decorator
 from modules.utils import get_image, send_image

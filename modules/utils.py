@@ -143,13 +143,3 @@ def mp4_fix(path, filename):
     os.remove(path+filename+".mp4")
     fixed_file_name = filename + "fixed"
     return fixed_file_name
-
-
-# custom filters for message handler
-# photo with caption
-class Caption_Filter(BaseFilter):
-    def __init__(self, command):
-        self.data=command
-    def filter(self, message):
-        if message.photo and message.caption and message.caption.startswith(self.data):
-            return True

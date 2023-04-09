@@ -8,10 +8,10 @@ import yaml
 from PIL import Image, ImageChops, ImageOps
 from telegram import Update
 from telegram.constants import ChatAction
-from telegram.ext import MessageHandler, PrefixHandler
+from telegram.ext import MessageHandler, PrefixHandler, filters
 
 from modules.logging import logging_decorator
-from modules.utils import Caption_Filter, get_image, get_param, send_image
+from modules.utils import get_image, get_param
 
 bleed = 100
 
@@ -25,8 +25,7 @@ def module_init(gd):
     token = gd.full_config["keys"]["telegram_token"]
     commands = gd.config["commands"]
     for command in commands:
-        # caption_filter = Caption_Filter("/"+command)
-        # gd.application.add_handler(MessageHandler(caption_filter, merch))
+        gd.application.add_handler(MessageHandler(filters.PHOTO & filters.CaptionRegex(r'/'+command+''), merch))
         gd.application.add_handler(PrefixHandler("/", command, merch))
     with open(resources_path+"templates.yml", "r") as f:
         templates_dict = yaml.load(f, Loader=yaml.SafeLoader)

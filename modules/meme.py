@@ -3,11 +3,11 @@ from datetime import datetime
 
 from telegram import Update
 from telegram.constants import ChatAction
-from telegram.ext import MessageHandler, PrefixHandler
+from telegram.ext import MessageHandler, PrefixHandler, filters
 
 from modules.logging import logging_decorator
 from modules.memegenerator import make_meme
-from modules.utils import Caption_Filter, get_image, send_image
+from modules.utils import get_image, send_image
 
 
 def module_init(gd):
@@ -19,8 +19,7 @@ def module_init(gd):
     for i in gd.config["fonts"]:
         fonts_dict[gd.config["fonts"][i]["name"]] = gd.config["fonts"][i]["path"]
     for command in commands:
-        # caption_filter = Caption_Filter("/"+command)
-        # gd.application.add_handler(MessageHandler(caption_filter, meme))
+        gd.application.add_handler(MessageHandler(filters.PHOTO & filters.CaptionRegex(r'/'+command+''), meme))
         gd.application.add_handler(PrefixHandler("/", commands, meme))
 
 

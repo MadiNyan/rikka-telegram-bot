@@ -7,10 +7,10 @@ from PIL import Image
 from sklearn.cluster import KMeans
 from telegram import Update
 from telegram.constants import ChatAction
-from telegram.ext import MessageHandler, PrefixHandler
+from telegram.ext import MessageHandler, PrefixHandler, filters
 
 from modules.logging import logging_decorator
-from modules.utils import Caption_Filter, get_image, get_param, send_image
+from modules.utils import get_image, get_param, send_image
 
 
 def module_init(gd):
@@ -19,8 +19,7 @@ def module_init(gd):
     commands = gd.config["commands"]
     extensions = gd.config["extensions"]
     for command in commands:
-        # caption_filter = Caption_Filter("/"+command)
-        # gd.application.add_handler(MessageHandler(caption_filter, palette))
+        gd.application.add_handler(MessageHandler(filters.PHOTO & filters.CaptionRegex(r'/'+command+''), palette))
         gd.application.add_handler(PrefixHandler("/", command, palette))
 
 

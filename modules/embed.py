@@ -4,11 +4,11 @@ from itertools import chain
 
 from telegram import Update
 from telegram.constants import ChatAction
-from telegram.ext import MessageHandler, PrefixHandler
+from telegram.ext import MessageHandler, PrefixHandler, filters
 from wand.image import Image
 
 from modules.logging import logging_decorator
-from modules.utils import Caption_Filter, get_image, mp4_fix, send_image
+from modules.utils import get_image, mp4_fix, send_image
 
 coords_by_frame = (
 [(58, 28), (164, 24), (168, 106), (63, 114)],
@@ -43,8 +43,7 @@ def module_init(gd):
     launchpad_gif = gd.config["launchpad_path"]
     commands = gd.config["commands"]
     for command in commands:
-        # caption_filter = Caption_Filter("/"+command)
-        # gd.application.add_handler(MessageHandler(caption_filter, fap))
+        gd.application.add_handler(MessageHandler(filters.PHOTO & filters.CaptionRegex(r'/'+command+''), fap))
         gd.application.add_handler(PrefixHandler("/", command, fap))
 
 
