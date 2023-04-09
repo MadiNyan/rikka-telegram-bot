@@ -1,13 +1,13 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.utils import Caption_Filter, get_image, send_image, mp4_fix
-from modules.logging import logging_decorator
-from telegram.ext import PrefixHandler, MessageHandler
-from telegram.ext.dispatcher import run_async
-from telegram import ChatAction
-from wand.image import Image
-from datetime import datetime
 import os
+from datetime import datetime
+
+from telegram import Update
+from telegram.constants import ChatAction
+from telegram.ext import MessageHandler, PrefixHandler
+from wand.image import Image
+
+from modules.logging import logging_decorator
+from modules.utils import Caption_Filter, get_image, mp4_fix, send_image
 
 
 def module_init(gd):
@@ -16,35 +16,35 @@ def module_init(gd):
     commands = gd.config["commands"]
     path = gd.config["path"]
     for command in commands:
-        caption_filter = Caption_Filter("/"+command)
-        gd.dp.add_handler(MessageHandler(caption_filter, kek))
-        gd.dp.add_handler(PrefixHandler("/", command, kek))
+        # caption_filter = Caption_Filter("/"+command)
+        # gd.application.add_handler(MessageHandler(caption_filter, kek))
+        gd.application.add_handler(PrefixHandler("/", command, kek))
 
 
-@run_async
 @logging_decorator("kek")
-def kek(update, context):
+async def kek(update: Update, context):
+    if update.message is None: return
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     if update.message.reply_to_message is not None:
         kek_param = "".join(update.message.text[5:7])
     elif update.message.caption is not None:
         kek_param = "".join(update.message.caption[5:7])
     else:
-        update.message.reply_text("You need an image for that")
+        await update.message.reply_text("You need an image for that")
         return
     try:
-        extension = get_image(update, context, path, filename)
+        extension = await get_image(update, context, path, filename)
     except:
-        update.message.reply_text("Can't get the image")
+        await update.message.reply_text("Can't get the image")
         return
     if extension not in extensions:
-        update.message.reply_text("Unsupported file")
+        await update.message.reply_text("Unsupported file")
         return False
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    await update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     
     if extension in [".mp4", ".gif"]:
         if kek_param == "-m":
-            update.message.reply_text("Multikek unsupported for animations")
+            await update.message.reply_text("Multikek unsupported for animations")
             return
         result = kekify_gifs(kek_param, filename, extension)
     else:
@@ -53,7 +53,7 @@ def kek(update, context):
     result.close()
     if extension == ".mp4":
         filename = mp4_fix(path, filename)
-    send_image(update, path, filename, extension)
+    await send_image(update, path, filename, extension)
     os.remove(path+filename+extension)
 
 
@@ -82,10 +82,9 @@ def kekify_gifs(kek_param, filename, extension):
     with Image(filename=path+filename+extension) as source:
         w = source.width; h = source.height
         new = Image()
-        for i in range(len(source.sequence)):
-            with source.sequence[i] as frame: 
-                img = Image(image=frame)
-                _, _, result = kekify(kek_param, filename, extension, img)
+        for frame in source.sequence:
+            img = Image(image=frame)
+            _, _, result = kekify(kek_param, filename, extension, img)
             new.sequence.append(result)
     return new
 

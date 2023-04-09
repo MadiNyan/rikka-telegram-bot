@@ -1,16 +1,16 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.utils import Caption_Filter, get_image, send_image, get_param
-from modules.logging import logging_decorator
-from telegram.ext import PrefixHandler, MessageHandler
-from telegram.ext.dispatcher import run_async
-from sklearn.cluster import KMeans
-from telegram import ChatAction
-from datetime import datetime
-from PIL import Image
-import numpy as np
-import cv2
 import os
+from datetime import datetime
+
+import cv2
+import numpy as np
+from PIL import Image
+from sklearn.cluster import KMeans
+from telegram import Update
+from telegram.constants import ChatAction
+from telegram.ext import MessageHandler, PrefixHandler
+
+from modules.logging import logging_decorator
+from modules.utils import Caption_Filter, get_image, get_param, send_image
 
 
 def module_init(gd):
@@ -19,30 +19,30 @@ def module_init(gd):
     commands = gd.config["commands"]
     extensions = gd.config["extensions"]
     for command in commands:
-        caption_filter = Caption_Filter("/"+command)
-        gd.dp.add_handler(MessageHandler(caption_filter, palette))
-        gd.dp.add_handler(PrefixHandler("/", command, palette))
+        # caption_filter = Caption_Filter("/"+command)
+        # gd.application.add_handler(MessageHandler(caption_filter, palette))
+        gd.application.add_handler(PrefixHandler("/", command, palette))
 
 
-@run_async
 @logging_decorator("palette")
-def palette(update, context):
+async def palette(update: Update, context):
+    if update.message is None: return
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     name = filename + "-palette"
-    colors = get_param(update, 4, 1, 10)
+    colors = await get_param(update, 4, 1, 10)
     if colors is None:
         return
     try:
-        extension = get_image(update, context, path, filename)
+        extension = await get_image(update, context, path, filename)
     except:
-        update.message.reply_text("I can't get the image! :(")
+        await update.message.reply_text("I can't get the image! :(")
         return
     if extension not in extensions:
-        update.message.reply_text("Unsupported file, onii-chan!")
+        await update.message.reply_text("Unsupported file, onii-chan!")
         return
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    await update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     start_computing(path, filename, extension, colors, "flat")
-    send_image(update, path, name, extension)
+    await send_image(update, path, name, extension)
     os.remove(path+filename+extension)
     os.remove(path+name+extension)
     return colors
@@ -63,7 +63,7 @@ def start_computing(path, filename, extension, colors, mode):
     # Reshape the image to be a list of pixels
     cv_image = cv_image.reshape((cv_image.shape[0] * cv_image.shape[1], 3))
     # Cluster the pixel intensities
-    clt = KMeans(n_clusters = number_of_colors, tol=0.001).fit(cv_image)
+    clt = KMeans(n_clusters = number_of_colors, tol=0.001, n_init="auto").fit(cv_image)
     # Build a histogram of clusters representing the number of pixels labeled to each color
     hist = centroid_histogram(clt)
     bar = plot_colors(hist, clt.cluster_centers_, width, height, number_of_colors, mode)

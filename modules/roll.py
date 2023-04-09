@@ -1,9 +1,10 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.logging import logging_decorator
-from telegram.ext import PrefixHandler
+
 from random import randint, seed
-from datetime import datetime
+
+from telegram import Update
+from telegram.ext import PrefixHandler
+
+from modules.logging import logging_decorator
 
 choices = ["It is certain", "It is decidedly so", "Without a doubt", "Yes definitely",
            "You may rely on it", "As I see it, yes", "Most likely", "Outlook good",
@@ -20,13 +21,13 @@ splitters = [" or ", " или "]
 def module_init(gd):
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(PrefixHandler("/", command, roll))
+        gd.application.add_handler(PrefixHandler("/", command, roll))
 
 
-def mysteryball(update, string):
+async def mysteryball(update, string):
     seed() if string == "" else seed(string)
     answer = randint(0, len(choices)-1)
-    update.message.reply_text("🎱 " + choices[answer])
+    await update.message.reply_text("🎱 " + choices[answer])
 
 
 def splitter_check(text):
@@ -35,13 +36,13 @@ def splitter_check(text):
             return splitter
 
 
-def rolling_process(update, full_text, split_text):
+async def rolling_process(update, full_text, split_text):
     seed(full_text)
     randoms = len(split_text) - 1
     answer = randint(0, randoms)
     uncapitalized = split_text[answer]
     capitalized = uncapitalized[0].upper() + uncapitalized[1:]
-    update.message.reply_text("⚖️ " + capitalized)
+    await update.message.reply_text("⚖️ " + capitalized)
 
 
 def numbers_check(text):
@@ -62,19 +63,20 @@ def numbers_check(text):
         return None, None
 
 
-def dice(update, number1, number2):
+async def dice(update, number1, number2):
     if number1 is not None and number2 is not None:
         if number1 > number2:
             tmp = number1
             number1 = number2
             number2 = tmp
         random_number = randint(number1, number2)
-        update.message.reply_text("🎲 " + str(random_number))
+        await update.message.reply_text("🎲 " + str(random_number))
         return True
 
 
 @logging_decorator("roll")
-def roll(update, context):
+async def roll(update: Update, context):
+    if update.message is None: return
     args = context.args
     if update.message.reply_to_message is not None:
         args = update.message.reply_to_message.text.split(" ")
@@ -82,11 +84,11 @@ def roll(update, context):
             args.pop(0)
     full_text = ' '.join(args)
     rng_start, rng_end = numbers_check(full_text)
-    if dice(update, rng_start, rng_end):
+    if await dice(update, rng_start, rng_end):
         return
     splitter = splitter_check(full_text)
     if splitter:
         split_text = full_text.split(splitter)
-        rolling_process(update, full_text, split_text)
+        await rolling_process(update, full_text, split_text)
     else:
-        mysteryball(update, full_text)
+        await mysteryball(update, full_text)

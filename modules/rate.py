@@ -1,14 +1,15 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.logging import logging_decorator
-from telegram.ext import PrefixHandler
 from random import random, seed
+
+from telegram import Update
+from telegram.ext import PrefixHandler
+
+from modules.logging import logging_decorator
 
 
 def module_init(gd):
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(PrefixHandler("/", command, rate))
+        gd.application.add_handler(PrefixHandler("/", command, rate))
 
 
 def ifint(number):
@@ -20,12 +21,13 @@ def ifint(number):
 
 
 @logging_decorator("rate")
-def rate(update, context):
-    if update.message.reply_to_message is not None:
-        if update.message.reply_to_message.text is not None:
-            args = update.message.reply_to_message.text.split(" ")
-    string = " ".join(context.args).lower()
-    print(string)
+async def rate(update: Update, context):
+    if update.message is None: return
+    if update.message.reply_to_message is not None and update.message.reply_to_message.text is not None:
+        args = update.message.reply_to_message.text.split(" ")
+    else:
+        args = context.args
+    string = " ".join(args).lower()
     if string == "":
         seed()
     else:
@@ -33,4 +35,4 @@ def rate(update, context):
     rng = random() * 10
     rounded = round(rng * 2) / 2
     rating = str(ifint(rounded))
-    update.message.reply_text("🤔 I rate this "+rating+"/10")
+    await update.message.reply_text("🤔 I rate this "+rating+"/10")

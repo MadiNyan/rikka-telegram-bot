@@ -1,18 +1,17 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.utils import Caption_Filter, get_param, get_image, send_image
-from telegram.ext import PrefixHandler, MessageHandler
-from PIL import Image, ImageChops, ImageOps, ImageDraw
-from modules.logging import logging_decorator
-from telegram.ext.dispatcher import run_async
-from telegram import ChatAction
-from datetime import datetime
-from itertools import chain
-import random
-import requests
 import json
-import yaml
 import os
+import random
+from datetime import datetime
+
+import requests
+import yaml
+from PIL import Image, ImageChops, ImageOps
+from telegram import Update
+from telegram.constants import ChatAction
+from telegram.ext import MessageHandler, PrefixHandler
+
+from modules.logging import logging_decorator
+from modules.utils import Caption_Filter, get_image, get_param, send_image
 
 bleed = 100
 
@@ -26,26 +25,26 @@ def module_init(gd):
     token = gd.full_config["keys"]["telegram_token"]
     commands = gd.config["commands"]
     for command in commands:
-        caption_filter = Caption_Filter("/"+command)
-        gd.dp.add_handler(MessageHandler(caption_filter, merch))
-        gd.dp.add_handler(PrefixHandler("/", command, merch))
+        # caption_filter = Caption_Filter("/"+command)
+        # gd.application.add_handler(MessageHandler(caption_filter, merch))
+        gd.application.add_handler(PrefixHandler("/", command, merch))
     with open(resources_path+"templates.yml", "r") as f:
         templates_dict = yaml.load(f, Loader=yaml.SafeLoader)
 
 
-@run_async
 @logging_decorator("merch")
-def merch(update, context):
+async def merch(update: Update, context):
+    if update.message is None: return
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     try:
-        extension = get_image(update, context, path, filename)
+        extension = await get_image(update, context, path, filename)
     except:
-        update.message.reply_text("I can't get the image! :(")
+        await update.message.reply_text("I can't get the image! :(")
         return
     if extension not in extensions:
-        update.message.reply_text("Unsupported file")
+        await update.message.reply_text("Unsupported file")
         return False
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    await update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     templates_list = list(templates_dict.keys())
 
     if len(context.args)>0:
@@ -53,10 +52,10 @@ def merch(update, context):
             amount = 1
             template = True
         else:
-            amount = get_param(update, 1, 1, 10)
+            amount = await get_param(update, 1, 1, 10)
             template = False
     else:
-        amount = get_param(update, 1, 1, 10)
+        amount = await get_param(update, 1, 1, 10)
         template = False
  
     image = path+filename+extension

@@ -1,4 +1,4 @@
-![Rikka Bot Logo](http://madi.cat/trash/rikka-bot.png)
+![Rikka Bot Logo](http://rikkabot.madinyan.ru/rikka-bot.png)
 
 *My personal multipurpose chat bot with completely random features*  
 *Can be found at [@Rikka_Bot](https://telegram.me/Rikka_Bot)*
@@ -10,7 +10,7 @@
 [![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) 
 [![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan)
 
-Official website: [rikkabot.madi.cat](https://rikkabot.madi.cat/)
+Official website: [rikkabot.madi.cat](https://rikkabot.madinyan.ru/)
 
 ----------
 

@@ -1,83 +1,90 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.anime_search import get_image, proxies, yandere_request_link
+from modules.anime_search import get_image, yandere_request_link
 from modules.logging import logging_decorator
 from telegram.ext import PrefixHandler
-from telegram.ext.dispatcher import run_async
 from modules.memegenerator import make_meme
 from modules.meme import fonts_dict, text_format
 from modules.nya import files
-from telegram import ChatAction
 from datetime import datetime
 import requests
 import random
 import shutil
 import os
+from telegram import Update
+from telegram.constants import ChatAction
 
 
 def module_init(gd):
-    global path, extensions, nyapath, files
+    global path, extensions, nyapath, files, proxies
     path = gd.config["path"]
     extensions = gd.config["extensions"]
     commands_nyameme = gd.config["commands_nyameme"]
     commands_animeme = gd.config["commands_animeme"]
     nyapath = gd.config["nyapath"]
+    proxyuser = gd.config["proxy"]["user"]
+    proxypassword = gd.config["proxy"]["password"]
+    proxyserver = gd.config["proxy"]["server"]
+    proxylink = "socks5://"+proxyuser+":"+proxypassword+"@"+proxyserver
+    proxies = {"https" : proxylink}
     for command in commands_nyameme:
-        gd.dp.add_handler(PrefixHandler("/", command, nyameme))
+        gd.application.add_handler(PrefixHandler("/", command, nyameme))
     for command in commands_animeme:
-        gd.dp.add_handler(PrefixHandler("/", command, animeme))
+        gd.application.add_handler(PrefixHandler("/", command, animeme))
 
 
-@run_async
 @logging_decorator("nyameme")
-def nyameme(update, context):
+async def nyameme(update: Update, context):
+    if update.message is None: return
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    await update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     font, args = get_font(context.args)
-    meme_text = get_text(update, args)
+    meme_text = await get_text(update, args)
+    if meme_text is None:
+        return
     top_text, bottom_text = text_split(meme_text)
     random_image = random.choice(files)
     filename = random_image.split(".")[0]
     extension = "."+random_image.split(".")[1]
     if extension not in extensions:
-        update.message.reply_text("Unexpected error")
+        await update.message.reply_text("Unexpected error")
         return
     shutil.copy(nyapath+random_image, path+random_image)
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    await update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     make_meme(top_text, bottom_text, filename, extension, path, font)
     with open(path + filename+"-meme" + extension, "rb") as f:
-        update.message.reply_photo(f)
+        await update.message.reply_photo(f)
     os.remove(path+filename+extension)
     os.remove(path+filename+"-meme"+extension)
     return
 
 
-@run_async
 @logging_decorator("animeme")
-def animeme(update, context):
+async def animeme(update: Update, context):
+    if update.message is None: return
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    await update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     font, args = get_font(context.args)
-    meme_text = get_text(update, args)
+    meme_text = await get_text(update, args)
+    if meme_text is None:
+        return
     top_text, bottom_text = text_split(meme_text)
-    _, _, sample_link = get_image("rating:safe", yandere_request_link, "")
+    _, _, sample_link = await get_image("rating:safe", yandere_request_link, "")
     extension = "."+sample_link.split(".")[-1]
     if extension not in extensions:
-        update.message.reply_text("Unexpected error")
+        await update.message.reply_text("Unexpected error")
         return
     response = requests.get(sample_link, proxies=proxies)
     with open(path+filename+extension, "wb") as img:
         img.write(response.content)
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    await update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     make_meme(top_text, bottom_text, filename, extension, path, font)
     with open(path + filename+"-meme" + extension, "rb") as f:
-        update.message.reply_photo(f)
+        await update.message.reply_photo(f)
     os.remove(path+filename+extension)
     os.remove(path+filename+"-meme"+extension)
     return
 
 
-def get_text(update, args):
+async def get_text(update, args):
     reply = update.message.reply_to_message
     if reply:
         if reply.caption:
@@ -90,14 +97,14 @@ def get_text(update, args):
     else:
         pass
     if len(args) < 1:
-        update.message.reply_text("Type in some text!")
+        await update.message.reply_text("Type in some text!")
         return None
     return args
 
 
 def text_split(text_list):
     if text_list == None:
-        return
+        return "", ""
     if len(text_list) == 1:
         top_text = None
         bottom_text = text_list[0]

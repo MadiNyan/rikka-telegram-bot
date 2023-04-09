@@ -1,14 +1,14 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.utils import Caption_Filter, get_param, get_image, send_image, mp4_fix
-from modules.logging import logging_decorator
-from telegram.ext import PrefixHandler, MessageHandler
-from telegram.ext.dispatcher import run_async
-from telegram import ChatAction
-from datetime import datetime
-from wand.image import Image
-from itertools import chain
 import os
+from datetime import datetime
+from itertools import chain
+
+from telegram import Update
+from telegram.constants import ChatAction
+from telegram.ext import MessageHandler, PrefixHandler
+from wand.image import Image
+
+from modules.logging import logging_decorator
+from modules.utils import Caption_Filter, get_image, mp4_fix, send_image
 
 coords_by_frame = (
 [(58, 28), (164, 24), (168, 106), (63, 114)],
@@ -43,21 +43,21 @@ def module_init(gd):
     launchpad_gif = gd.config["launchpad_path"]
     commands = gd.config["commands"]
     for command in commands:
-        caption_filter = Caption_Filter("/"+command)
-        gd.dp.add_handler(MessageHandler(caption_filter, fap))
-        gd.dp.add_handler(PrefixHandler("/", command, fap))
+        # caption_filter = Caption_Filter("/"+command)
+        # gd.application.add_handler(MessageHandler(caption_filter, fap))
+        gd.application.add_handler(PrefixHandler("/", command, fap))
 
 
-@run_async
 @logging_decorator("fap")
-def fap(update, context):
+async def fap(update: Update, context):
+    if update.message is None: return
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     try:
-        extension = get_image(update, context, path, filename)
+        extension = await get_image(update, context, path, filename)
     except:
-        update.message.reply_text("I can't get the image! :(")
+        await update.message.reply_text("I can't get the image! :(")
         return
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    await update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
 
     with Image(filename=path+filename+extension) as decal:
         decal.resize(320, 172)
@@ -72,9 +72,8 @@ def fap(update, context):
         with Image(filename=launchpad_gif) as template_gif:
             new = Image()
             for i in range(len(template_gif.sequence)):
-                with template_gif.sequence[i] as frame: 
-                    img = Image(image=frame)
-                    img.delay = 6
+                img = Image(image=template_gif.sequence[i])
+                img.delay = 6
                 destination_points = (coords_by_frame[i])
                 order = chain.from_iterable(zip(source_points, destination_points))
                 arguments = list(chain.from_iterable(order))
@@ -87,7 +86,7 @@ def fap(update, context):
                 img.close()
             new.save(filename=path+"result.mp4")
             result_filename = mp4_fix(path, "result")
-            send_image(update, path, result_filename, ".mp4")
+            await send_image(update, path, result_filename, ".mp4")
             new.close()
             os.remove(path+result_filename+".mp4")
             os.remove(path+filename+extension)

@@ -1,13 +1,13 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.utils import get_image, send_image
-from modules.logging import logging_decorator
-from telegram.ext import PrefixHandler, MessageHandler
-from telegram.ext.dispatcher import run_async
-from telegram import ChatAction
-from datetime import datetime
-import subprocess
+import asyncio
 import os
+from datetime import datetime
+
+from telegram import Update
+from telegram.constants import ChatAction
+from telegram.ext import MessageHandler, PrefixHandler
+
+from modules.logging import logging_decorator
+from modules.utils import get_image, send_image
 
 
 def module_init(gd):
@@ -15,27 +15,29 @@ def module_init(gd):
     path = gd.config["path"]
     commands = gd.config["commands"]
     for command in commands:
-        gd.dp.add_handler(PrefixHandler("/", command, reverse))
+        gd.application.add_handler(PrefixHandler("/", command, reverse))
 
 
-@run_async
 @logging_decorator("reverse")
-def reverse(update, context):
+async def reverse(update: Update, context):
+    if update.message is None: return
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
     try:
-        extension = get_image(update, context, path, filename)
+        extension = await get_image(update, context, path, filename)
     except:
-        update.message.reply_text("Can't get the video")
+        await update.message.reply_text("Can't get the video")
         return
-    update.message.chat.send_action(ChatAction.UPLOAD_VIDEO)
-    video = reverse_video(path, filename, extension)
-    send_image(update, path, video, extension)
+    await update.message.chat.send_action(ChatAction.UPLOAD_VIDEO)
+    video = await reverse_video(path, filename, extension)
+    await send_image(update, path, video, extension)
     os.remove(path+filename+extension)
     os.remove(path+video+extension)
 
 
-def reverse_video(path, filename, extension):
+
+async def reverse_video(path, filename, extension):
     new_name = "reversed"
-    args = "ffmpeg -loglevel panic -i " + path + filename + extension + " -vf reverse -af areverse " + path + "reversed" + extension + " -y"
-    subprocess.run(args, shell=True) 
+    args = f"ffmpeg -loglevel panic -i {path}{filename}{extension} -vf reverse -af areverse {path}reversed{extension} -y"
+    process = await asyncio.create_subprocess_shell(args)
+    await process.communicate()
     return new_name

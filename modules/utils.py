@@ -1,12 +1,10 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-# get_image func courtesy of Slko
-from telegram.ext import BaseFilter
-from wand.image import Image
-import subprocess
-import requests
 import os.path
-import io
+import subprocess
+
+import requests
+from telegram import Update
+from telegram.ext import ContextTypes
+from telegram.ext.filters import BaseFilter
 
 
 def extract_url(entity, text):
@@ -48,12 +46,13 @@ def is_image_by_mime_type(mime_type):
     return mime_types.get(mime_type.casefold(), False)
 
 
-def get_image(update, context, dl_path, filename):
+async def get_image(update: Update, context: ContextTypes.DEFAULT_TYPE, dl_path, filename):
+    if update.message is None: return
     output = os.path.join(dl_path, filename)
     reply = update.message.reply_to_message
     if reply is None:
         extension = ".jpg"
-        context.bot.getFile(update.message.photo[-1].file_id).download(output + extension)
+        await (await context.bot.getFile(update.message.photo[-1].file_id)).download_to_drive(output + extension)
         return extension
     # Entities; url, text_link
     if reply.entities is not None:
@@ -68,50 +67,51 @@ def get_image(update, context, dl_path, filename):
     # Document with file name
     if reply.document is not None and is_image(reply.document.file_name):
         extension = is_image(reply.document.file_name)
-        context.bot.getFile(reply.document.file_id).download(output + extension)
+        await (await context.bot.getFile(reply.document.file_id)).download_to_drive(output + extension)
         return extension
     # Document without file name
     if reply.document is not None and is_image_by_mime_type(reply.document.mime_type):
         extension = is_image_by_mime_type(reply.document.mime_type)
-        context.bot.getFile(reply.document.file_id).download(output + extension)
+        await (await context.bot.getFile(reply.document.file_id)).download_to_drive(output + extension)
         return extension
     # Sticker
     if reply.sticker is not None:
         extension = ".webp"
-        context.bot.getFile(reply.sticker.file_id).download(output+extension)
+        await (await context.bot.getFile(reply.sticker.file_id)).download_to_drive(output+extension)
         return extension
     # Video in reply
     if reply.video is not None:
         extension = ".mp4"
-        context.bot.getFile(reply.video.file_id).download(output + extension)
+        await (await context.bot.getFile(reply.video.file_id)).download_to_drive(output + extension)
         return extension
     # Photo in reply
     if reply.photo is not None:
         extension = ".jpg"
-        context.bot.getFile(reply.photo[-1].file_id).download(output + extension)
+        await (await context.bot.getFile(reply.photo[-1].file_id)).download_to_drive(output + extension)
         return extension
     return False
 
 
-def send_image(update, filepath, name, extension):
+async def send_image(update: Update, filepath, name, extension):
+    if update.message is None: return
     photo_extensions = (".jpg", ".jpeg")
     doc_extensions = (".png", ".svg", ".tif", ".bmp", ".gif", ".mp4")
     sticker_extensions = (".webp")
     if extension in photo_extensions:
         with open(filepath + name + extension, "rb") as f:
-            update.message.reply_photo(f)
+            await update.message.reply_photo(f)
         return True  
     if extension in doc_extensions:
         with open(filepath + name + extension, "rb") as f:
-            update.message.reply_document(f, timeout=90)
+            await update.message.reply_document(f)
         return True
     if extension in sticker_extensions:
         with open(filepath + name + extension, "rb") as f:
-            update.message.reply_sticker(f)
+            await update.message.reply_sticker(f)
         return True
 
 
-def get_param(update, defaultvalue, min_value, max_value):
+async def get_param(update, defaultvalue, min_value, max_value):
     if update.message.reply_to_message is not None:
         parts = update.message.text.split(" ", 1)
     elif update.message.caption is not None:
@@ -130,8 +130,8 @@ def get_param(update, defaultvalue, min_value, max_value):
             return defaultvalue
         if  parameter < min_value or parameter > max_value:
             errtext = "Baka, make it from " + str(min_value) + " to " + str(max_value) + "!"
-            update.message.reply_text(errtext)
-            return None
+            await update.message.reply_text(errtext)
+            return 0
     return parameter
     
 def mp4_fix(path, filename):

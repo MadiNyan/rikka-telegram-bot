@@ -1,9 +1,6 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from PIL import ImageFont
-from PIL import Image
-from PIL import ImageDraw
 import textwrap
+
+from PIL import Image, ImageDraw, ImageFont
 
 
 def make_meme(topString, bottomString, filename, extension, path, meme_font):

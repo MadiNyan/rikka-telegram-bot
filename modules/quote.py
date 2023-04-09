@@ -1,19 +1,19 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.logging import logging_decorator
-from telegram.ext.dispatcher import run_async
-from telegram import ChatAction
-from telegram.ext import MessageHandler, PrefixHandler
-from modules.utils import Caption_Filter, send_image
-from PIL import Image, ImageDraw, ImageOps
-from wand.image import Image as wandImage
-from wand.drawing import Drawing
-from wand.color import Color
-from wand.font import Font
-from datetime import datetime
-import random
 import io
 import os
+import random
+from datetime import datetime
+
+from PIL import Image, ImageDraw, ImageOps
+from telegram import Update
+from telegram.constants import ChatAction
+from telegram.ext import MessageHandler, PrefixHandler
+from wand.color import Color
+from wand.drawing import Drawing
+from wand.font import Font
+from wand.image import Image as wandImage
+
+from modules.logging import logging_decorator
+from modules.utils import Caption_Filter, send_image
 
 
 def module_init(gd):
@@ -23,23 +23,23 @@ def module_init(gd):
     font_path = gd.config["font"]
     commands = gd.config["commands"]
     for command in commands:
-        caption_filter = Caption_Filter("/"+command)
-        gd.dp.add_handler(MessageHandler(caption_filter, quote))
-        gd.dp.add_handler(PrefixHandler("/", commands, quote))
+        # caption_filter = Caption_Filter("/"+command)
+        # gd.application.add_handler(MessageHandler(caption_filter, quote))
+        gd.application.add_handler(PrefixHandler("/", commands, quote))
 
 
-@run_async
 @logging_decorator("quote")
-def quote(update, context):
+async def quote(update: Update, context):
+    if update.message is None: return
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
-    id, name, text = get_message(update, context)
+    id, name, text = await get_message(update, context)
     if text == "" or text == None:
-        update.message.reply_text("Type in some text!")
+        await update.message.reply_text("Type in some text!")
         return
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    profile_pic = get_profile_pic(context, filename, id, name)
+    await update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    profile_pic = await get_profile_pic(context, filename, id, name)
     make_quote(profile_pic, filename, text, name)
-    send_image(update, path, filename, ".jpg")
+    await send_image(update, path, filename, ".jpg")
     os.remove(path+filename+".jpg")
     os.remove(path+filename+"pfp.jpg")
 
@@ -55,7 +55,7 @@ def make_quote(image, filename, text, author):
     fit_text(binary_image, filename, text, author)
 
 
-def get_message(update, context):
+async def get_message(update, context):
     reply = update.message.reply_to_message
     if reply is None:
         id = update.message.from_user.id
@@ -82,13 +82,16 @@ def get_message(update, context):
     return id, name, text
 
 
-def get_profile_pic(context, filename, id, name):
+async def get_profile_pic(context, filename, id, name):
     pfp_path = path+filename+"pfp.jpg"
-    if len(context.bot.getUserProfilePhotos(id, limit = 1).photos) == 0:
+    pics = await context.bot.getUserProfilePhotos(id, limit = 1)
+    if len(pics.photos) == 0:
         generate_profile_pic(pfp_path, name)
     else:
-        pfp = context.bot.getUserProfilePhotos(id, limit = 1).photos[0][-1].file_id
-        context.bot.getFile(pfp).download(pfp_path)
+        user_profile_pics = await context.bot.getUserProfilePhotos(id, limit = 1)
+        current_pfp = user_profile_pics.photos[0][-1].file_id
+        dl_pfp = await context.bot.getFile(current_pfp)
+        await dl_pfp.download_to_drive(pfp_path)
     return pfp_path
 
 

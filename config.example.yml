@@ -1,12 +1,5 @@
 keys:
     telegram_token: =====key=====
-conn_params:
-    clean: true
-    updater_workers: 8
-    timeout: 10
-    bootstrap_retries: -1
-    poll_interval: 0.5
-    read_latency: 2.0
 
 features:
     anime_search:
@@ -165,6 +158,10 @@ features:
             - .jpg
             - .jpeg
             - .png
+        proxy:
+            user: username
+            password: password
+            server: proxy.example.com:1080
         
     palette:
         enabled: true
@@ -206,11 +203,7 @@ features:
         enabled: true
         commands:
             - roll
-            
-    system:
-        enabled: true
-        commands: 
-            - system
+
     tts:
         enabled: true
         commands: 

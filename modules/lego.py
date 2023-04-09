@@ -1,14 +1,14 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.utils import Caption_Filter, get_image, send_image, get_param
-from modules.logging import logging_decorator
-from telegram.ext import PrefixHandler, MessageHandler
-from telegram.ext.dispatcher import run_async
-from telegram import ChatAction
-from datetime import datetime
-import subprocess
-import legofy
 import os
+import subprocess
+from datetime import datetime
+
+import legofy
+from telegram import Update
+from telegram.constants import ChatAction
+from telegram.ext import MessageHandler, PrefixHandler
+
+from modules.logging import logging_decorator
+from modules.utils import Caption_Filter, get_image, get_param, send_image
 
 
 def module_init(gd):
@@ -17,33 +17,33 @@ def module_init(gd):
     extensions = gd.config["extensions"]
     commands = gd.config["commands"]
     for command in commands:
-        caption_filter = Caption_Filter("/"+command)
-        gd.dp.add_handler(MessageHandler(caption_filter, lego))
-        gd.dp.add_handler(PrefixHandler("/", command, lego))
+        # caption_filter = Caption_Filter("/"+command)
+        # gd.application.add_handler(MessageHandler(caption_filter, lego))
+        gd.application.add_handler(PrefixHandler("/", command, lego))
 
 
-@run_async
 @logging_decorator("lego")
-def lego(update, context):
+async def lego(update: Update, context):
+    if update.message is None: return
     filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
-    size = get_param(update, 50, 1, 100)
+    size = await get_param(update, 50, 1, 100)
     if size is None:
         return
     try:
-        extension = get_image(update, context, path, filename)
+        extension = await get_image(update, context, path, filename)
     except:
-        update.message.reply_text("Can't get the image! :(")
+        await update.message.reply_text("Can't get the image! :(")
         return
     if extension not in extensions:
-        update.message.reply_text("Unsupported file, onii-chan!")
+        await update.message.reply_text("Unsupported file, onii-chan!")
         return False
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
+    await update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
     if extension == ".webp" or ".png":
         stick = "convert " + path + filename + extension + " -background white -flatten " + path + filename + extension
         subprocess.run(stick, shell=True)
     legofy.main(image_path=path + filename + extension,
                 output_path=path + filename + "-lego" + extension,
                 size=size, palette_mode=None, dither=False)
-    send_image(update, path, filename+"-lego", extension)
+    await send_image(update, path, filename+"-lego", extension)
     os.remove(path+filename+extension)
     os.remove(path+filename+"-lego"+extension)
