@@ -10,13 +10,13 @@
 [![Code Climate](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot/badges/gpa.svg)](https://codeclimate.com/github/MadiNyan/rikka-telegram-bot) 
 [![Contact Me](https://img.shields.io/badge/Contact-Me-blue.svg)](https://telegram.me/Madi_Nyan)
 
-Official website: [rikkabot.madi.cat](https://rikkabot.madinyan.ru/)
+Official website: [rikkabot.madinyan.ru](https://rikkabot.madinyan.ru/)
 
 ----------
 
 ## Requirements:
-+ Python 3.6+
-+ python-telegram-bot
++ Python 3.10+
++ python-telegram-bot 20.0+
 + ImageMagick 7.0.10+
 
 ### Libraries:
