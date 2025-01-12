@@ -4,112 +4,48 @@ keys:
 features:
     anime_search:
         enabled: true
-        commands_gelbooru:
+        commands:
+            - a
+            - anime
             - gelbooru
             - gel
-        commands_yandere:
-            - a
-            - yandere
-            - yan
         proxy:
-            user: username
-            password: password
-            server: proxy.example.com:1080
+            enabled: true
+            server: "127.0.0.1:1080"
             
     embed:
         enabled: true
         commands: 
             - fap
-        path: userdata/
         launchpad_path: resources/embed/launchpad.mp4
-        extensions:
-            - .jpg
-            - .jpeg
-            - .png
-            - .webp
-
-    glitch:
-        enabled: true
-        commands: 
-            - glitch
-        path: userdata/
-        extensions:
-            - .jpg
-            - .jpeg
-            - .png
-            - .bmp 
-            - .webp
-
-    google_search:
-        enabled: true
-        commands_image:
-            - google
-            - img
-        commands_gif:
-            - gif
-            - gifs
 
     jpeg:
         enabled: true
         commands:
             - jpeg
-        path: userdata/
-        extensions:
-            - .jpg
-            - .jpeg
-            - .png
-            - .bmp
-            - .webp
 
     kek:
         enabled: true
         commands: 
             - kek
-        path: userdata/
-        extensions:
-            - .jpg
-            - .jpeg
-            - .png
-            - .bmp 
-            - .webp
-            - .gif
-            - .mp4
-
-    leetspeak:
-        enabled: true
-        commands: 
-            - leet
-        leet_dictionary: resources/leetdict.txt
 
     lego:
         enabled: true
         commands: 
             - lego
-        path: userdata/
-        extensions:
-            - .jpg
-            - .jpeg
-            - .png
-            - .bmp
-            - .gif
-            - .webp
 
     liquid:
         enabled: true
         commands: 
             - liq
-        path: userdata/
 
     logging:
         enabled: true
-        path: userdata/
 
     meme:
         enabled: true
         commands: 
             - meme
-            - memos
-        path: userdata/
         fonts:
             impact:
                 name: impact
@@ -120,23 +56,12 @@ features:
             comic:
                 name: comic
                 path: resources/comic.ttf
-        extensions:
-            - .jpg
-            - .jpeg
-            - .png
-            - .webp
 
     merch:
         enabled: true
         commands: 
             - merch
-        path: userdata/
         resources_path: resources/merch/
-        extensions:
-            - .jpg
-            - .jpeg
-            - .png
-            - .webp
 
     nya:
         enabled: true
@@ -152,38 +77,22 @@ features:
         commands_animeme:
             - am
             - animeme
-        path: userdata/
         nyapath: userdata/nya/
-        extensions:
-            - .jpg
-            - .jpeg
-            - .png
         proxy:
-            user: username
-            password: password
-            server: proxy.example.com:1080
+            enabled: true
+            server: "127.0.0.1:1080"
         
     palette:
         enabled: true
         commands:
             - palette
             - colors
-        path:
-            userdata/
-        extensions:
-            - .jpg
-            - .jpeg
-            - .png
-            - .webp
-            - .bmp
-            - .gif
 
     quote:
         enabled: true
         commands: 
             - quote
             - q
-        path: userdata/
         resources_path: resources/quote/
         font: resources/gothic.ttf
 
@@ -197,7 +106,6 @@ features:
         commands: 
             - reverse
             - rev
-        path: userdata/
 
     roll:
         enabled: true
@@ -208,9 +116,3 @@ features:
         enabled: true
         commands: 
             - say
-        path: userdata/
-        
-    zalgo:
-        enabled: true
-        commands:
-            - zalgo

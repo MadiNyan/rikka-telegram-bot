@@ -1,6 +1,5 @@
-/anime - get anime pic from yande.re
+/anime - get anime pic from gelbooru
 /colors - generate image palette
-/img - Google image search
 /jpeg - compress image
 /kek - mirror one side of an image to another
 /liq - liquid rescale image
@@ -9,7 +8,7 @@
 /nya - get random girl pic
 /quote - quote text into image
 /rate - rate stuff
-/roll - fortune tell
+/roll - roll a dice
 /say - Text-to-Speech
 
 Full help & examples at [rikkabot.madinyan.ru](https://rikkabot.madinyan.ru/)

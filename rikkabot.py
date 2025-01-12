@@ -1,7 +1,7 @@
 import importlib
 import os
-
 import yaml
+
 from telegram import Update
 from telegram.ext import Application, CommandHandler
 
@@ -17,7 +17,7 @@ with open("config.yml", "r") as f:
     config = yaml.load(f, Loader=yaml.SafeLoader)
 key = config["keys"]["telegram_token"]
 
-application = Application.builder().token(key).concurrent_updates(10).build()
+application = Application.builder().token(key).concurrent_updates(True).build()
 
 class Globals:
     def __init__(self, application, config, full_config):
@@ -62,7 +62,7 @@ application.add_handler(CommandHandler('start', start))
 @logging_decorator("help")
 async def help(update: Update, context):
     if update.message is None: return
-    await context.bot.send_message(update.message.chat_id, help_text, parse_mode="Markdown")
+    await context.bot.send_message(update.message.chat_id, help_text, parse_mode="MarkdownV2")
 application.add_handler(CommandHandler("help", help))
 
 # Starting bot
