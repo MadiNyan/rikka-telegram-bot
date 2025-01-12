@@ -195,13 +195,14 @@ async def send_image(
     # Prepare file for sending with name
     file_bytes.name = file_name or "file"
 
-    print("File bytes: ", file_bytes, "\n"
-          "mime_type: ", mime_type, "\n"
-          "attachment_type: ", attachment_type, "\n"
-          "file_name: ", file_name, "\n"
-          "caption: ", caption, "\n"
-          "has_spoiler: ", has_spoiler, "\n",
-          "file_bytes.size: ", file_bytes.getbuffer().nbytes)
+    # Debug print
+    # print("File bytes: ", file_bytes, "\n"
+    #       "mime_type: ", mime_type, "\n"
+    #       "attachment_type: ", attachment_type, "\n"
+    #       "file_name: ", file_name, "\n"
+    #       "caption: ", caption, "\n"
+    #       "has_spoiler: ", has_spoiler, "\n",
+    #       "file_bytes.size: ", file_bytes.getbuffer().nbytes)
 
     # Handle sending based on attachment type with spoiler support
     if attachment_type == "photo":
