@@ -1,17 +1,11 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.logging import logging_decorator
-from telegram.ext.dispatcher import run_async
-from telegram import ChatAction, InputMediaPhoto
-from telegram.ext import PrefixHandler
-from modules.utils import get_param
-from datetime import datetime
-import time
 import os
-import glob
-import json
 import random
-import requests
+
+from telegram import InputMediaPhoto, Update
+from telegram.ext import PrefixHandler
+
+from modules.logging import logging_decorator
+from modules.utils import get_param, send_chat_action
 
 
 def module_init(gd):
@@ -19,22 +13,18 @@ def module_init(gd):
     path = gd.config["path"]
     commands = gd.config["commands"]
     token = gd.full_config["keys"]["telegram_token"]
-    for command in commands:
-        gd.dp.add_handler(PrefixHandler("/", command, nya))
+    gd.application.add_handler(PrefixHandler("/", commands, nya))
     files = os.listdir(path)
 
 
-@run_async
 @logging_decorator("nya")
-def nya(update, context):
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    amount = get_param(update, 1, 1, 10)
-    photos = []
+async def nya(update: Update, context):
+    if update.message is None: return
+    await send_chat_action(update, context, "photo")
+    amount = await get_param(update, 1, 1, 10)
     upload_files = []
     for i in range(amount):
         random_image = random.choice(files)
-        attach_name = "".join(random.choice("abcdef1234567890") for x in range(16))
-        photos.append({"type": "photo", "media": "attach://" + attach_name})
-        upload_files.append((attach_name, (random_image, open(path+random_image, "rb"))))
-    requests.post("https://api.telegram.org/bot"+token+"/sendMediaGroup", params={"chat_id": update.message.chat.id, "media": json.dumps(photos)}, files=upload_files, timeout=120)
+        upload_files.append(InputMediaPhoto(media=open(path+random_image, "rb")))
+    await update.message.reply_media_group(media=upload_files)
     return amount

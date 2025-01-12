@@ -1,83 +1,89 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.anime_search import get_image, proxies, yandere_request_link
-from modules.logging import logging_decorator
-from telegram.ext import PrefixHandler
-from telegram.ext.dispatcher import run_async
-from modules.memegenerator import make_meme
-from modules.meme import fonts_dict, text_format
-from modules.nya import files
-from telegram import ChatAction
-from datetime import datetime
-import requests
+import io
 import random
-import shutil
-import os
+
+from datetime import datetime
+from telegram import Update
+from telegram.ext import PrefixHandler
+
+from modules.anime_search import get_gelbooru_image, check_attachment_type, gelbooru_download_image
+from modules.logging import logging_decorator
+from modules.meme import fonts_dict, text_format, make_meme
+from modules.nya import files, path
+from modules.utils import send_image, send_chat_action
+
+
+gelbooru_request_link = "https://gelbooru.com/index.php"
 
 
 def module_init(gd):
-    global path, extensions, nyapath, files
-    path = gd.config["path"]
-    extensions = gd.config["extensions"]
+    global proxy_url
     commands_nyameme = gd.config["commands_nyameme"]
     commands_animeme = gd.config["commands_animeme"]
-    nyapath = gd.config["nyapath"]
-    for command in commands_nyameme:
-        gd.dp.add_handler(PrefixHandler("/", command, nyameme))
-    for command in commands_animeme:
-        gd.dp.add_handler(PrefixHandler("/", command, animeme))
+    proxy_server = gd.config["proxy"]["server"]
+    if gd.config["proxy"]["enabled"] is True:
+        proxy_url = f"socks5://{proxy_server}"
+    else:
+        proxy_url = None
+    
+    gd.application.add_handler(PrefixHandler("/", commands_nyameme, nyameme))
+    gd.application.add_handler(PrefixHandler("/", commands_animeme, animeme))
 
 
-@run_async
 @logging_decorator("nyameme")
-def nyameme(update, context):
-    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    font, args = get_font(context.args)
-    meme_text = get_text(update, args)
-    top_text, bottom_text = text_split(meme_text)
+async def nyameme(update: Update, context):
+    if update.message is None: return
+    font, args = await get_font(context.args)
+    meme_text = await get_text(update, args)
+    if meme_text is None:
+        return
+    top_text, bottom_text = await text_split(meme_text)
     random_image = random.choice(files)
-    filename = random_image.split(".")[0]
-    extension = "."+random_image.split(".")[1]
-    if extension not in extensions:
-        update.message.reply_text("Unexpected error")
-        return
-    shutil.copy(nyapath+random_image, path+random_image)
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    make_meme(top_text, bottom_text, filename, extension, path, font)
-    with open(path + filename+"-meme" + extension, "rb") as f:
-        update.message.reply_photo(f)
-    os.remove(path+filename+extension)
-    os.remove(path+filename+"-meme"+extension)
+    clean_image = io.BytesIO(open(path+random_image, "rb").read())
+    await send_chat_action(update, context, "photo")
+    memed_image = await make_meme(top_text, bottom_text, clean_image, font)
+    await send_image(update, memed_image, "image/jpeg", "photo", None, has_spoiler=False)
     return
 
 
-@run_async
 @logging_decorator("animeme")
-def animeme(update, context):
-    filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    font, args = get_font(context.args)
-    meme_text = get_text(update, args)
-    top_text, bottom_text = text_split(meme_text)
-    _, _, sample_link = get_image("rating:safe", yandere_request_link, "")
-    extension = "."+sample_link.split(".")[-1]
-    if extension not in extensions:
-        update.message.reply_text("Unexpected error")
+async def animeme(update: Update, context):
+    if update.message is None: return
+    await send_chat_action(update, context, "photo")
+    font, args = await get_font(context.args)
+    meme_text = await get_text(update, args)
+    if meme_text is None:
         return
-    response = requests.get(sample_link, proxies=proxies)
-    with open(path+filename+extension, "wb") as img:
-        img.write(response.content)
-    update.message.chat.send_action(ChatAction.UPLOAD_PHOTO)
-    make_meme(top_text, bottom_text, filename, extension, path, font)
-    with open(path + filename+"-meme" + extension, "rb") as f:
-        update.message.reply_photo(f)
-    os.remove(path+filename+extension)
-    os.remove(path+filename+"-meme"+extension)
-    return
+    top_text, bottom_text = await text_split(meme_text)
+    image_query = "-rating:explicit score:>20 -animated -video -gif"
+    
+    try:
+        # Get random anime image
+        direct_link, _, sample_link, spoiler = await get_gelbooru_image(image_query, gelbooru_request_link, proxy_url)
+        if not sample_link:
+            await update.message.reply_text("Failed to get image")
+            return
+            
+        attachment_type, mime_type = await check_attachment_type(direct_link)
+        if attachment_type != "photo":
+            await update.message.reply_text("Unexpected file type")
+            return
+
+        # Download image
+        clean_image = await gelbooru_download_image(sample_link, proxy_url)
+        memed_image = io.BytesIO()
+            
+        await send_chat_action(update, context, "photo")
+        memed_image = await make_meme(top_text, bottom_text, clean_image, font)
+        filename = datetime.now().strftime("%d%m%y-%H%M%S%f")
+        await send_image(update, memed_image, mime_type, "photo", filename, has_spoiler=spoiler)
+        
+    except Exception as e:
+        await update.message.reply_text(f"Error: {str(e)}")
+        return
 
 
-def get_text(update, args):
+async def get_text(update, args):
+    # Get text from reply
     reply = update.message.reply_to_message
     if reply:
         if reply.caption:
@@ -90,14 +96,15 @@ def get_text(update, args):
     else:
         pass
     if len(args) < 1:
-        update.message.reply_text("Type in some text!")
+        await update.message.reply_text("Type in some text!")
         return None
     return args
 
 
-def text_split(text_list):
+async def text_split(text_list):
+    # Split text into top and bottom text
     if text_list == None:
-        return
+        return "", ""
     if len(text_list) == 1:
         top_text = None
         bottom_text = text_list[0]
@@ -111,7 +118,7 @@ def text_split(text_list):
     return top_text, bottom_text
 
 
-def get_font(args):
+async def get_font(args):
     rand_font = random.choice(list(fonts_dict))
     font = fonts_dict[rand_font]
     if len(args) < 1:

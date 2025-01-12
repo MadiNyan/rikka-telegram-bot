@@ -1,25 +1,11 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from modules.logging import logging_decorator
-from telegram.ext import Updater, PrefixHandler, CommandHandler
-from random import randint
 import importlib
-import yaml
 import os
-import logging
+import yaml
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)	
-logger = logging.getLogger(__name__)	
-logging.getLogger("telegram.utils.promise").propagate = False
+from telegram import Update
+from telegram.ext import Application, CommandHandler
 
-
-class Globals:
-    def __init__(self, updater, dp, config, full_config):
-        self.updater = updater
-        self.dp = dp
-        self.config = config
-        self.full_config = full_config
+from modules.logging import logging_decorator
 
 # Import logo from a text file
 with open("resources/logo.txt", "r", encoding="UTF-8") as logo_file:
@@ -30,15 +16,15 @@ with open("resources/logo.txt", "r", encoding="UTF-8") as logo_file:
 with open("config.yml", "r") as f:
     config = yaml.load(f, Loader=yaml.SafeLoader)
 key = config["keys"]["telegram_token"]
-clean = config["conn_params"]["clean"]
-workers = config["conn_params"]["updater_workers"]
-timeout = config["conn_params"]["timeout"]
-retries = config["conn_params"]["bootstrap_retries"]
-interval = config["conn_params"]["poll_interval"]
-latency = config["conn_params"]["read_latency"]
 
-updater = Updater(token=key, use_context=True, workers=workers)
-dp = updater.dispatcher
+application = Application.builder().token(key).concurrent_updates(True).build()
+
+class Globals:
+    def __init__(self, application, config, full_config):
+        self.application = application
+        self.config = config
+        self.full_config = full_config
+
 
 for feature in config["features"]:
     if "path" in config["features"][feature]:
@@ -47,38 +33,37 @@ for feature in config["features"]:
             os.makedirs(path)
     if config["features"][feature]["enabled"] is True:
         module_config = config["features"][feature]
-        global_data = gd = Globals(updater, dp, module_config, config)
+        global_data = gd = Globals(application, module_config, config)
         module = importlib.import_module("modules." + feature).module_init(gd)
         print(feature)
+print("========")
 
 # Import /help from a text file
 with open("resources/help.txt", "r", encoding="UTF-8") as helpfile:
     help_text = helpfile.read()
-    print("Help textfile imported")
 
 
 # Start feature
 @logging_decorator("start")
-def start(update, context):
+async def start(update: Update, context):
+    if update.message is None: return
     if update.message.chat.type != "private":
         return
     with open("resources/hello.webp", "rb") as hello:
-        update.message.reply_sticker(hello, quote=False)
-    personname = update.message.from_user.first_name
-    update.message.reply_text("Konnichiwa, " + personname + "! \nMy name is Takanashi Rikka desu! \
-                              \nUse /help to see what I can do! :3", quote=False)
-dp.add_handler(CommandHandler("start", start))
+        await update.message.reply_sticker(hello, quote=False)
+    if update.message.from_user:
+        personname = update.message.from_user.first_name 
+        await update.message.reply_text("Hello, " + personname + "! \nMy name is Rikka! \
+                                \nUse /help to see what I can do!", quote=False)
+application.add_handler(CommandHandler('start', start))
 
 
 # Show help
 @logging_decorator("help")
-def help(update, context):
-    context.bot.send_message(update.message.chat_id, help_text, parse_mode="Markdown")
-dp.add_handler(CommandHandler("help", help))
+async def help(update: Update, context):
+    if update.message is None: return
+    await context.bot.send_message(update.message.chat_id, help_text, parse_mode="MarkdownV2")
+application.add_handler(CommandHandler("help", help))
 
 # Starting bot
-updater.start_polling(clean=clean, timeout=timeout, bootstrap_retries=retries, poll_interval=interval, read_latency=latency)
-# Run the bot until you presses Ctrl+C
-print("=====================\nUp and running!\n")
-#Idle
-updater.idle()
+application.run_polling()
