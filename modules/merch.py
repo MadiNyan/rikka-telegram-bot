@@ -72,7 +72,7 @@ async def merch(update: Update, context):
 
         return amount
     except Exception as e:
-        await update.message.reply_text(str(e))
+        await update.message.reply_text(f"Error during processing:\n{str(e)}")
         return
 
 

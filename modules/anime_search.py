@@ -46,7 +46,7 @@ async def search(update, context, request_link, post_link):
     try:
         direct_link, post_id, sample_link, spoiler = await get_gelbooru_image(query, request_link, proxy_url)
     except Exception as e:
-        await update.message.reply_text("Sorry, something went wrong!\nError: {str(e)}")
+        await update.message.reply_text(f"Error retrieving image:\n{str(e)}")
         return query
     if direct_link is None:
         await update.message.reply_text("Nothing found!")

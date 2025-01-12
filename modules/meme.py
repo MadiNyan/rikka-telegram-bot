@@ -90,7 +90,7 @@ async def meme(update: Update, context):
         await send_image(update, result_bytes, mime_type, attachment_type, filename, None, has_spoiler)
 
     except Exception as e:
-        await update.message.reply_text(f"Error during processing: {e}")
+        await update.message.reply_text(f"Error during processing:\n{str(e)}")
         return
 
 async def make_meme(topString, bottomString, input_bytes, meme_font):

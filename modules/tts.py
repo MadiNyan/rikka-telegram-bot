@@ -82,7 +82,7 @@ async def tts(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_voice(voice_bytes, quote=False)
 
     except Exception as e:
-        await update.message.reply_text(f"Error generating voice: {str(e)}")
+        await update.message.reply_text(f"Error during processing:\n{str(e)}")
 
     finally:
         # Cleanup

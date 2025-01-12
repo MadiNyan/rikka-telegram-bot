@@ -90,6 +90,6 @@ async def liquid(update: Update, context):
         await send_image(update, processed_file_bytes, mime_type, attachment_type, filename, None, spoiler)
 
     except Exception as e:
-        await update.message.reply_text(f"Error during processing: {e}")
+        await update.message.reply_text(f"Error during processing:\n{str(e)}")
     finally:
         file_bytes.close()

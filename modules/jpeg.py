@@ -64,5 +64,5 @@ async def jpeg(update: Update, context):
         await send_image(update, result_bytes, mime_type, attachment_type, filename, None, spoiler)
 
     except Exception as e:
-        await update.message.reply_text(f"Unable to process the image.\nError: {str(e)}")
+        await update.message.reply_text(f"Error during processing:\n{str(e)}")
         return

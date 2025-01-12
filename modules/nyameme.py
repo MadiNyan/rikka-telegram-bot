@@ -78,7 +78,7 @@ async def animeme(update: Update, context):
         await send_image(update, memed_image, mime_type, "photo", filename, has_spoiler=spoiler)
         
     except Exception as e:
-        await update.message.reply_text(f"Error: {str(e)}")
+        await update.message.reply_text(f"Error during processing:\n{str(e)}")
         return
 
 

@@ -27,21 +27,22 @@ async def palette(update: Update, context):
         file_bytes, mime_type, attachment_type, filename, spoiler = await get_image(update, context)
         if file_bytes is None:
             raise ValueError("Unable to retrieve the file.")
-    except Exception as e:
-        await update.message.reply_text(f"Error: {str(e)}")
-        return
     
-    # Extract first frame if media is video or gif
-    if mime_type and (mime_type.startswith('video/') or mime_type == 'image/gif'):
-        file_bytes = await extract_first_frame(file_bytes)
-    
-    await send_chat_action(update, context, "photo")
+        # Extract first frame if media is video or gif
+        if mime_type and (mime_type.startswith('video/') or mime_type == 'image/gif'):
+            file_bytes = await extract_first_frame(file_bytes)
+        
+        await send_chat_action(update, context, "photo")
 
-    # Calculate palette
-    processed_file_bytes = await start_computing(file_bytes, colors, "percentage")
-    # Send the processed file back to the user
-    await send_image(update, processed_file_bytes, mime_type, "photo", filename, None, spoiler)
-    return colors
+        # Calculate palette
+        processed_file_bytes = await start_computing(file_bytes, colors, "percentage")
+        # Send the processed file back to the user
+        await send_image(update, processed_file_bytes, mime_type, "photo", filename, None, spoiler)
+        return colors
+
+    except Exception as e:
+        await update.message.reply_text(f"Error during processing:\n{str(e)}")
+        return
 
 
 async def start_computing(file_bytes, colors, mode):

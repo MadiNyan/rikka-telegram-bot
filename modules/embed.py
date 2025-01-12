@@ -101,4 +101,4 @@ async def fap(update: Update, context):
                 new.close()
 
     except Exception as e:
-        await update.message.reply_text(f"Something went wrong: {e}")
+        await update.message.reply_text(f"Error during processing:\n{str(e)}")
