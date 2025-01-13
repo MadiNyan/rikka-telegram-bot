@@ -62,8 +62,8 @@ application.add_handler(CommandHandler('start', start))
 @logging_decorator("help")
 async def help(update: Update, context):
     if update.message is None: return
-    await context.bot.send_message(update.message.chat_id, help_text, parse_mode="MarkdownV2")
+    await context.bot.send_message(update.message.chat_id, help_text, parse_mode="Markdown")
 application.add_handler(CommandHandler("help", help))
 
 # Starting bot
-application.run_polling()
+application.run_polling(drop_pending_updates=True)
