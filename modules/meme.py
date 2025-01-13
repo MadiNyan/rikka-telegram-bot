@@ -18,28 +18,17 @@ def module_init(gd):
     gd.application.add_handler(PrefixHandler("/", commands, meme))
 
 
-def text_format(split_text):
-    if len(split_text) == 1 and split_text[0] == "":
+def text_format(initial_text):
+    split_text = initial_text.split("@", maxsplit=1)
+    if not split_text or (len(split_text) == 1 and not split_text[0]):
         return None, None
-    elif len(split_text) > 1 and split_text[0] == "" and split_text[1] == "":
-        return None, None
-    elif len(split_text) == 1:
-        top_text = None
-        bottom_text = split_text[0]
-        bottom_text.rstrip()
-    elif len(split_text) > 1 and split_text[0] == "":
-        top_text = None
-        bottom_text = split_text[1]
-        bottom_text.lstrip()
-    elif len(split_text) > 1 and split_text[1] == "":
-        top_text = split_text[0]
-        top_text.rstrip()
-        bottom_text = None
-    else:
-        top_text = split_text[0].rstrip()
-        top_text.rstrip()
-        bottom_text = split_text[1]
-        bottom_text.lstrip()
+
+    if len(split_text) == 1:
+        return None, split_text[0].rstrip()
+
+    top_text = split_text[0].rstrip() if split_text[0] else None
+    bottom_text = split_text[1].lstrip() if split_text[1] else None
+
     return top_text, bottom_text
 
 
@@ -62,8 +51,8 @@ async def meme(update: Update, context):
             break
 
     initial_text = " ".join(args)
-    split_text = initial_text.split("@", maxsplit=1)
-    top_text, bottom_text = text_format(split_text)
+    
+    top_text, bottom_text = text_format(initial_text)
     if top_text is None and bottom_text is None:
         await update.message.reply_text("Type in some text!")
         return
