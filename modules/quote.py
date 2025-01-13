@@ -70,8 +70,15 @@ async def get_message(update, context):
             else:
                 text = reply.caption
         else:
-            id = reply.forward_origin.id
-            name = reply.forward_origin.full_name
+            if reply.forward_origin.type == "hidden_user":
+                name = reply.forward_origin.sender_user_name
+                id = None
+            elif reply.forward_origin.type == "channel":
+                name = reply.forward_origin.chat.title
+                id = reply.forward_origin.chat.id
+            else:
+                name = reply.forward_origin.sender_user.full_name
+                id = reply.forward_origin.sender_user.id
             if len(reply.photo) < 1:
                 text = reply.text
             else:
@@ -80,6 +87,19 @@ async def get_message(update, context):
 
 
 async def get_profile_pic(context, id, name):
+    if id is None:
+        return generate_profile_pic(name)
+    elif id < 0:
+        chat = await context.bot.get_chat(id)
+        if chat.photo:
+            chat_pfp_id = chat.photo.big_file_id
+            dl_pfp = await context.bot.getFile(chat_pfp_id)
+            pfp_bytes = io.BytesIO()
+            await dl_pfp.download_to_memory(pfp_bytes)
+            pfp_bytes.seek(0)
+            return pfp_bytes
+        else:
+            return generate_profile_pic(name)
     pics = await context.bot.getUserProfilePhotos(id, limit = 1)
     if len(pics.photos) == 0:
         return generate_profile_pic(name)
@@ -89,6 +109,7 @@ async def get_profile_pic(context, id, name):
         dl_pfp = await context.bot.getFile(current_pfp)
         pfp_bytes = io.BytesIO()
         await dl_pfp.download_to_memory(pfp_bytes)
+        pfp_bytes.seek(0)
         return pfp_bytes
 
 
@@ -104,6 +125,7 @@ def generate_profile_pic(name):
             font = Font(font_path, color="white")
             context(img)
             img.caption(initials, left=left, top=top, width=width, height=height, font=font, gravity="center")
+            img.format = 'jpeg'
             img.save(file=pfp_bytes)
     pfp_bytes.seek(0)
     return pfp_bytes
