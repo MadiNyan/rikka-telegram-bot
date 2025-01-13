@@ -12,6 +12,8 @@ features:
         proxy:
             enabled: true
             server: "127.0.0.1:1080"
+        base_query: rating:general score:>50
+        custom_query: rating:general score:>50
             
     embed:
         enabled: true
@@ -81,6 +83,7 @@ features:
         proxy:
             enabled: true
             server: "127.0.0.1:1080"
+        query: rating:general score:>30 -animated -video -gif
         
     palette:
         enabled: true

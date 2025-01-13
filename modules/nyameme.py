@@ -16,10 +16,11 @@ gelbooru_request_link = "https://gelbooru.com/index.php"
 
 
 def module_init(gd):
-    global proxy_url
+    global proxy_url, query
     commands_nyameme = gd.config["commands_nyameme"]
     commands_animeme = gd.config["commands_animeme"]
     proxy_server = gd.config["proxy"]["server"]
+    query = gd.config["query"]
     if gd.config["proxy"]["enabled"] is True:
         proxy_url = f"socks5://{proxy_server}"
     else:
@@ -54,7 +55,7 @@ async def animeme(update: Update, context):
     if meme_text is None:
         return
     top_text, bottom_text = await text_split(meme_text)
-    image_query = "-rating:explicit score:>20 -animated -video -gif"
+    image_query = query
     
     try:
         # Get random anime image

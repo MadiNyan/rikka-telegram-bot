@@ -17,13 +17,15 @@ gelbooru_post_link = "https://gelbooru.com/index.php?page=post&s=view&id="
 
 
 def module_init(gd):
-    global proxy_url
+    global proxy_url, base_query, custom_query
     commands = gd.config["commands"]
     proxy_server = gd.config["proxy"]["server"]
     if gd.config["proxy"]["enabled"] is True:
         proxy_url = f"socks5://{proxy_server}"
     else:
         proxy_url = None
+    base_query = gd.config["base_query"]
+    custom_query = gd.config["custom_query"]
     
     gd.application.add_handler(PrefixHandler("/", commands, gelbooru_search))
 
@@ -37,9 +39,8 @@ async def gelbooru_search(update: Update, context):
 async def search(update, context, request_link, post_link):
     if update.message is None: return
     
-    base_query = "-rating:explicit score:>10"
     if context.args:
-        query = " ".join(context.args) + " score:>5"
+        query = " ".join(context.args) + " " + custom_query
     else:
         query = base_query
 
@@ -48,7 +49,7 @@ async def search(update, context, request_link, post_link):
     except Exception as e:
         await update.message.reply_text(f"Error retrieving image:\n{str(e)}")
         return query
-    if direct_link is None:
+    if direct_link == "":
         await update.message.reply_text("Nothing found!")
         return query
     image_bytes = await gelbooru_download_image(direct_link, proxy_url)
@@ -56,12 +57,18 @@ async def search(update, context, request_link, post_link):
         await update.message.reply_text("Could not download image")
         return query
     
+    
     page_link = post_link + post_id
     msg_text = "[View post]({})".format(page_link)
     caption = (msg_text, "Markdown")
     attachment_type, mime_type = await check_attachment_type(direct_link)
+    if attachment_type == "photo" and image_bytes.getbuffer().nbytes > 10000000:
+        attachment_type = "document"
     await send_chat_action(update, context, attachment_type)
-    await send_image(update, image_bytes, mime_type, attachment_type, None, caption=caption, has_spoiler=bool(spoiler))
+    try:
+        await send_image(update, image_bytes, mime_type, attachment_type, None, caption=caption, has_spoiler=bool(spoiler))
+    except Exception("BadRequest") as e:
+        print(e)
     return query
 
 
