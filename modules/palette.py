@@ -19,10 +19,10 @@ def module_init(gd):
 @logging_decorator("palette")
 async def palette(update: Update, context):
     if update.message is None: return
-    colors = await get_param(update, 4, 1, 10)
-    if colors is None:
-        return
     try:
+        colors = await get_param(update, 4, 1, 10)
+        if colors is None:
+            return
         # Get image
         file_bytes, mime_type, attachment_type, filename, spoiler = await get_image(update, context)
         if file_bytes is None:

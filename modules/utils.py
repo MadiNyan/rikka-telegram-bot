@@ -241,12 +241,9 @@ async def get_param(update, defaultvalue, min_value, max_value):
         try:
             parameter = int(parts[1])
         except:
-            #update.message.reply_text("Paremeter needs to be a number!")
             return defaultvalue
         if  parameter < min_value or parameter > max_value:
-            errtext = "Baka, make it from " + str(min_value) + " to " + str(max_value) + "!"
-            await update.message.reply_text(errtext)
-            return 0
+            raise ValueError("Parameter must be between " + str(min_value) + " and " + str(max_value))
     return parameter
 
 
