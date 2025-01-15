@@ -110,7 +110,7 @@ async def text_split(text_list):
         top_text = None
         bottom_text = text_list[0]
     elif "@" in text_list:
-        split_text = " ".join(text_list).split("@", maxsplit=1)
+        split_text = " ".join(text_list)
         top_text, bottom_text = text_format(split_text)
     else:
         split_spot = random.randint(1, len(text_list)-1)
