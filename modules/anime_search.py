@@ -83,7 +83,7 @@ async def get_gelbooru_image(query, request_link, proxy_url) -> Tuple[str, str, 
     }
     
     # Use urlencode but preserve certain characters
-    params_str = urllib.parse.urlencode(params, safe=":>+ ")  # Added space and > to safe chars
+    params_str = urllib.parse.urlencode(params, safe="():>+ ")  # Added space and > to safe chars
     
     connector = ProxyConnector.from_url(proxy_url, rdns=False) if proxy_url else None
     async with aiohttp.ClientSession(connector=connector) as session:
