@@ -66,4 +66,4 @@ async def help(update: Update, context):
 application.add_handler(CommandHandler("help", help))
 
 # Starting bot
-application.run_polling(drop_pending_updates=True)
+application.run_polling(timeout=100, drop_pending_updates=True)

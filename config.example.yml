@@ -1,6 +1,11 @@
 keys:
     telegram_token: =====key=====
 
+admin_id:
+    - 000000000
+    - 111111111
+    - 222222222
+
 features:
     anime_search:
         enabled: true
@@ -14,6 +19,13 @@ features:
             server: "127.0.0.1:1080"
         base_query: rating:general score:>50
         custom_query: rating:general score:>50
+
+    donate:
+        enabled: true
+        commands:
+            - donate
+        contact: "@username"
+        amount: 20
             
     embed:
         enabled: true
