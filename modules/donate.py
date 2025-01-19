@@ -85,7 +85,7 @@ async def precheckout_callback(update: Update, context: CallbackContext):
     query = update.pre_checkout_query
 
     # Answer the pre-checkout query (approve or decline the payment)
-    if query.invoice_payload != "donation_payload":
+    if query.invoice_payload != "rikka_donation_payload":
         await query.answer(ok=False, error_message="Something went wrong. Please try again.")
     else:
         await query.answer(ok=True)
