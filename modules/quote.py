@@ -1,4 +1,5 @@
 import io
+import os
 import random
 
 from PIL import Image, ImageDraw, ImageOps
@@ -16,16 +17,31 @@ from modules.utils import send_image, send_chat_action
 def module_init(gd):
     global resources_path, font_path
     resources_path = gd.config["resources_path"]
-    font_path = gd.config["font"]
+    font_path = gd.config["font"]  # базовый шрифт из конфига
     commands = gd.config["commands"]
     gd.application.add_handler(PrefixHandler("/", commands, quote))
+
+UKR_SPECIFIC = set("іІїЇєЄґҐ")
+
+
+def has_ukrainian_chars(s: str) -> bool:
+    if not s:
+        return False
+    return any(ch in UKR_SPECIFIC for ch in s)
+
+
+def pick_font_for_text(base_font: str, text: str, name: str) -> str:
+    if has_ukrainian_chars(text) or has_ukrainian_chars(name):
+        return os.path.join(resources_path, "NotoSans.ttf")
+    return base_font
 
 
 @logging_decorator("quote")
 async def quote(update: Update, context):
-    if update.message is None: return
+    if update.message is None:
+        return
     id, name, text = await get_message(update, context)
-    if text == "" or text == None:
+    if text is None or text == "":
         await update.message.reply_text("Type in some text!")
         return
     await send_chat_action(update, context, "photo")
@@ -35,18 +51,15 @@ async def quote(update: Update, context):
 
 
 def make_quote(profile_pic_bytes, text, author):
-    # Load background and profile pic
-    background = Image.open(resources_path+"bg.jpg")
+    background = Image.open(resources_path + "bg.jpg")
     profile_pic_bytes.seek(0)
     avatar = Image.open(profile_pic_bytes)
-    
-    # Process images
+
     avatar_circle = circle(avatar)
     background.paste(avatar_circle, (50, 110), avatar_circle)
-    watermark = Image.open(resources_path+"watermark.png").convert("RGBA")
+    watermark = Image.open(resources_path + "watermark.png").convert("RGBA")
     background.paste(watermark, (20, 540), watermark)
-    
-    # Convert to bytes and add text
+
     binary_image = img_to_bytes(background, ".jpg")
     output_bytes = fit_text(binary_image, text, author)
     return output_bytes
@@ -100,11 +113,11 @@ async def get_profile_pic(context, id, name):
             return pfp_bytes
         else:
             return generate_profile_pic(name)
-    pics = await context.bot.getUserProfilePhotos(id, limit = 1)
+    pics = await context.bot.getUserProfilePhotos(id, limit=1)
     if len(pics.photos) == 0:
         return generate_profile_pic(name)
     else:
-        user_profile_pics = await context.bot.getUserProfilePhotos(id, limit = 1)
+        user_profile_pics = await context.bot.getUserProfilePhotos(id, limit=1)
         current_pfp = user_profile_pics.photos[0][-1].file_id
         dl_pfp = await context.bot.getFile(current_pfp)
         pfp_bytes = io.BytesIO()
@@ -115,53 +128,85 @@ async def get_profile_pic(context, id, name):
 
 def generate_profile_pic(name):
     words = name.split()
-    letters = [word[0] for word in words]
-    initials = "".join(letters)
-    colors =["#c75650", "#d67a27", "#7e6ccf", "#4eb331", "#2ea4ca"]
+    letters = [word[0] for word in words if word]
+    initials = "".join(letters)[:3] or "?"
+    colors = ["#c75650", "#d67a27", "#7e6ccf", "#4eb331", "#2ea4ca"]
     pfp_bytes = io.BytesIO()
-    with wandImage(width = 756, height = 756, background = Color(random.choice(colors))) as img:
+
+    # Выбираем шрифт для инициалов по наличию украинских символов в имени
+    selected_font = pick_font_for_text(font_path, "", name)
+
+    with wandImage(width=756, height=756, background=Color(random.choice(colors))) as img:
         left, top, width, height = 200, 265, 340, 240
-        with Drawing() as context:
-            font = Font(font_path, color="white")
-            context(img)
-            img.caption(initials, left=left, top=top, width=width, height=height, font=font, gravity="center")
-            img.format = 'jpeg'
+        with Drawing() as ctx:
+            font = Font(selected_font, color="white")
+            ctx(img)
+            img.caption(
+                initials,
+                left=left,
+                top=top,
+                width=width,
+                height=height,
+                font=font,
+                gravity="center",
+            )
+            img.format = "jpeg"
             img.save(file=pfp_bytes)
     pfp_bytes.seek(0)
     return pfp_bytes
 
 
 def circle(image):
-    mask = Image.open(resources_path+"mask.png").convert("L")
+    mask = Image.open(resources_path + "mask.png").convert("L")
     circle = ImageOps.fit(image, mask.size, centering=(0.5, 0.5))
     circle.putalpha(mask)
-    stroke = Image.new("RGBA", (756,756), (255,255,255,0))
+    stroke = Image.new("RGBA", (756, 756), (255, 255, 255, 0))
     draw = ImageDraw.Draw(stroke)
-    draw.ellipse((0, 0, 755, 755), width=18, outline ="white")
+    draw.ellipse((0, 0, 755, 755), width=18, outline="white")
     stroke = stroke.resize((378, 378), resample=Image.Resampling.LANCZOS)
-    circle.paste(stroke, (0,0), stroke)
+    circle.paste(stroke, (0, 0), stroke)
     return circle
 
 
 def img_to_bytes(file, ext):
-	fp = io.BytesIO()
-	format = Image.registered_extensions()[ext]
-	file.save(fp, format)
-	return fp.getvalue()
+    fp = io.BytesIO()
+    format = Image.registered_extensions()[ext]
+    file.save(fp, format)
+    return fp.getvalue()
 
 
 def fit_text(img, text, name):
     text = "«" + text + "»"
-    name = "—  " + name
+    name_line = "—  " + name
     output_bytes = io.BytesIO()
+
+    # Выбираем шрифт для основного текста и подписи
+    selected_font = pick_font_for_text(font_path, text, name)
+
     with wandImage(blob=img) as canvas:
         text_left, text_top, text_width, text_height = 475, 50, 675, 410
         name_left, name_top, name_width, name_height = 530, 460, 570, 50
-        with Drawing() as context:
-            font = Font(font_path, color="white")
-            context(canvas)
-            canvas.caption(text, left=text_left, top=text_top, width=text_width, height=text_height, font=font, gravity="center")
-            canvas.caption(name, left=name_left, top=name_top, width=name_width, height=name_height, font=font, gravity="center")
+        with Drawing() as ctx:
+            font = Font(selected_font, color="white")
+            ctx(canvas)
+            canvas.caption(
+                text,
+                left=text_left,
+                top=text_top,
+                width=text_width,
+                height=text_height,
+                font=font,
+                gravity="center",
+            )
+            canvas.caption(
+                name_line,
+                left=name_left,
+                top=name_top,
+                width=name_width,
+                height=name_height,
+                font=font,
+                gravity="center",
+            )
             canvas.save(file=output_bytes)
     output_bytes.seek(0)
     return output_bytes
