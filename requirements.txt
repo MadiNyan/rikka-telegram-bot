@@ -8,6 +8,6 @@ Pillow==11.1.0
 python-telegram-bot==21.10
 python-magic-bin==0.4.14
 PyYAML==6.0.2
-Requests==2.32.3
+Requests==2.33.0
 scikit_learn==1.6.0
 Wand==0.6.13
