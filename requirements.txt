@@ -1,4 +1,4 @@
-aiohttp==3.11.11
+aiohttp==3.13.4
 aiohttp_socks==0.10.1
 comtypes==1.4.9
 legofy==1.0.0
